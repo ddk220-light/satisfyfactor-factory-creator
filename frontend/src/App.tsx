@@ -1,3 +1,10 @@
+import WizardShell from "./components/wizard/WizardShell"
+
 export default function App() {
-  return <div>Satisfactory Factory Planner</div>
+  return (
+    <div style={{ background: "#0d1117", color: "#ccc", minHeight: "100vh",
+                  fontFamily: "'Courier New', monospace" }}>
+      <WizardShell />
+    </div>
+  )
 }
