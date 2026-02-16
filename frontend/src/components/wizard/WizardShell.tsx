@@ -3,6 +3,7 @@ import type { UserPreferences, AnalyzeResult, LocationCandidate, FactoryResult }
 import PreferencesStep from "./PreferencesStep"
 import RecipeStep from "./RecipeStep"
 import LocationStep from "./LocationStep"
+import Dashboard from "../dashboard/Dashboard"
 
 type WizardStep = "preferences" | "recipes" | "locations" | "dashboard"
 
@@ -60,7 +61,13 @@ export default function WizardShell() {
           onBack={() => setStep("recipes")}
         />
       )}
-      {step === "dashboard" && <div style={{ padding: 16 }}>Dashboard (Tasks 15-18)</div>}
+      {step === "dashboard" && state.preferences && state.analysis && state.selectedLocations && (
+        <Dashboard
+          preferences={state.preferences}
+          analysis={state.analysis}
+          selectedLocations={state.selectedLocations}
+        />
+      )}
     </div>
   )
 }
