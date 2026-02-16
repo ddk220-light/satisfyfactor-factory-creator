@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Factory Location Planner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Courier New',monospace;display:flex;flex-direction:column;height:100vh;overflow:hidden;background:#111}
+#sidebar{width:300px;background:#1a1a2e;color:#ccc;overflow-y:auto;border-right:2px solid #333;display:flex;flex-direction:column}
+#sidebar h1{font-size:14px;padding:10px 12px;background:#16213e;color:#e0e0e0;letter-spacing:1px;text-transform:uppercase}
+#legend{padding:8px 12px;border-bottom:1px solid #333;font-size:11px}
+#legend .row{display:flex;align-items:center;gap:6px;margin:2px 0}
+#legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+#factory-list{flex:1;overflow-y:auto;padding:0}
+.factory-section{border-bottom:1px solid #333;padding:10px 12px}
+.factory-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.factory-header input[type=checkbox]{cursor:pointer;accent-color:inherit;width:14px;height:14px;flex-shrink:0}
+.factory-section.hidden-factory{opacity:0.4}
+.factory-section.hidden-factory .loc-option,.factory-section.hidden-factory .zoom-btn{pointer-events:none;opacity:0.3}
+.factory-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.factory-name{font-weight:bold;font-size:13px;color:#fff}
+.factory-theme{font-size:11px;color:#888;margin-bottom:6px}
+.factory-resources{font-size:10px;color:#666;margin-bottom:8px}
+.loc-option{display:flex;align-items:center;gap:6px;padding:3px 0;cursor:pointer;font-size:11px}
+.loc-option:hover{color:#fff}
+.loc-option input{cursor:pointer;accent-color:inherit}
+.loc-option .score{color:#aaa}
+.loc-option .quad{color:#666;font-size:10px}
+.loc-summary{font-size:10px;color:#555;margin-left:22px;margin-bottom:2px}
+.zoom-btn{display:block;margin:6px 0 0 0;padding:4px 10px;background:#16213e;color:#7f8fa6;border:1px solid #333;border-radius:3px;cursor:pointer;font-size:11px;font-family:inherit}
+.zoom-btn:hover{background:#1f3060;color:#fff}
+#controls{padding:10px 12px;border-top:1px solid #333}
+#export-btn{width:100%;padding:8px;background:#0f3460;color:#e0e0e0;border:1px solid #444;border-radius:4px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:bold;letter-spacing:1px}
+#export-btn:hover{background:#1a5276}
+#reset-btn{width:100%;padding:6px;margin-top:6px;background:#1a1a2e;color:#7f8fa6;border:1px solid #333;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px}
+#reset-btn:hover{background:#16213e;color:#fff}
+canvas{flex:1;display:block;cursor:grab}
+canvas.grabbing{cursor:grabbing}
+#tooltip{position:fixed;background:rgba(20,20,40,0.95);color:#ddd;padding:6px 10px;border-radius:4px;font-size:11px;font-family:'Courier New',monospace;pointer-events:none;display:none;border:1px solid #444;max-width:250px;z-index:100}
+#tab-bar{display:flex;background:#16213e;border-bottom:2px solid #333;flex-shrink:0}
+.tab-btn{padding:10px 24px;font-family:'Courier New',monospace;font-size:13px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#7f8fa6;background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab-btn:hover{color:#ccc}
+.tab-btn.active{color:#e0e0e0;border-bottom-color:#e0e0e0}
+#tab-content{display:flex;flex:1;overflow:hidden}
+#map-view{display:flex;flex:1;overflow:hidden}
+#factories-view{display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:24px 32px;font-family:'Courier New',monospace}
+</style>
+</head>
+<body>
+<div id="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('map')">Map</button>
+  <button class="tab-btn" onclick="switchTab('factories')">Factories</button>
+</div>
+<div id="tab-content">
+  <div id="map-view">
+    <div id="sidebar">
+      <h1>Factory Location Planner</h1>
+      <div id="legend"></div>
+      <div id="factory-list"></div>
+      <div id="controls">
+        <button id="export-btn">EXPORT SELECTIONS</button>
+        <button id="reset-btn">Reset View</button>
+      </div>
+    </div>
+    <canvas id="map"></canvas>
+  </div>
+  <div id="factories-view">
+    <div id="factories-content"></div>
+  </div>
+</div>
+<div id="tooltip"></div>
+
+<script>
+// === TAB SWITCHING ===
+let currentTab = 'map';
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('map-view').style.display = tab === 'map' ? 'flex' : 'none';
+  document.getElementById('factories-view').style.display = tab === 'factories' ? 'flex' : 'none';
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === tab);
+  });
+  if (tab === 'map') { resize(); draw(); }
+  if (tab === 'factories' && !factoriesLoaded) { loadFactories(); }
+}
+let factoriesLoaded = false;
+async function loadFactories() {
+  try {
+    const resp = await fetch('factory-subunits.json');
+    const data = await resp.json();
+    factoriesLoaded = true;
+    renderFactoriesTab(data);
+  } catch (e) {
+    document.getElementById('factories-content').innerHTML = '<p style="color:#e74c3c">Failed to load factory-subunits.json: ' + e.message + '</p>';
+  }
+}
+function renderFactoriesTab(data) {
+  document.getElementById('factories-content').innerHTML = '<p style="color:#888">Loading...</p>';
+}
+
+// === DATA ===
+const ALL_NODES = [{"x":-62537,"y":228043,"t":"limestone","p":"i"},{"x":-110522,"y":249722,"t":"limestone","p":"i"},{"x":383046,"y":-92549,"t":"limestone","p":"i"},{"x":359885,"y":-200469,"t":"limestone","p":"i"},{"x":15240,"y":-158579,"t":"limestone","p":"i"},{"x":92495,"y":-132749,"t":"limestone","p":"i"},{"x":-94477,"y":228243,"t":"limestone","p":"i"},{"x":-55951,"y":271565,"t":"limestone","p":"i"},{"x":237355,"y":-164936,"t":"limestone","p":"i"},{"x":135005,"y":123175,"t":"limestone","p":"i"},{"x":244591,"y":-190903,"t":"limestone","p":"i"},{"x":299122,"y":-85512,"t":"limestone","p":"i"},{"x":-43322,"y":239553,"t":"limestone","p":"i"},{"x":338761,"y":-205718,"t":"limestone","p":"i"},{"x":-41301,"y":288558,"t":"limestone","p":"i"},{"x":121322,"y":-88295,"t":"limestone","p":"n"},{"x":4128,"y":273242,"t":"limestone","p":"n"},{"x":20776,"y":-134970,"t":"limestone","p":"n"},{"x":-90458,"y":-152279,"t":"limestone","p":"n"},{"x":66757,"y":-150677,"t":"limestone","p":"n"},{"x":225406,"y":-237057,"t":"limestone","p":"n"},{"x":-129015,"y":-39541,"t":"limestone","p":"n"},{"x":-6449,"y":-120483,"t":"limestone","p":"n"},{"x":245860,"y":-218934,"t":"limestone","p":"n"},{"x":16092,"y":264153,"t":"limestone","p":"n"},{"x":-268788,"y":-79095,"t":"limestone","p":"n"},{"x":107368,"y":-43239,"t":"limestone","p":"n"},{"x":308652,"y":-100658,"t":"limestone","p":"n"},{"x":158314,"y":-65003,"t":"limestone","p":"n"},{"x":-273321,"y":-19667,"t":"limestone","p":"n"},{"x":-108120,"y":261059,"t":"limestone","p":"n"},{"x":109989,"y":196759,"t":"limestone","p":"n"},{"x":67878,"y":-95777,"t":"limestone","p":"n"},{"x":295896,"y":-272876,"t":"limestone","p":"n"},{"x":186164,"y":77070,"t":"limestone","p":"n"},{"x":-37142,"y":201538,"t":"limestone","p":"n"},{"x":-173249,"y":-112173,"t":"limestone","p":"n"},{"x":-194906,"y":-25780,"t":"limestone","p":"n"},{"x":-8701,"y":283440,"t":"limestone","p":"n"},{"x":-231390,"y":-89530,"t":"limestone","p":"n"},{"x":-167201,"y":61298,"t":"limestone","p":"n"},{"x":-280837,"y":-42089,"t":"limestone","p":"n"},{"x":79670,"y":-75852,"t":"limestone","p":"n"},{"x":175981,"y":-40156,"t":"limestone","p":"n"},{"x":-267051,"y":-24387,"t":"limestone","p":"n"},{"x":226320,"y":-200702,"t":"limestone","p":"n"},{"x":-52587,"y":264647,"t":"limestone","p":"n"},{"x":63823,"y":8377,"t":"limestone","p":"n"},{"x":141568,"y":230907,"t":"limestone","p":"n"},{"x":40251,"y":-144691,"t":"limestone","p":"n"},{"x":8342,"y":147572,"t":"limestone","p":"n"},{"x":270772,"y":47036,"t":"limestone","p":"n"},{"x":3998,"y":271121,"t":"limestone","p":"n"},{"x":75115,"y":-123003,"t":"limestone","p":"n"},{"x":168496,"y":-108030,"t":"limestone","p":"n"},{"x":-129599,"y":-96956,"t":"limestone","p":"n"},{"x":-89046,"y":153285,"t":"limestone","p":"n"},{"x":370713,"y":-221971,"t":"limestone","p":"n"},{"x":-133445,"y":-35240,"t":"limestone","p":"n"},{"x":343519,"y":-83470,"t":"limestone","p":"n"},{"x":-145781,"y":-31969,"t":"limestone","p":"n"},{"x":-164381,"y":64841,"t":"limestone","p":"n"},{"x":60593,"y":-77891,"t":"limestone","p":"n"},{"x":385953,"y":-254365,"t":"limestone","p":"n"},{"x":177198,"y":-86517,"t":"limestone","p":"n"},{"x":146861,"y":115063,"t":"limestone","p":"p"},{"x":-151152,"y":184381,"t":"limestone","p":"p"},{"x":-206173,"y":-141689,"t":"limestone","p":"p"},{"x":50260,"y":-157153,"t":"limestone","p":"p"},{"x":348908,"y":-163350,"t":"limestone","p":"p"},{"x":-279020,"y":-186294,"t":"limestone","p":"p"},{"x":-41845,"y":-152412,"t":"limestone","p":"p"},{"x":166452,"y":7804,"t":"limestone","p":"p"},{"x":-178099,"y":-165242,"t":"limestone","p":"p"},{"x":391118,"y":-208703,"t":"limestone","p":"p"},{"x":-281761,"y":-134704,"t":"limestone","p":"p"},{"x":-80089,"y":204746,"t":"limestone","p":"p"},{"x":219901,"y":42217,"t":"limestone","p":"p"},{"x":284986,"y":111894,"t":"limestone","p":"p"},{"x":120085,"y":-9957,"t":"limestone","p":"p"},{"x":-280306,"y":-181363,"t":"limestone","p":"p"},{"x":-165002,"y":-133278,"t":"limestone","p":"p"},{"x":-55288,"y":129003,"t":"limestone","p":"p"},{"x":311623,"y":-69811,"t":"limestone","p":"p"},{"x":-156729,"y":202160,"t":"limestone","p":"p"},{"x":225430,"y":-6949,"t":"limestone","p":"p"},{"x":-53615,"y":160376,"t":"limestone","p":"p"},{"x":-107865,"y":60191,"t":"limestone","p":"p"},{"x":-227331,"y":-158278,"t":"limestone","p":"p"},{"x":355116,"y":-122970,"t":"limestone","p":"p"},{"x":-261496,"y":-116493,"t":"limestone","p":"p"},{"x":-55555,"y":-129406,"t":"limestone","p":"p"},{"x":-221697,"y":-104736,"t":"limestone","p":"p"},{"x":69552,"y":-100369,"t":"limestone","p":"p"},{"x":242692,"y":-149433,"t":"iron","p":"i"},{"x":-55693,"y":194370,"t":"iron","p":"i"},{"x":-57161,"y":192773,"t":"iron","p":"i"},{"x":-41484,"y":125794,"t":"iron","p":"i"},{"x":265501,"y":-178206,"t":"iron","p":"i"},{"x":-64963,"y":-201169,"t":"iron","p":"i"},{"x":-50102,"y":284478,"t":"iron","p":"i"},{"x":-94905,"y":262678,"t":"iron","p":"i"},{"x":-43327,"y":130254,"t":"iron","p":"i"},{"x":264240,"y":-162899,"t":"iron","p":"i"},{"x":311799,"y":-215343,"t":"iron","p":"i"},{"x":233433,"y":145603,"t":"iron","p":"i"},{"x":-61757,"y":194634,"t":"iron","p":"i"},{"x":-38249,"y":127975,"t":"iron","p":"i"},{"x":-36500,"y":243894,"t":"iron","p":"i"},{"x":-94007,"y":268116,"t":"iron","p":"i"},{"x":-65049,"y":137464,"t":"iron","p":"i"},{"x":-91268,"y":253077,"t":"iron","p":"i"},{"x":233293,"y":139880,"t":"iron","p":"i"},{"x":-99587,"y":267812,"t":"iron","p":"i"},{"x":-43940,"y":207992,"t":"iron","p":"i"},{"x":248481,"y":-146160,"t":"iron","p":"i"},{"x":283969,"y":-121598,"t":"iron","p":"i"},{"x":-52877,"y":-201762,"t":"iron","p":"i"},{"x":-42273,"y":132151,"t":"iron","p":"i"},{"x":-97178,"y":264232,"t":"iron","p":"i"},{"x":-93267,"y":254146,"t":"iron","p":"i"},{"x":-92372,"y":266082,"t":"iron","p":"i"},{"x":-98579,"y":265801,"t":"iron","p":"i"},{"x":311230,"y":-128705,"t":"iron","p":"i"},{"x":-58919,"y":195893,"t":"iron","p":"i"},{"x":-41928,"y":206908,"t":"iron","p":"i"},{"x":225651,"y":147648,"t":"iron","p":"i"},{"x":314598,"y":-196773,"t":"iron","p":"i"},{"x":330433,"y":-142400,"t":"iron","p":"i"},{"x":-35041,"y":245805,"t":"iron","p":"i"},{"x":221481,"y":146594,"t":"iron","p":"i"},{"x":-47534,"y":289607,"t":"iron","p":"i"},{"x":-60453,"y":141696,"t":"iron","p":"i"},{"x":-263873,"y":-30848,"t":"iron","p":"n"},{"x":374875,"y":-259903,"t":"iron","p":"n"},{"x":266881,"y":-120715,"t":"iron","p":"n"},{"x":93730,"y":160264,"t":"iron","p":"n"},{"x":241091,"y":-239788,"t":"iron","p":"n"},{"x":-54101,"y":229417,"t":"iron","p":"n"},{"x":313010,"y":-133842,"t":"iron","p":"n"},{"x":96326,"y":159762,"t":"iron","p":"n"},{"x":245700,"y":30065,"t":"iron","p":"n"},{"x":276674,"y":-195100,"t":"iron","p":"n"},{"x":256612,"y":-197979,"t":"iron","p":"n"},{"x":-190787,"y":-117690,"t":"iron","p":"n"},{"x":-187933,"y":-114624,"t":"iron","p":"n"},{"x":-8997,"y":293512,"t":"iron","p":"n"},{"x":338208,"y":-177564,"t":"iron","p":"n"},{"x":377738,"y":-254226,"t":"iron","p":"n"},{"x":-49077,"y":231708,"t":"iron","p":"n"},{"x":-259120,"y":-44689,"t":"iron","p":"n"},{"x":298734,"y":-199293,"t":"iron","p":"n"},{"x":-50407,"y":302871,"t":"iron","p":"n"},{"x":92725,"y":163306,"t":"iron","p":"n"},{"x":-186902,"y":-118340,"t":"iron","p":"n"},{"x":280138,"y":-261097,"t":"iron","p":"n"},{"x":-1126,"y":285301,"t":"iron","p":"n"},{"x":-258433,"y":-40561,"t":"iron","p":"n"},{"x":-44922,"y":302274,"t":"iron","p":"n"},{"x":-260110,"y":-27674,"t":"iron","p":"n"},{"x":133276,"y":197857,"t":"iron","p":"n"},{"x":131967,"y":194729,"t":"iron","p":"n"},{"x":268524,"y":-116944,"t":"iron","p":"n"},{"x":339300,"y":-183354,"t":"iron","p":"n"},{"x":-58996,"y":-224575,"t":"iron","p":"n"},{"x":-51645,"y":229391,"t":"iron","p":"n"},{"x":233142,"y":-26440,"t":"iron","p":"n"},{"x":572,"y":283802,"t":"iron","p":"n"},{"x":252751,"y":29140,"t":"iron","p":"n"},{"x":96959,"y":157163,"t":"iron","p":"n"},{"x":237725,"y":-23006,"t":"iron","p":"n"},{"x":-261358,"y":-41228,"t":"iron","p":"n"},{"x":-256244,"y":-29564,"t":"iron","p":"n"},{"x":245043,"y":-22318,"t":"iron","p":"n"},{"x":-10234,"y":291035,"t":"iron","p":"n"},{"x":124933,"y":5226,"t":"iron","p":"p"},{"x":273730,"y":-148173,"t":"iron","p":"p"},{"x":164518,"y":238318,"t":"iron","p":"p"},{"x":-230853,"y":-115124,"t":"iron","p":"p"},{"x":133637,"y":205792,"t":"iron","p":"p"},{"x":255250,"y":-91660,"t":"iron","p":"p"},{"x":219395,"y":37189,"t":"iron","p":"p"},{"x":59113,"y":-71502,"t":"iron","p":"p"},{"x":181724,"y":-116280,"t":"iron","p":"p"},{"x":-43382,"y":-136820,"t":"iron","p":"p"},{"x":-170448,"y":-28321,"t":"iron","p":"p"},{"x":285861,"y":-127665,"t":"iron","p":"p"},{"x":-47085,"y":-141055,"t":"iron","p":"p"},{"x":-152490,"y":-45787,"t":"iron","p":"p"},{"x":-162724,"y":182453,"t":"iron","p":"p"},{"x":278266,"y":-210772,"t":"iron","p":"p"},{"x":-96101,"y":163753,"t":"iron","p":"p"},{"x":-252033,"y":-125001,"t":"iron","p":"p"},{"x":-227411,"y":-118862,"t":"iron","p":"p"},{"x":347228,"y":-58491,"t":"iron","p":"p"},{"x":84199,"y":-86394,"t":"iron","p":"p"},{"x":255908,"y":-3071,"t":"iron","p":"p"},{"x":70865,"y":-78126,"t":"iron","p":"p"},{"x":178062,"y":-120504,"t":"iron","p":"p"},{"x":-166731,"y":-26566,"t":"iron","p":"p"},{"x":271771,"y":100432,"t":"iron","p":"p"},{"x":-44869,"y":-139480,"t":"iron","p":"p"},{"x":372374,"y":-153421,"t":"iron","p":"p"},{"x":83509,"y":-90507,"t":"iron","p":"p"},{"x":242757,"y":87933,"t":"iron","p":"p"},{"x":-250080,"y":-126363,"t":"iron","p":"p"},{"x":297576,"y":-150186,"t":"iron","p":"p"},{"x":245862,"y":4379,"t":"iron","p":"p"},{"x":-110588,"y":-135153,"t":"iron","p":"p"},{"x":-164443,"y":171772,"t":"iron","p":"p"},{"x":348526,"y":-123751,"t":"iron","p":"p"},{"x":64576,"y":-71387,"t":"iron","p":"p"},{"x":304840,"y":-172908,"t":"iron","p":"p"},{"x":-37614,"y":-142250,"t":"iron","p":"p"},{"x":385303,"y":-189928,"t":"iron","p":"p"},{"x":319464,"y":-158098,"t":"iron","p":"p"},{"x":68075,"y":-81001,"t":"iron","p":"p"},{"x":128573,"y":1795,"t":"iron","p":"p"},{"x":-167603,"y":179557,"t":"iron","p":"p"},{"x":116236,"y":-15552,"t":"iron","p":"p"},{"x":282689,"y":-179305,"t":"iron","p":"p"},{"x":20144,"y":-169847,"t":"copper","p":"i"},{"x":-83134,"y":275762,"t":"copper","p":"i"},{"x":-83962,"y":273577,"t":"copper","p":"i"},{"x":-266904,"y":-133355,"t":"copper","p":"i"},{"x":256402,"y":-184355,"t":"copper","p":"i"},{"x":130551,"y":179529,"t":"copper","p":"i"},{"x":326947,"y":-209586,"t":"copper","p":"i"},{"x":95346,"y":-168442,"t":"copper","p":"i"},{"x":-156723,"y":109165,"t":"copper","p":"i"},{"x":329410,"y":-186014,"t":"copper","p":"i"},{"x":-71673,"y":106511,"t":"copper","p":"i"},{"x":381666,"y":-268290,"t":"copper","p":"i"},{"x":-159616,"y":112858,"t":"copper","p":"i"},{"x":233447,"y":-247935,"t":"copper","p":"n"},{"x":-163354,"y":-192097,"t":"copper","p":"n"},{"x":108117,"y":152284,"t":"copper","p":"n"},{"x":287768,"y":-274886,"t":"copper","p":"n"},{"x":167904,"y":-116373,"t":"copper","p":"n"},{"x":252875,"y":-161693,"t":"copper","p":"n"},{"x":5251,"y":157169,"t":"copper","p":"n"},{"x":297398,"y":-96437,"t":"copper","p":"n"},{"x":-96801,"y":-135276,"t":"copper","p":"n"},{"x":-33328,"y":231626,"t":"copper","p":"n"},{"x":-36771,"y":296779,"t":"copper","p":"n"},{"x":-94265,"y":165842,"t":"copper","p":"n"},{"x":355998,"y":-66386,"t":"copper","p":"n"},{"x":-166357,"y":-129628,"t":"copper","p":"n"},{"x":58031,"y":82305,"t":"copper","p":"n"},{"x":-266712,"y":-51318,"t":"copper","p":"n"},{"x":160086,"y":259421,"t":"copper","p":"n"},{"x":270317,"y":-211597,"t":"copper","p":"n"},{"x":7172,"y":155232,"t":"copper","p":"n"},{"x":-28703,"y":198210,"t":"copper","p":"n"},{"x":-281346,"y":-72000,"t":"copper","p":"n"},{"x":282284,"y":63327,"t":"copper","p":"n"},{"x":297499,"y":-7312,"t":"copper","p":"n"},{"x":297710,"y":-107996,"t":"copper","p":"n"},{"x":277591,"y":-94119,"t":"copper","p":"n"},{"x":5024,"y":159951,"t":"copper","p":"n"},{"x":348939,"y":-185584,"t":"copper","p":"n"},{"x":-268264,"y":-54991,"t":"copper","p":"n"},{"x":-21265,"y":283148,"t":"copper","p":"n"},{"x":-148008,"y":-30185,"t":"copper","p":"p"},{"x":225504,"y":55773,"t":"copper","p":"p"},{"x":-26898,"y":-145469,"t":"copper","p":"p"},{"x":-21758,"y":-145312,"t":"copper","p":"p"},{"x":149937,"y":4686,"t":"copper","p":"p"},{"x":152648,"y":5227,"t":"copper","p":"p"},{"x":80832,"y":242478,"t":"copper","p":"p"},{"x":-171879,"y":185789,"t":"copper","p":"p"},{"x":355462,"y":-149808,"t":"copper","p":"p"},{"x":342806,"y":-114728,"t":"copper","p":"p"},{"x":56109,"y":-85970,"t":"copper","p":"p"},{"x":157738,"y":14878,"t":"copper","p":"p"},{"x":380814,"y":-169868,"t":"copper","p":"p"},{"x":211843,"y":-18820,"t":"caterium","p":"n"},{"x":109619,"y":155798,"t":"caterium","p":"n"},{"x":90376,"y":80714,"t":"caterium","p":"n"},{"x":208006,"y":-16383,"t":"caterium","p":"n"},{"x":103846,"y":-94854,"t":"caterium","p":"n"},{"x":-135468,"y":-174682,"t":"caterium","p":"n"},{"x":-12815,"y":-104642,"t":"caterium","p":"n"},{"x":224308,"y":-128742,"t":"caterium","p":"n"},{"x":114180,"y":-17000,"t":"caterium","p":"n"},{"x":-153387,"y":82252,"t":"caterium","p":"p"},{"x":270786,"y":120111,"t":"caterium","p":"p"},{"x":208140,"y":-23983,"t":"caterium","p":"p"},{"x":236609,"y":-260096,"t":"caterium","p":"p"},{"x":-131574,"y":227253,"t":"caterium","p":"p"},{"x":406564,"y":-206810,"t":"caterium","p":"p"},{"x":-92343,"y":281606,"t":"caterium","p":"p"},{"x":-178491,"y":-79788,"t":"caterium","p":"p"},{"x":406197,"y":-252990,"t":"coal","p":"i"},{"x":8348,"y":70432,"t":"coal","p":"i"},{"x":368851,"y":-76219,"t":"coal","p":"i"},{"x":220713,"y":-250482,"t":"coal","p":"i"},{"x":218926,"y":-255339,"t":"coal","p":"i"},{"x":177478,"y":129905,"t":"coal","p":"i"},{"x":151131,"y":75311,"t":"coal","p":"i"},{"x":-271794,"y":-146229,"t":"coal","p":"i"},{"x":193869,"y":116585,"t":"coal","p":"i"},{"x":153854,"y":84163,"t":"coal","p":"i"},{"x":-281034,"y":-142695,"t":"coal","p":"i"},{"x":180820,"y":141195,"t":"coal","p":"i"},{"x":155600,"y":113112,"t":"coal","p":"i"},{"x":-144746,"y":64419,"t":"coal","p":"i"},{"x":365436,"y":-80082,"t":"coal","p":"i"},{"x":-78419,"y":129174,"t":"coal","p":"n"},{"x":-86788,"y":138201,"t":"coal","p":"n"},{"x":362594,"y":-135770,"t":"coal","p":"n"},{"x":-75977,"y":130576,"t":"coal","p":"n"},{"x":209927,"y":162975,"t":"coal","p":"n"},{"x":271514,"y":-246511,"t":"coal","p":"n"},{"x":-110109,"y":-129160,"t":"coal","p":"n"},{"x":399534,"y":-255365,"t":"coal","p":"n"},{"x":150583,"y":249924,"t":"coal","p":"n"},{"x":-141072,"y":39662,"t":"coal","p":"n"},{"x":-102630,"y":-140320,"t":"coal","p":"n"},{"x":-89379,"y":136763,"t":"coal","p":"n"},{"x":157195,"y":241872,"t":"coal","p":"n"},{"x":153876,"y":252817,"t":"coal","p":"n"},{"x":368128,"y":-139151,"t":"coal","p":"n"},{"x":214894,"y":116756,"t":"coal","p":"n"},{"x":365854,"y":-133384,"t":"coal","p":"n"},{"x":57623,"y":45463,"t":"coal","p":"n"},{"x":-275456,"y":-165870,"t":"coal","p":"n"},{"x":-107739,"y":-130640,"t":"coal","p":"n"},{"x":-265694,"y":-162571,"t":"coal","p":"n"},{"x":400379,"y":-262928,"t":"coal","p":"n"},{"x":33025,"y":69,"t":"coal","p":"n"},{"x":-53782,"y":33003,"t":"coal","p":"n"},{"x":276453,"y":-250331,"t":"coal","p":"n"},{"x":404788,"y":-113961,"t":"coal","p":"n"},{"x":-64843,"y":-7738,"t":"coal","p":"n"},{"x":128059,"y":-24825,"t":"coal","p":"n"},{"x":155868,"y":248394,"t":"coal","p":"n"},{"x":-29926,"y":39693,"t":"coal","p":"n"},{"x":-99604,"y":-146823,"t":"coal","p":"n"},{"x":-107794,"y":31855,"t":"coal","p":"p"},{"x":330471,"y":-264658,"t":"coal","p":"p"},{"x":138805,"y":-23953,"t":"coal","p":"p"},{"x":122698,"y":-26966,"t":"coal","p":"p"},{"x":-60961,"y":96196,"t":"coal","p":"p"},{"x":-66077,"y":296871,"t":"coal","p":"p"},{"x":-113216,"y":-44145,"t":"coal","p":"p"},{"x":-148430,"y":56310,"t":"coal","p":"p"},{"x":404471,"y":-116795,"t":"coal","p":"p"},{"x":239775,"y":148305,"t":"coal","p":"p"},{"x":136290,"y":-20924,"t":"coal","p":"p"},{"x":-113616,"y":-50450,"t":"coal","p":"p"},{"x":206003,"y":181237,"t":"coal","p":"p"},{"x":17164,"y":280788,"t":"coal","p":"p"},{"x":-107640,"y":-52376,"t":"coal","p":"p"},{"x":325549,"y":-264500,"t":"coal","p":"p"},{"x":29991,"y":-186850,"t":"oil","p":"i"},{"x":-43612,"y":-190316,"t":"oil","p":"i"},{"x":169717,"y":203386,"t":"oil","p":"i"},{"x":167392,"y":-88954,"t":"oil","p":"i"},{"x":176297,"y":-94197,"t":"oil","p":"i"},{"x":-32600,"y":-192538,"t":"oil","p":"i"},{"x":15357,"y":-197672,"t":"oil","p":"i"},{"x":57144,"y":-191300,"t":"oil","p":"i"},{"x":146452,"y":-222638,"t":"oil","p":"i"},{"x":147769,"y":-212912,"t":"oil","p":"i"},{"x":52589,"y":-8859,"t":"oil","p":"n"},{"x":178265,"y":206096,"t":"oil","p":"n"},{"x":172814,"y":-94608,"t":"oil","p":"n"},{"x":26598,"y":-193984,"t":"oil","p":"n"},{"x":52471,"y":-201465,"t":"oil","p":"n"},{"x":49404,"y":-4744,"t":"oil","p":"n"},{"x":-232469,"y":62838,"t":"oil","p":"n"},{"x":173702,"y":-91776,"t":"oil","p":"n"},{"x":148478,"y":-193869,"t":"oil","p":"n"},{"x":-35726,"y":-209521,"t":"oil","p":"n"},{"x":185124,"y":214442,"t":"oil","p":"n"},{"x":-229054,"y":78058,"t":"oil","p":"n"},{"x":184227,"y":217102,"t":"oil","p":"p"},{"x":-245049,"y":90588,"t":"oil","p":"p"},{"x":49639,"y":656,"t":"oil","p":"p"},{"x":44496,"y":-228950,"t":"oil","p":"p"},{"x":182116,"y":188397,"t":"oil","p":"p"},{"x":12163,"y":-225348,"t":"oil","p":"p"},{"x":-252534,"y":69813,"t":"oil","p":"p"},{"x":184783,"y":191090,"t":"oil","p":"p"},{"x":91305,"y":220217,"t":"sulfur","p":"i"},{"x":296500,"y":13254,"t":"sulfur","p":"i"},{"x":-41122,"y":-72631,"t":"sulfur","p":"i"},{"x":34655,"y":284303,"t":"sulfur","p":"i"},{"x":-39890,"y":-93579,"t":"sulfur","p":"i"},{"x":128296,"y":-75942,"t":"sulfur","p":"i"},{"x":92073,"y":3164,"t":"sulfur","p":"n"},{"x":96368,"y":220401,"t":"sulfur","p":"n"},{"x":380366,"y":-109496,"t":"sulfur","p":"n"},{"x":-101382,"y":91579,"t":"sulfur","p":"n"},{"x":-213023,"y":-170021,"t":"sulfur","p":"n"},{"x":246502,"y":-277000,"t":"sulfur","p":"p"},{"x":-145044,"y":165965,"t":"sulfur","p":"p"},{"x":94847,"y":224537,"t":"sulfur","p":"p"},{"x":188183,"y":-247468,"t":"sulfur","p":"p"},{"x":242310,"y":152779,"t":"sulfur","p":"p"},{"x":198936,"y":93354,"t":"bauxite","p":"i"},{"x":103318,"y":67499,"t":"bauxite","p":"i"},{"x":261128,"y":48275,"t":"bauxite","p":"i"},{"x":-5634,"y":44274,"t":"bauxite","p":"i"},{"x":89593,"y":62639,"t":"bauxite","p":"i"},{"x":39478,"y":52120,"t":"bauxite","p":"n"},{"x":263148,"y":53611,"t":"bauxite","p":"n"},{"x":199007,"y":89173,"t":"bauxite","p":"n"},{"x":2571,"y":9834,"t":"bauxite","p":"n"},{"x":-150575,"y":-23,"t":"bauxite","p":"n"},{"x":106048,"y":50479,"t":"bauxite","p":"n"},{"x":260299,"y":56228,"t":"bauxite","p":"p"},{"x":-5293,"y":92075,"t":"bauxite","p":"p"},{"x":-177367,"y":44999,"t":"bauxite","p":"p"},{"x":-59322,"y":14595,"t":"bauxite","p":"p"},{"x":116878,"y":51511,"t":"bauxite","p":"p"},{"x":-217052,"y":11242,"t":"bauxite","p":"p"},{"x":55042,"y":-130641,"t":"quartz","p":"i"},{"x":62290,"y":-137424,"t":"quartz","p":"i"},{"x":62111,"y":207627,"t":"quartz","p":"i"},{"x":34968,"y":118464,"t":"quartz","p":"n"},{"x":305660,"y":-301306,"t":"quartz","p":"n"},{"x":196668,"y":-13956,"t":"quartz","p":"n"},{"x":55253,"y":205856,"t":"quartz","p":"n"},{"x":-194230,"y":-140422,"t":"quartz","p":"n"},{"x":308598,"y":-296079,"t":"quartz","p":"n"},{"x":190098,"y":-17281,"t":"quartz","p":"n"},{"x":-90370,"y":63712,"t":"quartz","p":"p"},{"x":-167360,"y":-145683,"t":"quartz","p":"p"},{"x":61654,"y":196432,"t":"quartz","p":"p"},{"x":-171986,"y":-144146,"t":"quartz","p":"p"},{"x":193980,"y":-5468,"t":"quartz","p":"p"},{"x":37926,"y":120939,"t":"quartz","p":"p"},{"x":-90474,"y":67260,"t":"quartz","p":"p"},{"x":-132772,"y":-187579,"t":"uranium","p":"i"},{"x":180194,"y":-189199,"t":"uranium","p":"i"},{"x":168713,"y":50839,"t":"uranium","p":"i"},{"x":-75893,"y":51637,"t":"uranium","p":"n"},{"x":38000,"y":91736,"t":"uranium","p":"n"},{"x":132958,"y":240893,"t":"sam","p":"i"},{"x":152962,"y":-24054,"t":"sam","p":"i"},{"x":-80870,"y":-32419,"t":"sam","p":"i"},{"x":80730,"y":204812,"t":"sam","p":"i"},{"x":-46645,"y":-252947,"t":"sam","p":"i"},{"x":272832,"y":-261866,"t":"sam","p":"i"},{"x":-143612,"y":20728,"t":"sam","p":"i"},{"x":119149,"y":71321,"t":"sam","p":"i"},{"x":230542,"y":-33617,"t":"sam","p":"i"},{"x":161929,"y":103777,"t":"sam","p":"i"},{"x":-181814,"y":89077,"t":"sam","p":"n"},{"x":15460,"y":-804,"t":"sam","p":"n"},{"x":172559,"y":-285517,"t":"sam","p":"n"},{"x":228273,"y":116287,"t":"sam","p":"n"},{"x":-24066,"y":269858,"t":"sam","p":"n"},{"x":-182183,"y":-142367,"t":"sam","p":"n"},{"x":162899,"y":65414,"t":"sam","p":"p"},{"x":-48375,"y":128937,"t":"sam","p":"p"},{"x":82559,"y":-219609,"t":"sam","p":"p"}];
+const FACTORIES = {"ferrium":{"name":"Ferrium","theme":"Pure Iron","req":["iron","limestone"],"cx":279838,"cy":-181875,"totalNodes":12,"nodes":[{"x":273730,"y":-148173,"t":"iron","p":"p"},{"x":278266,"y":-210772,"t":"iron","p":"p"},{"x":297576,"y":-150186,"t":"iron","p":"p"},{"x":304840,"y":-172908,"t":"iron","p":"p"},{"x":282689,"y":-179305,"t":"iron","p":"p"},{"x":276674,"y":-195100,"t":"iron","p":"n"},{"x":256612,"y":-197979,"t":"iron","p":"n"},{"x":298734,"y":-199293,"t":"iron","p":"n"},{"x":265501,"y":-178206,"t":"iron","p":"i"},{"x":264240,"y":-162899,"t":"iron","p":"i"},{"x":314598,"y":-196773,"t":"iron","p":"i"},{"x":244591,"y":-190903,"t":"limestone","p":"i"}],"resources":{"iron":{"count":11,"pure":5,"normal":3,"impure":3},"limestone":{"count":1,"pure":0,"normal":0,"impure":1}}},"naphtheon":{"name":"Naphtheon","theme":"Oil Ecosystem","req":["iron","oil","limestone"],"cx":53864,"cy":-1143,"totalNodes":4,"nodes":[{"x":63823,"y":8377,"t":"limestone","p":"n"},{"x":49638,"y":656,"t":"oil","p":"p"},{"x":52589,"y":-8859,"t":"oil","p":"n"},{"x":49404,"y":-4744,"t":"oil","p":"n"}],"resources":{"limestone":{"count":1,"pure":0,"normal":1,"impure":0},"oil":{"count":3,"pure":1,"normal":2,"impure":0}}},"forgeholm":{"name":"Forgeholm","theme":"Steel Spine","req":["iron","coal","limestone"],"cx":125551,"cy":-24977,"totalNodes":9,"nodes":[{"x":138805,"y":-23953,"t":"coal","p":"p"},{"x":122698,"y":-26966,"t":"coal","p":"p"},{"x":136290,"y":-20924,"t":"coal","p":"p"},{"x":128059,"y":-24825,"t":"coal","p":"n"},{"x":124933,"y":5226,"t":"iron","p":"p"},{"x":128573,"y":1795,"t":"iron","p":"p"},{"x":116236,"y":-15552,"t":"iron","p":"p"},{"x":120085,"y":-9957,"t":"limestone","p":"p"},{"x":107368,"y":-43240,"t":"limestone","p":"n"}],"resources":{"coal":{"count":4,"pure":3,"normal":1,"impure":0},"iron":{"count":3,"pure":3,"normal":0,"impure":0},"limestone":{"count":2,"pure":1,"normal":1,"impure":0}}},"luxara":{"name":"Luxara","theme":"Aluminum Replacement","req":["iron","coal","limestone","bauxite"],"cx":198574,"cy":98588,"totalNodes":6,"nodes":[{"x":199007,"y":89173,"t":"bauxite","p":"n"},{"x":198936,"y":93354,"t":"bauxite","p":"i"},{"x":214894,"y":116756,"t":"coal","p":"n"},{"x":177478,"y":129905,"t":"coal","p":"i"},{"x":193869,"y":116585,"t":"coal","p":"i"},{"x":186164,"y":77070,"t":"limestone","p":"n"}],"resources":{"bauxite":{"count":2,"pure":0,"normal":1,"impure":1},"coal":{"count":3,"pure":0,"normal":1,"impure":2},"limestone":{"count":1,"pure":0,"normal":1,"impure":0}}},"cathera":{"name":"Cathera","theme":"Copper & Caterium","req":["iron","copper","caterium","limestone"],"cx":75657,"cy":-98308,"totalNodes":14,"nodes":[{"x":103846,"y":-94854,"t":"caterium","p":"n"},{"x":56109,"y":-85970,"t":"copper","p":"p"},{"x":59113,"y":-71502,"t":"iron","p":"p"},{"x":84199,"y":-86394,"t":"iron","p":"p"},{"x":70865,"y":-78126,"t":"iron","p":"p"},{"x":83508,"y":-90507,"t":"iron","p":"p"},{"x":64576,"y":-71387,"t":"iron","p":"p"},{"x":68075,"y":-81001,"t":"iron","p":"p"},{"x":69552,"y":-100369,"t":"limestone","p":"p"},{"x":67878,"y":-95777,"t":"limestone","p":"n"},{"x":79670,"y":-75852,"t":"limestone","p":"n"},{"x":75115,"y":-123004,"t":"limestone","p":"n"},{"x":60593,"y":-77891,"t":"limestone","p":"n"},{"x":92495,"y":-132749,"t":"limestone","p":"i"}],"resources":{"caterium":{"count":1,"pure":0,"normal":1,"impure":0},"copper":{"count":1,"pure":1,"normal":0,"impure":0},"iron":{"count":6,"pure":6,"normal":0,"impure":0},"limestone":{"count":6,"pure":1,"normal":4,"impure":1}}}};
+const MINING_TOWNS = [{"id":"siderith","name":"Siderith","theme":"Iron Mining Outpost","resource":"iron","color":"#ff6b6b","cx":241941,"cy":3242,"nodes":[{"x":245700,"y":30065,"t":"iron","p":"n"},{"x":233142,"y":-26440,"t":"iron","p":"n"},{"x":252751,"y":29140,"t":"iron","p":"n"},{"x":237725,"y":-23006,"t":"iron","p":"n"},{"x":245043,"y":-22318,"t":"iron","p":"n"},{"x":219395,"y":37189,"t":"iron","p":"p"},{"x":255908,"y":-3071,"t":"iron","p":"p"},{"x":245862,"y":4379,"t":"iron","p":"p"}],"capacity":5340,"nodeCount":8,"purity":{"pure":3,"normal":5,"impure":0},"supplies":["Naphtheon (2,007/min)","Luxara (40/min)"]},{"id":"calcara","name":"Calcara","theme":"Limestone Quarry","resource":"limestone","color":"#dfe6e9","cx":169486,"cy":-45968,"nodes":[{"x":158314,"y":-65003,"t":"limestone","p":"n"},{"x":175981,"y":-40156,"t":"limestone","p":"n"},{"x":177198,"y":-86517,"t":"limestone","p":"n"}],"capacity":1800,"nodeCount":3,"purity":{"pure":0,"normal":3,"impure":0},"supplies":["Ferrium (764/min)","Luxara (157/min)"]}];
+
+// === MAP IMAGE ===
+const MAP_IMG = new Image();
+let mapImgLoaded = false;
+MAP_IMG.onload = () => { mapImgLoaded = true; draw(); };
+MAP_IMG.src = 'satisfactory-map.jpg';
+
+// Map image covers these game coordinate bounds (from tiles.json)
+const IMG_MIN_X = -324999, IMG_MAX_X = 424999;
+const IMG_MIN_Y = -374999, IMG_MAX_Y = 374999;
+const IMG_GAME_W = IMG_MAX_X - IMG_MIN_X; // 749998
+const IMG_GAME_H = IMG_MAX_Y - IMG_MIN_Y; // 749998
+
+// === CONSTANTS ===
+const RESOURCE_COLORS = {
+  iron:'#e74c3c', limestone:'#95a5a6', copper:'#e67e22', coal:'#555',
+  oil:'#9b59b6', caterium:'#f1c40f', bauxite:'#e91e63', quartz:'#00bcd4',
+  sulfur:'#cddc39', sam:'#2196f3', uranium:'#4caf50', nitrogen:'#80deea',
+  water:'#4fc3f7'
+};
+const FACTORY_COLORS = {
+  ferrium:'#e74c3c', naphtheon:'#9b59b6', forgeholm:'#3498db',
+  luxara:'#f1c40f', cathera:'#1abc9c'
+};
+const PURITY_SCALE = {p:1.3, n:1.0, i:0.7};
+const PURITY_ALPHA = {p:1.0, n:0.7, i:0.5};
+const PURITY_LABEL = {p:'Pure', n:'Normal', i:'Impure'};
+
+const SEARCH_RADIUS = 50000; // 500m in game units
+
+// Zoom thresholds
+const ZOOM_SHOW_BG_NODES = 0.0018;
+const ZOOM_SHOW_FACTORY_NODES = 0.0015;
+const ZOOM_SHOW_LINES = 0.0025;
+const ZOOM_SHOW_RADIUS = 0.002;
+const ZOOM_SHOW_PURITY_TEXT = 0.01;
+
+// === STATE ===
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+// Map bounds
+const MAP_MIN_X = -300000, MAP_MAX_X = 420000;
+const MAP_MIN_Y = -320000, MAP_MAX_Y = 320000;
+const MAP_W = MAP_MAX_X - MAP_MIN_X;
+const MAP_H = MAP_MAX_Y - MAP_MIN_Y;
+const MAP_CX = (MAP_MIN_X + MAP_MAX_X) / 2;
+const MAP_CY = (MAP_MIN_Y + MAP_MAX_Y) / 2;
+
+let viewX = MAP_CX, viewY = MAP_CY;
+let zoom = 0.001; // will be set on init
+let dragging = false, dragStartX = 0, dragStartY = 0, dragViewX = 0, dragViewY = 0;
+let W = 800, H = 600;
+
+let visible = {};
+for (const fid of Object.keys(FACTORIES)) { visible[fid] = true; }
+let townVisible = {};
+for (const mt of MINING_TOWNS) { townVisible[mt.id] = true; }
+
+// === TRANSFORM ===
+function g2s(gx, gy) {
+  return {
+    x: (gx - viewX) * zoom + W / 2,
+    y: (gy - viewY) * zoom + H / 2,
+  };
+}
+function s2g(sx, sy) {
+  return {
+    x: (sx - W / 2) / zoom + viewX,
+    y: (sy - H / 2) / zoom + viewY,
+  };
+}
+
+// === DRAWING ===
+function draw() {
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, W, H);
+
+  drawMapBackground();
+  drawGrid();
+
+  // Background resource nodes (faint)
+  if (zoom > ZOOM_SHOW_BG_NODES) {
+    drawBackgroundNodes();
+  }
+
+  // Factory data
+  const fids = Object.keys(FACTORIES);
+  for (const fid of fids) {
+    if (!visible[fid]) continue;
+    const f = FACTORIES[fid];
+
+    if (zoom > ZOOM_SHOW_RADIUS) drawSearchRadius(fid, f);
+    if (zoom > ZOOM_SHOW_LINES) drawConnections(fid, f);
+    if (zoom > ZOOM_SHOW_FACTORY_NODES) drawFactoryNodes(fid, f);
+  }
+
+  // Mining towns
+  for (const mt of MINING_TOWNS) {
+    if (!townVisible[mt.id]) continue;
+    if (zoom > ZOOM_SHOW_RADIUS) drawSearchRadius_mt(mt);
+    if (zoom > ZOOM_SHOW_LINES) drawConnections_mt(mt);
+    if (zoom > ZOOM_SHOW_FACTORY_NODES) drawTownNodes(mt);
+  }
+
+  // Factory centers always on top
+  for (const fid of fids) {
+    if (!visible[fid]) continue;
+    const f = FACTORIES[fid];
+    drawFactoryCenter(fid, f);
+  }
+
+  // Mining town centers on top
+  for (const mt of MINING_TOWNS) {
+    if (!townVisible[mt.id]) continue;
+    drawTownCenter(mt);
+  }
+}
+
+function drawMapBackground() {
+  if (!mapImgLoaded) return;
+  const tl = g2s(IMG_MIN_X, IMG_MIN_Y);
+  const screenW = IMG_GAME_W * zoom;
+  const screenH = IMG_GAME_H * zoom;
+  ctx.drawImage(MAP_IMG, tl.x, tl.y, screenW, screenH);
+}
+
+function drawGrid() {
+  // Draw faint grid lines at 100k game unit intervals (1km)
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  const step = 100000;
+  const tlg = s2g(0, 0);
+  const brg = s2g(W, H);
+  const startX = Math.floor(tlg.x / step) * step;
+  const startY = Math.floor(tlg.y / step) * step;
+  ctx.beginPath();
+  for (let gx = startX; gx <= brg.x; gx += step) {
+    const s = g2s(gx, 0);
+    ctx.moveTo(s.x, 0);
+    ctx.lineTo(s.x, H);
+  }
+  for (let gy = startY; gy <= brg.y; gy += step) {
+    const s = g2s(0, gy);
+    ctx.moveTo(0, s.y);
+    ctx.lineTo(W, s.y);
+  }
+  ctx.stroke();
+}
+
+function drawBackgroundNodes() {
+  const tlg = s2g(0, 0);
+  const brg = s2g(W, H);
+  for (const n of ALL_NODES) {
+    // Frustum cull
+    if (n.x < tlg.x - 5000 || n.x > brg.x + 5000) continue;
+    if (n.y < tlg.y - 5000 || n.y > brg.y + 5000) continue;
+    const s = g2s(n.x, n.y);
+    const r = 2 * PURITY_SCALE[n.p];
+    ctx.globalAlpha = 0.15 * PURITY_ALPHA[n.p];
+    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawSearchRadius(fid, f) {
+  const s = g2s(f.cx, f.cy);
+  const r = SEARCH_RADIUS * zoom;
+  ctx.strokeStyle = FACTORY_COLORS[fid] + '30';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawConnections(fid, f) {
+  const sc = g2s(f.cx, f.cy);
+  ctx.strokeStyle = FACTORY_COLORS[fid] + '40';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (const n of f.nodes) {
+    const sn = g2s(n.x, n.y);
+    ctx.moveTo(sc.x, sc.y);
+    ctx.lineTo(sn.x, sn.y);
+  }
+  ctx.stroke();
+}
+
+function drawFactoryNodes(fid, f) {
+  const color = FACTORY_COLORS[fid];
+  for (const n of f.nodes) {
+    const s = g2s(n.x, n.y);
+    const baseR = 4 * PURITY_SCALE[n.p];
+
+    // Filled dot in resource color
+    ctx.globalAlpha = PURITY_ALPHA[n.p];
+    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Ring in factory color
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, baseR + 1.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Purity + type label at high zoom
+    if (zoom > ZOOM_SHOW_PURITY_TEXT) {
+      ctx.font = '9px Courier New';
+      const label = PURITY_LABEL[n.p] + ' ' + n.t;
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.strokeText(label, s.x + baseR + 4, s.y + 3);
+      ctx.fillStyle = '#ddd';
+      ctx.fillText(label, s.x + baseR + 4, s.y + 3);
+    }
+  }
+}
+
+function drawFactoryCenter(fid, f) {
+  const s = g2s(f.cx, f.cy);
+  const color = FACTORY_COLORS[fid];
+  const r = Math.max(8, 12 / Math.max(zoom / 0.001, 0.5));
+
+  // Outer glow
+  ctx.fillStyle = color + '30';
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, r + 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Main circle
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Border
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Label
+  ctx.font = 'bold 12px Courier New';
+  ctx.textAlign = 'center';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 3;
+  ctx.strokeText(f.name, s.x, s.y - r - 8);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(f.name, s.x, s.y - r - 8);
+  ctx.textAlign = 'left';
+}
+
+// === MINING TOWN DRAWING ===
+function drawSearchRadius_mt(mt) {
+  const s = g2s(mt.cx, mt.cy);
+  const r = SEARCH_RADIUS * zoom;
+  ctx.strokeStyle = mt.color + '30';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawConnections_mt(mt) {
+  const sc = g2s(mt.cx, mt.cy);
+  ctx.strokeStyle = mt.color + '40';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (const n of mt.nodes) {
+    const sn = g2s(n.x, n.y);
+    ctx.moveTo(sc.x, sc.y);
+    ctx.lineTo(sn.x, sn.y);
+  }
+  ctx.stroke();
+}
+
+function drawTownNodes(mt) {
+  for (const n of mt.nodes) {
+    const s = g2s(n.x, n.y);
+    const baseR = 4 * PURITY_SCALE[n.p];
+    ctx.globalAlpha = PURITY_ALPHA[n.p];
+    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = mt.color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, baseR + 1.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    if (zoom > ZOOM_SHOW_PURITY_TEXT) {
+      ctx.font = '9px Courier New';
+      const label = PURITY_LABEL[n.p] + ' ' + n.t;
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.strokeText(label, s.x + baseR + 4, s.y + 3);
+      ctx.fillStyle = '#ddd';
+      ctx.fillText(label, s.x + baseR + 4, s.y + 3);
+    }
+  }
+}
+
+function drawTownCenter(mt) {
+  const s = g2s(mt.cx, mt.cy);
+  const r = Math.max(8, 12 / Math.max(zoom / 0.001, 0.5));
+
+  // Outer glow
+  ctx.fillStyle = mt.color + '30';
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  ctx.rotate(Math.PI / 4);
+  ctx.fillRect(-r - 4, -r - 4, (r + 4) * 2, (r + 4) * 2);
+  ctx.restore();
+
+  // Diamond shape
+  ctx.fillStyle = mt.color;
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  ctx.rotate(Math.PI / 4);
+  ctx.fillRect(-r, -r, r * 2, r * 2);
+  ctx.restore();
+
+  // Border
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  ctx.rotate(Math.PI / 4);
+  ctx.strokeRect(-r, -r, r * 2, r * 2);
+  ctx.restore();
+
+  // Label
+  ctx.font = 'bold 12px Courier New';
+  ctx.textAlign = 'center';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 3;
+  ctx.strokeText(mt.name, s.x, s.y - r - 10);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(mt.name, s.x, s.y - r - 10);
+
+  // Pickaxe icon text inside
+  ctx.font = 'bold 9px Courier New';
+  ctx.fillStyle = '#000';
+  ctx.fillText('\u26CF', s.x, s.y + 4);
+  ctx.textAlign = 'left';
+}
+
+// === SIDEBAR ===
+function buildLegend() {
+  const el = document.getElementById('legend');
+  let html = '<div style="font-weight:bold;margin-bottom:4px;color:#fff;font-size:12px">Resource Types</div>';
+  const types = ['iron','limestone','copper','coal','oil','caterium','bauxite','quartz','sulfur','sam','uranium'];
+  for (const t of types) {
+    html += `<div class="row"><span class="dot" style="background:${RESOURCE_COLORS[t]}"></span>${t}</div>`;
+  }
+  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Purity</div>';
+  html += '<div class="row"><span class="dot" style="background:#ccc;width:13px;height:13px"></span>Pure (large)</div>';
+  html += '<div class="row"><span class="dot" style="background:#ccc;width:10px;height:10px"></span>Normal</div>';
+  html += '<div class="row"><span class="dot" style="background:#ccc;width:7px;height:7px"></span>Impure (small)</div>';
+  el.innerHTML = html;
+}
+
+function buildSidebar() {
+  const el = document.getElementById('factory-list');
+  let html = '';
+  for (const [fid, f] of Object.entries(FACTORIES)) {
+    const color = FACTORY_COLORS[fid];
+    const resSummary = Object.entries(f.resources).map(([rt, rd]) =>
+      `${rt}: ${rd.pure}P/${rd.normal}N/${rd.impure}I`
+    ).join(', ');
+    html += `<div class="factory-section" id="fsec-${fid}">`;
+    html += `<div class="factory-header"><input type="checkbox" checked onchange="toggleVis('${fid}',this.checked)" style="accent-color:${color}"><span class="factory-swatch" style="background:${color}"></span><span class="factory-name">${f.name}</span></div>`;
+    html += `<div class="factory-theme">${f.theme}</div>`;
+    html += `<div class="factory-resources">${f.totalNodes} nodes: ${resSummary}</div>`;
+    html += `<button class="zoom-btn" onclick="zoomTo('${fid}')">Zoom to ${f.name} &rarr;</button>`;
+    html += `</div>`;
+  }
+
+  // Mining towns
+  html += '<div style="padding:8px 12px;border-bottom:1px solid #333;font-weight:bold;font-size:12px;color:#fff;background:#16213e;letter-spacing:1px;text-transform:uppercase">Mining Towns</div>';
+  for (const mt of MINING_TOWNS) {
+    html += `<div class="factory-section" id="tsec-${mt.id}">`;
+    html += `<div class="factory-header"><input type="checkbox" checked onchange="toggleTownVis('${mt.id}',this.checked)" style="accent-color:${mt.color}"><span class="factory-swatch" style="background:${mt.color};transform:rotate(45deg)"></span><span class="factory-name">${mt.name}</span></div>`;
+    html += `<div class="factory-theme">${mt.theme}</div>`;
+    html += `<div class="factory-resources">${mt.nodeCount} ${mt.resource} nodes | ${mt.capacity}/min capacity</div>`;
+    html += `<div class="factory-resources">${mt.purity.pure}P / ${mt.purity.normal}N / ${mt.purity.impure}I</div>`;
+    html += `<div class="factory-resources" style="margin-top:4px">Supplies:</div>`;
+    for (const s of mt.supplies) {
+      html += `<div class="factory-resources" style="color:#aaa">&nbsp;&bull; ${s}</div>`;
+    }
+    html += `<button class="zoom-btn" onclick="zoomToTown('${mt.id}')">Zoom to ${mt.name} &rarr;</button>`;
+    html += `</div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function toggleVis(fid, on) {
+  visible[fid] = on;
+  document.getElementById('fsec-' + fid).classList.toggle('hidden-factory', !on);
+  draw();
+}
+
+function zoomTo(fid) {
+  const f = FACTORIES[fid];
+  viewX = f.cx;
+  viewY = f.cy;
+  zoom = 0.004;
+  draw();
+}
+
+function toggleTownVis(tid, on) {
+  townVisible[tid] = on;
+  document.getElementById('tsec-' + tid).classList.toggle('hidden-factory', !on);
+  draw();
+}
+
+function zoomToTown(tid) {
+  const mt = MINING_TOWNS.find(t => t.id === tid);
+  if (!mt) return;
+  viewX = mt.cx;
+  viewY = mt.cy;
+  zoom = 0.004;
+  draw();
+}
+
+function resetView() {
+  viewX = MAP_CX;
+  viewY = MAP_CY;
+  fitZoom();
+  draw();
+}
+
+function exportSelections() {
+  const result = {
+    meta: {
+      description: 'Selected factory and mining town locations for Satisfactory',
+      exported_at: new Date().toISOString(),
+      coordinate_system: {
+        x: 'positive = east/right',
+        y: 'positive = south/bottom',
+        units: 'centimeters (100 units = 1 meter)'
+      }
+    },
+    selections: {}
+  };
+  for (const [fid, f] of Object.entries(FACTORIES)) {
+    result.selections[fid] = {
+      factory_name: f.name,
+      theme: f.theme,
+      center: {x: f.cx, y: f.cy},
+      required_resources: f.req,
+      total_nodes: f.totalNodes,
+      resources: f.resources,
+      nodes: f.nodes,
+    };
+  }
+  for (const mt of MINING_TOWNS) {
+    result.selections[mt.id] = {
+      factory_name: mt.name,
+      theme: mt.theme,
+      type: 'mining_town',
+      center: {x: mt.cx, y: mt.cy},
+      required_resources: [mt.resource],
+      total_nodes: mt.nodeCount,
+      capacity_per_min: mt.capacity,
+      supplies: mt.supplies,
+      purity: mt.purity,
+      nodes: mt.nodes,
+    };
+  }
+  const blob = new Blob([JSON.stringify(result, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'selected-factory-locations.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// === INTERACTION ===
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const mg = s2g(e.offsetX, e.offsetY);
+  const factor = e.deltaY > 0 ? 0.88 : 1.14;
+  zoom = Math.max(0.0003, Math.min(0.05, zoom * factor));
+  viewX = mg.x - (e.offsetX - W / 2) / zoom;
+  viewY = mg.y - (e.offsetY - H / 2) / zoom;
+  draw();
+}, {passive: false});
+
+canvas.addEventListener('mousedown', (e) => {
+  if (e.button === 0) {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragViewX = viewX;
+    dragViewY = viewY;
+    canvas.classList.add('grabbing');
+  }
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (dragging) {
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+    viewX = dragViewX - dx / zoom;
+    viewY = dragViewY - dy / zoom;
+    draw();
+  }
+  // Tooltip for factory centers
+  if (!dragging) {
+    const mg = s2g(e.clientX - canvas.getBoundingClientRect().left,
+                    e.clientY - canvas.getBoundingClientRect().top);
+    let hit = null;
+    for (const [fid, f] of Object.entries(FACTORIES)) {
+      if (!visible[fid]) continue;
+      const dx = mg.x - f.cx, dy = mg.y - f.cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const hitR = 15 / zoom;
+      if (dist < hitR) { hit = {fid, f}; break; }
+    }
+    // Also check mining towns
+    let hitTown = null;
+    if (!hit) {
+      for (const mt of MINING_TOWNS) {
+        if (!townVisible[mt.id]) continue;
+        const dx = mg.x - mt.cx, dy = mg.y - mt.cy;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const hitR = 15 / zoom;
+        if (d < hitR) { hitTown = mt; break; }
+      }
+    }
+    if (hit) {
+      const {f} = hit;
+      let tt = `<b>${f.name}</b> (${f.theme})<br>`;
+      tt += `${f.totalNodes} resource nodes`;
+      tooltip.innerHTML = tt;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top = (e.clientY + 14) + 'px';
+    } else if (hitTown) {
+      let tt = `<b>${hitTown.name}</b> (${hitTown.theme})<br>`;
+      tt += `${hitTown.nodeCount} ${hitTown.resource} nodes | ${hitTown.capacity}/min<br>`;
+      tt += `${hitTown.purity.pure}P / ${hitTown.purity.normal}N / ${hitTown.purity.impure}I<br>`;
+      tt += `Supplies: ${hitTown.supplies.join(', ')}`;
+      tooltip.innerHTML = tt;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top = (e.clientY + 14) + 'px';
+    } else {
+      tooltip.style.display = 'none';
+    }
+  }
+});
+
+window.addEventListener('mouseup', () => {
+  dragging = false;
+  canvas.classList.remove('grabbing');
+});
+
+document.getElementById('export-btn').addEventListener('click', exportSelections);
+document.getElementById('reset-btn').addEventListener('click', resetView);
+
+// Keyboard shortcuts
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'r') resetView();
+  if (e.key === 'e') exportSelections();
+  const fids = Object.keys(FACTORIES);
+  const num = parseInt(e.key);
+  if (num >= 1 && num <= fids.length) zoomTo(fids[num - 1]);
+});
+
+// === INIT ===
+function fitZoom() {
+  zoom = Math.min(W / MAP_W, H / MAP_H) * 0.9;
+}
+
+function resize() {
+  const rect = canvas.getBoundingClientRect();
+  W = rect.width;
+  H = rect.height;
+  canvas.width = W;
+  canvas.height = H;
+}
+
+function init() {
+  resize();
+  fitZoom();
+  buildLegend();
+  buildSidebar();
+  draw();
+}
+
+window.addEventListener('resize', () => { resize(); draw(); });
+init();
+</script>
+</body>
+</html>
