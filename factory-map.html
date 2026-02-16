@@ -44,6 +44,21 @@ canvas.grabbing{cursor:grabbing}
 #tab-content{display:flex;flex:1;overflow:hidden}
 #map-view{display:flex;flex:1;overflow:hidden}
 #factories-view{display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:24px 32px;font-family:'Courier New',monospace}
+#factories-content{max-width:1400px;margin:0 auto;width:100%}
+.summary-banner{background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:20px 24px;margin-bottom:24px}
+.summary-banner h2{font-size:16px;color:#e0e0e0;margin-bottom:4px;letter-spacing:1px}
+.summary-banner .meta{font-size:11px;color:#888;margin-bottom:16px}
+.summary-table{width:100%;border-collapse:collapse;font-size:12px}
+.summary-table th{text-align:left;color:#888;font-weight:normal;padding:4px 12px 4px 0;border-bottom:1px solid #333;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+.summary-table td{padding:6px 12px 6px 0;border-bottom:1px solid #222}
+.summary-table tr:last-child td{border-bottom:none;font-weight:bold;border-top:1px solid #555;color:#fff}
+.summary-table .factory-accent{width:4px;padding:0 8px 0 0}
+.summary-table .factory-accent span{display:inline-block;width:4px;height:16px;border-radius:2px}
+.summary-table tr.clickable{cursor:pointer}
+.summary-table tr.clickable:hover td{color:#fff}
+.factory-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.factory-nav a{padding:6px 14px;background:#1a1a2e;border:1px solid #333;border-radius:4px;color:#ccc;text-decoration:none;font-size:12px;font-family:'Courier New',monospace}
+.factory-nav a:hover{background:#16213e;color:#fff}
 </style>
 </head>
 <body>
@@ -95,7 +110,53 @@ async function loadFactories() {
   }
 }
 function renderFactoriesTab(data) {
-  document.getElementById('factories-content').innerHTML = '<p style="color:#888">Loading...</p>';
+  const el = document.getElementById('factories-content');
+  let html = '';
+
+  // Global summary banner
+  html += '<div class="summary-banner">';
+  html += '<h2>' + data.meta.title + '</h2>';
+  html += '<div class="meta">Module basis: ' + data.meta.module_basis + ' &nbsp;|&nbsp; Shard budget: ' + data.meta.shards_used + ' / ' + data.meta.shard_budget + ' used</div>';
+  html += '<table class="summary-table"><thead><tr>';
+  html += '<th class="factory-accent"></th><th>Factory</th><th>Target HMF</th><th>Copies</th><th>Shards</th><th>Buildings</th>';
+  html += '</tr></thead><tbody>';
+
+  let totalHmf = 0, totalCopies = 0, totalShards = 0, totalBuildings = 0;
+  for (const s of data.summary) {
+    const color = FACTORY_COLORS[s.factory] || '#666';
+    totalHmf += s.target_hmf;
+    totalCopies += s.copies_needed;
+    totalShards += s.total_shards_all_copies;
+    totalBuildings += s.total_buildings_all_copies;
+    html += '<tr class="clickable" onclick="document.getElementById(\'factory-' + s.factory + '\').scrollIntoView({behavior:\'smooth\'})">';
+    html += '<td class="factory-accent"><span style="background:' + color + '"></span></td>';
+    html += '<td style="color:' + color + ';font-weight:bold">' + s.factory.charAt(0).toUpperCase() + s.factory.slice(1) + '</td>';
+    html += '<td>' + s.target_hmf.toFixed(2) + '/min</td>';
+    html += '<td>' + s.copies_needed + ' modules</td>';
+    html += '<td>' + s.total_shards_all_copies + '</td>';
+    html += '<td>' + s.total_buildings_all_copies + '</td>';
+    html += '</tr>';
+  }
+  html += '<tr><td></td><td>Total</td><td>' + totalHmf.toFixed(2) + '/min</td><td>' + totalCopies + ' modules</td><td>' + totalShards + '</td><td>' + totalBuildings + '</td></tr>';
+  html += '</tbody></table></div>';
+
+  // Factory anchor nav
+  html += '<div class="factory-nav">';
+  for (const fid of Object.keys(data.modules)) {
+    const color = FACTORY_COLORS[fid] || '#666';
+    html += '<a href="#factory-' + fid + '" style="border-left:3px solid ' + color + '" onclick="event.preventDefault();document.getElementById(\'factory-' + fid + '\').scrollIntoView({behavior:\'smooth\'})">' + fid.charAt(0).toUpperCase() + fid.slice(1) + '</a>';
+  }
+  html += '</div>';
+
+  // Factory cards (placeholder for next task)
+  for (const [fid, mod] of Object.entries(data.modules)) {
+    html += '<div id="factory-' + fid + '" style="padding:20px;margin-bottom:16px;border:1px solid #333;border-radius:6px;background:#1a1a2e;border-left:4px solid ' + (FACTORY_COLORS[fid] || '#666') + '">';
+    html += '<h3 style="color:' + (FACTORY_COLORS[fid] || '#fff') + ';margin-bottom:4px">' + fid.toUpperCase() + ' — ' + mod.theme + '</h3>';
+    html += '<p style="font-size:11px;color:#888">' + mod.hmf_recipe + ' | ' + mod.hmf_per_min + ' HMF/min per module</p>';
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
 }
 
 // === DATA ===
