@@ -9,6 +9,10 @@ app = FastAPI(title="Satisfactory Factory Planner")
 def health():
     return {"status": "ok"}
 
+from backend.routers import items, themes
+app.include_router(items.router)
+app.include_router(themes.router)
+
 # Serve React build in production
 frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 if os.path.isdir(frontend_dir):
