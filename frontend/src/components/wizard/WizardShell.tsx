@@ -2,6 +2,7 @@ import { useState } from "react"
 import type { UserPreferences, AnalyzeResult, LocationCandidate, FactoryResult } from "../../types/plan"
 import PreferencesStep from "./PreferencesStep"
 import RecipeStep from "./RecipeStep"
+import LocationStep from "./LocationStep"
 
 type WizardStep = "preferences" | "recipes" | "locations" | "dashboard"
 
@@ -48,7 +49,17 @@ export default function WizardShell() {
           onBack={() => setStep("preferences")}
         />
       )}
-      {step === "locations" && <div style={{ padding: 16 }}>Location Selection (Task 14)</div>}
+      {step === "locations" && state.preferences && state.analysis && (
+        <LocationStep
+          preferences={state.preferences}
+          analysis={state.analysis}
+          onComplete={(selected) => {
+            setState(s => ({ ...s, selectedLocations: selected }))
+            setStep("dashboard")
+          }}
+          onBack={() => setStep("recipes")}
+        />
+      )}
       {step === "dashboard" && <div style={{ padding: 16 }}>Dashboard (Tasks 15-18)</div>}
     </div>
   )
