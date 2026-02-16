@@ -3,6 +3,9 @@ import type { UserPreferences, AnalyzeResult, LocationCandidate, FactoryResult }
 import { usePlanAPI } from "../../hooks/usePlanAPI"
 import SummaryBanner from "./SummaryBanner"
 import FactoriesTab from "./FactoriesTab"
+import MapTab from "./MapTab"
+import ModulesTab from "./ModulesTab"
+import ExportTab from "./ExportTab"
 
 type DashboardTab = "factories" | "map" | "modules" | "export"
 
@@ -97,9 +100,9 @@ export default function Dashboard({ preferences, analysis, selectedLocations }: 
 
       {/* Tab content */}
       {tab === "factories" && <FactoriesTab results={results} />}
-      {tab === "map" && <div style={{ padding: 16, color: "#888" }}>Map view (Task 16)</div>}
-      {tab === "modules" && <div style={{ padding: 16, color: "#888" }}>Modules view (Task 16)</div>}
-      {tab === "export" && <div style={{ padding: 16, color: "#888" }}>Export (Task 17)</div>}
+      {tab === "map" && <MapTab selectedLocations={selectedLocations} />}
+      {tab === "modules" && results && <ModulesTab results={results} />}
+      {tab === "export" && results && <ExportTab results={results} />}
     </div>
   )
 }
