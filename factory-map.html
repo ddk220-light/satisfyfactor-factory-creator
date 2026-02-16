@@ -59,6 +59,35 @@ canvas.grabbing{cursor:grabbing}
 .factory-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
 .factory-nav a{padding:6px 14px;background:#1a1a2e;border:1px solid #333;border-radius:4px;color:#ccc;text-decoration:none;font-size:12px;font-family:'Courier New',monospace}
 .factory-nav a:hover{background:#16213e;color:#fff}
+.factory-card{margin-bottom:32px;border-radius:6px;background:#1a1a2e;border:1px solid #333;overflow:hidden}
+.factory-card-header{padding:16px 20px;border-left:4px solid #666}
+.factory-card-header h3{font-size:15px;margin-bottom:2px}
+.factory-card-header .recipe{font-size:11px;color:#888;margin-bottom:8px}
+.factory-card-header .stats{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;margin-bottom:8px}
+.factory-card-header .stats .stat{color:#aaa}
+.factory-card-header .stats .stat b{color:#e0e0e0}
+.raw-inputs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.raw-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:#16213e;border:1px solid #333;border-radius:12px;font-size:10px;color:#ccc}
+.raw-pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.building-summary{padding:12px 20px;border-top:1px solid #333;font-size:11px;color:#aaa;display:flex;gap:12px;flex-wrap:wrap}
+.building-summary span{white-space:nowrap}
+.flow-diagram{padding:20px;min-height:120px;position:relative;overflow-x:auto}
+.flow-columns{display:flex;gap:0;align-items:stretch;min-width:max-content}
+.flow-column{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 28px;min-width:130px}
+.flow-node{background:#16213e;border:1px solid #333;border-radius:4px;padding:8px 10px;font-size:11px;min-width:120px;position:relative;cursor:default}
+.flow-node .item-name{font-weight:bold;color:#e0e0e0;font-size:12px;margin-bottom:3px}
+.flow-node .building-info{color:#888}
+.flow-node .output-rate{color:#aaa;font-size:10px;margin-top:2px}
+.flow-node.raw-input{background:#0d1117;border-style:dashed;border-color:#555}
+.flow-node.raw-input .item-name{color:#aaa}
+.flow-node.anchor{border:2px solid #666;background:#1f2940;position:relative}
+.flow-node.anchor .anchor-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:4px}
+.flow-node.anchor .scaling{font-size:10px;color:#aaa;margin-top:6px;padding-top:6px;border-top:1px solid #333}
+.flow-node.overclocked{border-color:#f39c12;box-shadow:0 0 6px rgba(243,156,18,0.2)}
+.flow-node .shard-badge{display:inline-block;font-size:9px;color:#f39c12;margin-left:4px}
+.flow-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
+.flow-svg text{fill:#666;font-size:9px;font-family:'Courier New',monospace}
+.flow-tooltip{position:absolute;background:rgba(20,20,40,0.97);color:#ddd;padding:10px 14px;border-radius:4px;font-size:11px;font-family:'Courier New',monospace;pointer-events:none;display:none;border:1px solid #555;max-width:300px;z-index:200;white-space:pre-line;line-height:1.5}
 </style>
 </head>
 <body>
@@ -148,15 +177,307 @@ function renderFactoriesTab(data) {
   }
   html += '</div>';
 
-  // Factory cards (placeholder for next task)
-  for (const [fid, mod] of Object.entries(data.modules)) {
-    html += '<div id="factory-' + fid + '" style="padding:20px;margin-bottom:16px;border:1px solid #333;border-radius:6px;background:#1a1a2e;border-left:4px solid ' + (FACTORY_COLORS[fid] || '#666') + '">';
-    html += '<h3 style="color:' + (FACTORY_COLORS[fid] || '#fff') + ';margin-bottom:4px">' + fid.toUpperCase() + ' — ' + mod.theme + '</h3>';
-    html += '<p style="font-size:11px;color:#888">' + mod.hmf_recipe + ' | ' + mod.hmf_per_min + ' HMF/min per module</p>';
+  // Resource color mapping for raw input pills
+  var RESOURCE_COLORS_MAP = {
+    'Iron Ore': '#e74c3c', 'Limestone': '#95a5a6', 'Copper Ore': '#e67e22',
+    'Coal': '#555', 'Crude Oil': '#9b59b6', 'Caterium Ore': '#f1c40f',
+    'Bauxite': '#e91e63', 'Water': '#4fc3f7', 'Silica': '#00bcd4'
+  };
+
+  // Factory cards
+  for (var _fid in data.modules) {
+    if (!data.modules.hasOwnProperty(_fid)) continue;
+    var mod = data.modules[_fid];
+    var color = FACTORY_COLORS[_fid] || '#666';
+
+    html += '<div id="factory-' + _fid + '" class="factory-card">';
+
+    // Header banner
+    html += '<div class="factory-card-header" style="border-left-color:' + color + '">';
+    html += '<h3 style="color:' + color + '">' + _fid.toUpperCase() + ' \u2014 ' + mod.theme + '</h3>';
+    html += '<div class="recipe">' + mod.hmf_recipe + '</div>';
+    html += '<div class="stats">';
+    html += '<span class="stat"><b>' + mod.hmf_per_min + '</b> HMF/min per module</span>';
+    html += '<span class="stat">\u00d7' + mod.copies_needed_ceil + ' copies \u2192 <b>' + mod.target_hmf + '</b> HMF/min</span>';
+    html += '<span class="stat"><b>' + mod.total_buildings + '</b> buildings</span>';
+    html += '<span class="stat"><b>' + mod.total_power_mw + '</b> MW</span>';
+    html += '<span class="stat"><b>' + mod.shards_per_module + '</b> shards/module</span>';
     html += '</div>';
+
+    // Raw input pills
+    html += '<div class="raw-inputs">';
+    for (var rName in mod.raw_inputs) {
+      if (!mod.raw_inputs.hasOwnProperty(rName)) continue;
+      var rInfo = mod.raw_inputs[rName];
+      var rc = RESOURCE_COLORS_MAP[rName] || '#888';
+      html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + rName + ' ' + rInfo.per_min + (rInfo.is_fluid ? ' m\u00b3' : '') + '/min</span>';
+    }
+    html += '</div>';
+    html += '</div>'; // end header
+
+    // Flow diagram container
+    html += '<div class="flow-diagram" id="flow-' + _fid + '"></div>';
+
+    // Building summary
+    html += '<div class="building-summary">';
+    for (var btype in mod.building_totals) {
+      if (!mod.building_totals.hasOwnProperty(btype)) continue;
+      html += '<span>' + btype + ' \u00d7' + mod.building_totals[btype] + '</span>';
+    }
+    html += '</div>';
+
+    html += '</div>'; // end factory card
   }
 
   el.innerHTML = html;
+
+  // Render flow diagrams and connectors after DOM is populated
+  requestAnimationFrame(function() {
+    for (var fid in data.modules) {
+      if (!data.modules.hasOwnProperty(fid)) continue;
+      renderFlowDiagram(fid, data.modules[fid]);
+    }
+    requestAnimationFrame(function() {
+      for (var fid in data.modules) {
+        if (!data.modules.hasOwnProperty(fid)) continue;
+        drawConnectors(fid, data.modules[fid]);
+      }
+    });
+  });
+}
+
+function buildDAG(steps) {
+  var producerOf = {};
+  for (var i = 0; i < steps.length; i++) {
+    producerOf[steps[i].item] = steps[i];
+  }
+
+  var rawInputs = new Set();
+  for (var i = 0; i < steps.length; i++) {
+    var step = steps[i];
+    for (var inputName in step.inputs) {
+      if (!producerOf[inputName]) rawInputs.add(inputName);
+    }
+  }
+
+  var layer = {};
+  rawInputs.forEach(function(r) { layer[r] = 0; });
+
+  var changed = true;
+  while (changed) {
+    changed = false;
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      var maxInputLayer = -1;
+      var allResolved = true;
+      for (var inputName in step.inputs) {
+        if (layer[inputName] === undefined) { allResolved = false; break; }
+        if (layer[inputName] > maxInputLayer) maxInputLayer = layer[inputName];
+      }
+      if (allResolved && (layer[step.item] === undefined || layer[step.item] < maxInputLayer + 1)) {
+        layer[step.item] = maxInputLayer + 1;
+        changed = true;
+      }
+    }
+  }
+
+  var maxLayer = 0;
+  for (var k in layer) { if (layer[k] > maxLayer) maxLayer = layer[k]; }
+
+  var columns = [];
+  for (var i = 0; i <= maxLayer; i++) { columns.push([]); }
+
+  rawInputs.forEach(function(r) {
+    columns[0].push({ type: 'raw', item: r, layer: 0 });
+  });
+
+  for (var i = 0; i < steps.length; i++) {
+    var step = steps[i];
+    var l = layer[step.item];
+    columns[l].push({ type: 'step', step: step, item: step.item, layer: l });
+  }
+
+  var edges = [];
+  for (var i = 0; i < steps.length; i++) {
+    var step = steps[i];
+    for (var inputName in step.inputs) {
+      edges.push({ from: inputName, to: step.item, rate: step.inputs[inputName] });
+    }
+  }
+
+  return { columns: columns, edges: edges, rawInputs: rawInputs, layer: layer, maxLayer: maxLayer };
+}
+
+function renderFlowDiagram(fid, mod) {
+  var dag = buildDAG(mod.steps);
+  var color = FACTORY_COLORS[fid] || '#666';
+  var el = document.getElementById('flow-' + fid);
+
+  var html = '<div class="flow-columns">';
+  for (var col = 0; col <= dag.maxLayer; col++) {
+    html += '<div class="flow-column">';
+    for (var n = 0; n < dag.columns[col].length; n++) {
+      var node = dag.columns[col][n];
+      if (node.type === 'raw') {
+        var rawInfo = mod.raw_inputs[node.item];
+        var rate = rawInfo ? rawInfo.per_min : '';
+        var unit = rawInfo && rawInfo.is_fluid ? ' m\u00b3/min' : '/min';
+        html += '<div class="flow-node raw-input" data-item="' + node.item + '">';
+        html += '<div class="item-name">' + node.item + '</div>';
+        html += '<div class="output-rate">' + rate + unit + '</div>';
+        html += '</div>';
+      } else {
+        var step = node.step;
+        var isAnchor = step.building === 'Manufacturer';
+        var isOC = step.shards_per_building > 0;
+        var cls = 'flow-node';
+        if (isAnchor) cls += ' anchor';
+        if (isOC && !isAnchor) cls += ' overclocked';
+
+        html += '<div class="' + cls + '" data-item="' + step.item + '"' + (isAnchor ? ' style="border-color:' + color + '"' : '') + '>';
+        if (isAnchor) {
+          html += '<span class="anchor-label" style="color:' + color + '">\u2605 Module Anchor</span>';
+        }
+        html += '<div class="item-name">' + step.item + '</div>';
+        html += '<div class="building-info">' + step.buildings_ceil + '\u00d7 ' + step.building;
+        if (isOC) html += '<span class="shard-badge">\u26a1 ' + step.shards_per_building + '</span>';
+        html += '</div>';
+        var outRate = Object.values(step.outputs)[0];
+        html += '<div class="output-rate">' + outRate.toFixed(1) + '/min out</div>';
+        if (isAnchor) {
+          html += '<div class="scaling">\u00d7' + mod.copies_needed_ceil + ' copies \u2192 ' + mod.target_hmf + ' HMF/min</div>';
+        }
+        html += '</div>';
+      }
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  el.innerHTML = html;
+
+  // Tooltip setup
+  var tooltipEl = document.createElement('div');
+  tooltipEl.className = 'flow-tooltip';
+  el.appendChild(tooltipEl);
+
+  el.addEventListener('mousemove', function(e) {
+    var nodeEl = e.target.closest('.flow-node');
+    if (!nodeEl) { tooltipEl.style.display = 'none'; return; }
+    var item = nodeEl.getAttribute('data-item');
+
+    if (nodeEl.classList.contains('raw-input')) {
+      var rawInfo = mod.raw_inputs[item];
+      if (!rawInfo) { tooltipEl.style.display = 'none'; return; }
+      tooltipEl.innerHTML = '<b>' + item + '</b> (Raw Input)\n' + rawInfo.per_min + ' ' + rawInfo.note;
+    } else {
+      var step = mod.steps.find(function(s) { return s.item === item; });
+      if (!step) { tooltipEl.style.display = 'none'; return; }
+      var tt = '<b>' + step.item + '</b>\n';
+      tt += 'Recipe: ' + step.recipe + '\n';
+      tt += 'Building: ' + step.building + '\n';
+      tt += 'Count: ' + step.buildings_exact.toFixed(2) + ' \u2192 ' + step.buildings_ceil + ' (ceil)\n';
+      tt += 'Clock: ' + step.overclock_detail + '\n';
+      tt += 'Power: ' + step.power_mw + ' MW each\n';
+      if (step.shards_per_building > 0) tt += 'Shards: ' + step.shards_per_building + ' per building\n';
+      tt += '\nInputs:';
+      for (var inp in step.inputs) {
+        tt += '\n  ' + inp + ': ' + step.inputs[inp].toFixed(2) + '/min';
+      }
+      tt += '\nOutputs:';
+      for (var out in step.outputs) {
+        tt += '\n  ' + out + ': ' + step.outputs[out].toFixed(2) + '/min';
+      }
+      tooltipEl.innerHTML = tt;
+    }
+
+    var elRect = el.getBoundingClientRect();
+    tooltipEl.style.display = 'block';
+    tooltipEl.style.left = (e.clientX - elRect.left + 12) + 'px';
+    tooltipEl.style.top = (e.clientY - elRect.top + 12) + 'px';
+  });
+
+  el.addEventListener('mouseleave', function() { tooltipEl.style.display = 'none'; });
+}
+
+function drawConnectors(fid, mod) {
+  var dag = buildDAG(mod.steps);
+  var container = document.getElementById('flow-' + fid);
+  var containerRect = container.getBoundingClientRect();
+
+  var nodeEls = container.querySelectorAll('.flow-node');
+  var nodeRects = {};
+  for (var i = 0; i < nodeEls.length; i++) {
+    var nel = nodeEls[i];
+    var item = nel.getAttribute('data-item');
+    var rect = nel.getBoundingClientRect();
+    nodeRects[item] = {
+      left: rect.left - containerRect.left,
+      right: rect.right - containerRect.left,
+      top: rect.top - containerRect.top,
+      bottom: rect.bottom - containerRect.top,
+      cy: (rect.top + rect.bottom) / 2 - containerRect.top
+    };
+  }
+
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS, 'svg');
+  svg.classList.add('flow-svg');
+  svg.setAttribute('width', container.scrollWidth);
+  svg.setAttribute('height', container.scrollHeight);
+
+  var defs = document.createElementNS(svgNS, 'defs');
+  var marker = document.createElementNS(svgNS, 'marker');
+  marker.setAttribute('id', 'arrow-' + fid);
+  marker.setAttribute('viewBox', '0 0 10 10');
+  marker.setAttribute('refX', '10');
+  marker.setAttribute('refY', '5');
+  marker.setAttribute('markerWidth', '6');
+  marker.setAttribute('markerHeight', '6');
+  marker.setAttribute('orient', 'auto');
+  var arrowPath = document.createElementNS(svgNS, 'path');
+  arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+  arrowPath.setAttribute('fill', '#555');
+  marker.appendChild(arrowPath);
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  for (var i = 0; i < dag.edges.length; i++) {
+    var edge = dag.edges[i];
+    var fromRect = nodeRects[edge.from];
+    var toRect = nodeRects[edge.to];
+    if (!fromRect || !toRect) continue;
+
+    var x1 = fromRect.right;
+    var y1 = fromRect.cy;
+    var x2 = toRect.left;
+    var y2 = toRect.cy;
+
+    var line = document.createElementNS(svgNS, 'path');
+    if (Math.abs(y1 - y2) < 2) {
+      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2);
+    } else {
+      var midX = (x1 + x2) / 2;
+      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + midX + ' ' + y1 + ' L ' + midX + ' ' + y2 + ' L ' + x2 + ' ' + y2);
+    }
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#555');
+    line.setAttribute('stroke-width', '1.5');
+    line.setAttribute('marker-end', 'url(#arrow-' + fid + ')');
+    svg.appendChild(line);
+
+    // Rate label at midpoint
+    var labelX = (x1 + x2) / 2;
+    var labelY = Math.abs(y1 - y2) < 2 ? y1 - 8 : (y1 + y2) / 2 - 8;
+    var text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', labelX);
+    text.setAttribute('y', labelY);
+    text.setAttribute('text-anchor', 'middle');
+    text.textContent = edge.rate.toFixed(0) + '/m';
+    svg.appendChild(text);
+  }
+
+  container.insertBefore(svg, container.firstChild);
 }
 
 // === DATA ===
