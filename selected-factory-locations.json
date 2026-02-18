@@ -1,0 +1,529 @@
+{
+  "meta": {
+    "description": "Selected factory locations for Satisfactory mini-factories",
+    "exported_at": "2026-02-16T01:10:04.722Z",
+    "coordinate_system": {
+      "x": "positive = east/right",
+      "y": "positive = south/bottom",
+      "units": "centimeters (100 units = 1 meter)"
+    }
+  },
+  "selections": {
+    "ferrium": {
+      "factory_name": "Ferrium",
+      "theme": "Pure Iron",
+      "selected_rank": 3,
+      "center": {
+        "x": 279838,
+        "y": -181875
+      },
+      "score": 5304.1,
+      "required_resources": [
+        "iron",
+        "limestone"
+      ],
+      "total_nodes": 12,
+      "resources": {
+        "iron": {
+          "count": 11,
+          "pure": 5,
+          "normal": 3,
+          "impure": 3
+        },
+        "limestone": {
+          "count": 1,
+          "pure": 0,
+          "normal": 0,
+          "impure": 1
+        }
+      },
+      "nodes": [
+        {
+          "x": 273730,
+          "y": -148173,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 278266,
+          "y": -210772,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 297576,
+          "y": -150186,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 304840,
+          "y": -172908,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 282689,
+          "y": -179305,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 276674,
+          "y": -195100,
+          "t": "iron",
+          "p": "n"
+        },
+        {
+          "x": 256612,
+          "y": -197979,
+          "t": "iron",
+          "p": "n"
+        },
+        {
+          "x": 298734,
+          "y": -199293,
+          "t": "iron",
+          "p": "n"
+        },
+        {
+          "x": 265501,
+          "y": -178206,
+          "t": "iron",
+          "p": "i"
+        },
+        {
+          "x": 264240,
+          "y": -162899,
+          "t": "iron",
+          "p": "i"
+        },
+        {
+          "x": 314598,
+          "y": -196773,
+          "t": "iron",
+          "p": "i"
+        },
+        {
+          "x": 244591,
+          "y": -190903,
+          "t": "limestone",
+          "p": "i"
+        }
+      ]
+    },
+    "naphtheon": {
+      "factory_name": "Naphtheon",
+      "theme": "Oil Ecosystem",
+      "selected_rank": 3,
+      "center": {
+        "x": 53864,
+        "y": -1143
+      },
+      "score": 3588.7,
+      "required_resources": [
+        "iron",
+        "oil",
+        "limestone"
+      ],
+      "total_nodes": 4,
+      "resources": {
+        "limestone": {
+          "count": 1,
+          "pure": 0,
+          "normal": 1,
+          "impure": 0
+        },
+        "oil": {
+          "count": 3,
+          "pure": 1,
+          "normal": 2,
+          "impure": 0
+        }
+      },
+      "nodes": [
+        {
+          "x": 63823,
+          "y": 8377,
+          "t": "limestone",
+          "p": "n"
+        },
+        {
+          "x": 49638,
+          "y": 656,
+          "t": "oil",
+          "p": "p"
+        },
+        {
+          "x": 52589,
+          "y": -8859,
+          "t": "oil",
+          "p": "n"
+        },
+        {
+          "x": 49404,
+          "y": -4744,
+          "t": "oil",
+          "p": "n"
+        }
+      ]
+    },
+    "forgeholm": {
+      "factory_name": "Forgeholm",
+      "theme": "Steel Spine",
+      "selected_rank": 1,
+      "center": {
+        "x": 125551,
+        "y": -24977
+      },
+      "score": 5590.9,
+      "required_resources": [
+        "iron",
+        "coal",
+        "limestone"
+      ],
+      "total_nodes": 9,
+      "resources": {
+        "coal": {
+          "count": 4,
+          "pure": 3,
+          "normal": 1,
+          "impure": 0
+        },
+        "iron": {
+          "count": 3,
+          "pure": 3,
+          "normal": 0,
+          "impure": 0
+        },
+        "limestone": {
+          "count": 2,
+          "pure": 1,
+          "normal": 1,
+          "impure": 0
+        }
+      },
+      "nodes": [
+        {
+          "x": 138805,
+          "y": -23953,
+          "t": "coal",
+          "p": "p"
+        },
+        {
+          "x": 122698,
+          "y": -26966,
+          "t": "coal",
+          "p": "p"
+        },
+        {
+          "x": 136290,
+          "y": -20924,
+          "t": "coal",
+          "p": "p"
+        },
+        {
+          "x": 128059,
+          "y": -24825,
+          "t": "coal",
+          "p": "n"
+        },
+        {
+          "x": 124933,
+          "y": 5226,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 128573,
+          "y": 1795,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 116236,
+          "y": -15552,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 120085,
+          "y": -9957,
+          "t": "limestone",
+          "p": "p"
+        },
+        {
+          "x": 107368,
+          "y": -43240,
+          "t": "limestone",
+          "p": "n"
+        }
+      ]
+    },
+    "luxara": {
+      "factory_name": "Luxara",
+      "theme": "Aluminum Replacement",
+      "selected_rank": 3,
+      "center": {
+        "x": 198574,
+        "y": 98588
+      },
+      "score": 5589.4,
+      "required_resources": [
+        "iron",
+        "coal",
+        "limestone",
+        "bauxite"
+      ],
+      "total_nodes": 6,
+      "resources": {
+        "bauxite": {
+          "count": 2,
+          "pure": 0,
+          "normal": 1,
+          "impure": 1
+        },
+        "coal": {
+          "count": 3,
+          "pure": 0,
+          "normal": 1,
+          "impure": 2
+        },
+        "limestone": {
+          "count": 1,
+          "pure": 0,
+          "normal": 1,
+          "impure": 0
+        }
+      },
+      "nodes": [
+        {
+          "x": 199007,
+          "y": 89173,
+          "t": "bauxite",
+          "p": "n"
+        },
+        {
+          "x": 198936,
+          "y": 93354,
+          "t": "bauxite",
+          "p": "i"
+        },
+        {
+          "x": 214894,
+          "y": 116756,
+          "t": "coal",
+          "p": "n"
+        },
+        {
+          "x": 177478,
+          "y": 129905,
+          "t": "coal",
+          "p": "i"
+        },
+        {
+          "x": 193869,
+          "y": 116585,
+          "t": "coal",
+          "p": "i"
+        },
+        {
+          "x": 186164,
+          "y": 77070,
+          "t": "limestone",
+          "p": "n"
+        }
+      ]
+    },
+    "cathera": {
+      "factory_name": "Cathera",
+      "theme": "Copper & Caterium",
+      "selected_rank": 1,
+      "center": {
+        "x": 75657,
+        "y": -98308
+      },
+      "score": 1864.2,
+      "required_resources": [
+        "iron",
+        "copper",
+        "caterium",
+        "limestone"
+      ],
+      "total_nodes": 14,
+      "resources": {
+        "caterium": {
+          "count": 1,
+          "pure": 0,
+          "normal": 1,
+          "impure": 0
+        },
+        "copper": {
+          "count": 1,
+          "pure": 1,
+          "normal": 0,
+          "impure": 0
+        },
+        "iron": {
+          "count": 6,
+          "pure": 6,
+          "normal": 0,
+          "impure": 0
+        },
+        "limestone": {
+          "count": 6,
+          "pure": 1,
+          "normal": 4,
+          "impure": 1
+        }
+      },
+      "nodes": [
+        {
+          "x": 103846,
+          "y": -94854,
+          "t": "caterium",
+          "p": "n"
+        },
+        {
+          "x": 56109,
+          "y": -85970,
+          "t": "copper",
+          "p": "p"
+        },
+        {
+          "x": 59113,
+          "y": -71502,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 84199,
+          "y": -86394,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 70865,
+          "y": -78126,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 83508,
+          "y": -90507,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 64576,
+          "y": -71387,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 68075,
+          "y": -81001,
+          "t": "iron",
+          "p": "p"
+        },
+        {
+          "x": 69552,
+          "y": -100369,
+          "t": "limestone",
+          "p": "p"
+        },
+        {
+          "x": 67878,
+          "y": -95777,
+          "t": "limestone",
+          "p": "n"
+        },
+        {
+          "x": 79670,
+          "y": -75852,
+          "t": "limestone",
+          "p": "n"
+        },
+        {
+          "x": 75115,
+          "y": -123004,
+          "t": "limestone",
+          "p": "n"
+        },
+        {
+          "x": 60593,
+          "y": -77891,
+          "t": "limestone",
+          "p": "n"
+        },
+        {
+          "x": 92495,
+          "y": -132749,
+          "t": "limestone",
+          "p": "i"
+        }
+      ]
+    },
+    "siderith": {
+      "factory_name": "Siderith",
+      "theme": "Iron Mining Outpost",
+      "type": "mining_town",
+      "center": {
+        "x": 241941,
+        "y": 3242
+      },
+      "required_resources": [
+        "iron"
+      ],
+      "total_nodes": 8,
+      "capacity_per_min": 5340,
+      "supplies": ["Naphtheon (2,007/min)", "Luxara (40/min)"],
+      "resources": {
+        "iron": {
+          "count": 8,
+          "pure": 3,
+          "normal": 5,
+          "impure": 0
+        }
+      },
+      "nodes": [
+        {"x": 245700, "y": 30065, "t": "iron", "p": "n"},
+        {"x": 233142, "y": -26440, "t": "iron", "p": "n"},
+        {"x": 252751, "y": 29140, "t": "iron", "p": "n"},
+        {"x": 237725, "y": -23006, "t": "iron", "p": "n"},
+        {"x": 245043, "y": -22318, "t": "iron", "p": "n"},
+        {"x": 219395, "y": 37189, "t": "iron", "p": "p"},
+        {"x": 255908, "y": -3071, "t": "iron", "p": "p"},
+        {"x": 245862, "y": 4379, "t": "iron", "p": "p"}
+      ]
+    },
+    "calcara": {
+      "factory_name": "Calcara",
+      "theme": "Limestone Quarry",
+      "type": "mining_town",
+      "center": {
+        "x": 169486,
+        "y": -45968
+      },
+      "required_resources": [
+        "limestone"
+      ],
+      "total_nodes": 3,
+      "capacity_per_min": 1800,
+      "supplies": ["Ferrium (764/min)", "Luxara (157/min)"],
+      "resources": {
+        "limestone": {
+          "count": 3,
+          "pure": 0,
+          "normal": 3,
+          "impure": 0
+        }
+      },
+      "nodes": [
+        {"x": 158314, "y": -65003, "t": "limestone", "p": "n"},
+        {"x": 175981, "y": -40156, "t": "limestone", "p": "n"},
+        {"x": 177198, "y": -86517, "t": "limestone", "p": "n"}
+      ]
+    }
+  }
+}

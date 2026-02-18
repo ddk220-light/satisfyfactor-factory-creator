@@ -1,0 +1,10 @@
+{
+  "extraction": "Extraction",
+  "production": "Production",
+  "generator": "Generators",
+  "special": "Special",
+  "workstation": "Workstations",
+  "storage": "Storage",
+  "dockstation": "Docking stations",
+  "tower": "Towers"
+}

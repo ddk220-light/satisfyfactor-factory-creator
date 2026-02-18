@@ -71,6 +71,14 @@ canvas.grabbing{cursor:grabbing}
 .raw-pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .building-summary{padding:12px 20px;border-top:1px solid #333;font-size:11px;color:#aaa;display:flex;gap:12px;flex-wrap:wrap}
 .building-summary span{white-space:nowrap}
+.resource-supply{padding:12px 20px;border-top:1px solid #333}
+.resource-supply h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.resource-supply table{width:100%;border-collapse:collapse;font-size:11px}
+.resource-supply th{text-align:left;color:#666;font-weight:normal;padding:3px 8px 3px 0;font-size:10px;text-transform:uppercase}
+.resource-supply td{padding:4px 8px 4px 0;border-top:1px solid #222}
+.resource-supply .local{color:#2ecc71}
+.resource-supply .train{color:#e67e22}
+.resource-supply .surplus{color:#555}
 .flow-diagram{padding:20px;min-height:120px;position:relative;overflow-x:auto}
 .flow-columns{display:flex;gap:0;align-items:stretch;min-width:max-content}
 .flow-column{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 28px;min-width:130px}
@@ -183,6 +191,13 @@ function renderFactoriesTab(data) {
     'Coal': '#555', 'Crude Oil': '#9b59b6', 'Caterium Ore': '#f1c40f',
     'Bauxite': '#e91e63', 'Water': '#4fc3f7', 'Silica': '#00bcd4'
   };
+  var RESOURCE_NAME_MAP = {
+    'Iron Ore': 'iron', 'Limestone': 'limestone', 'Copper Ore': 'copper',
+    'Coal': 'coal', 'Crude Oil': 'oil', 'Caterium Ore': 'caterium',
+    'Bauxite': 'bauxite', 'Water': 'water', 'Silica': 'silica'
+  };
+  var ORE_RATES = { pure: 780, normal: 600, impure: 300 };
+  var OIL_RATES = { pure: 600, normal: 300, impure: 150 };
 
   // Factory cards
   for (var _fid in data.modules) {
@@ -214,6 +229,47 @@ function renderFactoriesTab(data) {
     }
     html += '</div>';
     html += '</div>'; // end header
+
+    // Resource supply breakdown
+    html += '<div class="resource-supply">';
+    html += '<h4>Resource Supply</h4>';
+    html += '<table><thead><tr><th>Resource</th><th>Total Needed</th><th>Local Nodes</th><th>By Train</th></tr></thead><tbody>';
+    for (var rName in mod.raw_inputs) {
+      if (!mod.raw_inputs.hasOwnProperty(rName)) continue;
+      var rInfo = mod.raw_inputs[rName];
+      var totalNeeded = rInfo.per_min * mod.copies_needed_ceil;
+      var unit = rInfo.is_fluid ? ' m\u00b3/min' : '/min';
+      var mappedKey = RESOURCE_NAME_MAP[rName];
+      var localStr, trainStr;
+
+      if (rName === 'Water') {
+        localStr = '<span class="local">Local (extractors)</span>';
+        trainStr = '\u2014';
+      } else if (rName === 'Silica') {
+        localStr = '\u2014';
+        trainStr = '<span class="train">' + totalNeeded.toLocaleString(undefined, {maximumFractionDigits:1}) + unit + '</span>';
+      } else {
+        var res = FACTORIES[_fid] && FACTORIES[_fid].resources && FACTORIES[_fid].resources[mappedKey];
+        var localCap = 0;
+        if (res) {
+          var rates = (mappedKey === 'oil') ? OIL_RATES : ORE_RATES;
+          localCap = (res.pure || 0) * rates.pure + (res.normal || 0) * rates.normal + (res.impure || 0) * rates.impure;
+        }
+        var byTrain = Math.max(0, totalNeeded - localCap);
+        if (localCap > 0) {
+          localStr = '<span class="local">' + localCap.toLocaleString(undefined, {maximumFractionDigits:1}) + unit + '</span>';
+        } else {
+          localStr = '\u2014';
+        }
+        if (byTrain > 0.05) {
+          trainStr = '<span class="train">' + byTrain.toLocaleString(undefined, {maximumFractionDigits:1}) + unit + '</span>';
+        } else {
+          trainStr = '\u2014';
+        }
+      }
+      html += '<tr><td>' + rName + '</td><td>' + totalNeeded.toLocaleString(undefined, {maximumFractionDigits:1}) + unit + '</td><td>' + localStr + '</td><td>' + trainStr + '</td></tr>';
+    }
+    html += '</tbody></table></div>';
 
     // Flow diagram container
     html += '<div class="flow-diagram" id="flow-' + _fid + '"></div>';

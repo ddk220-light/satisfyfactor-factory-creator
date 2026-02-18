@@ -1,0 +1,1187 @@
+{
+  "meta": {
+    "game": "Satisfactory",
+    "target_item": "Computer",
+    "exploration_goal": "Explore themed Computer production using different alternate recipe combinations to create distinct resource identities",
+    "created": "2026-02-15",
+    "notes": {
+      "fluid_units": "Database stores fluids in mL. Divide by 1000 for m3/min.",
+      "per_min": "Calculated as quantity / duration * 60",
+      "rate_basis": "All per_min values are per single building at 100% clock speed"
+    }
+  },
+  "factories": [
+    {
+      "id": "caterium-core",
+      "name": "Aurelion",
+      "theme": "Caterium Electronics",
+      "backstory": "Replaces traditional copper wiring with caterium throughout the chain, eliminating cables entirely and using quickwire for all connectivity.",
+      "raw_resources": [
+        "Copper Ore",
+        "Caterium Ore",
+        "Crude Oil"
+      ],
+      "eliminated": [
+        "Cable",
+        "Wire (from copper)"
+      ],
+      "building_types": [
+        "Manufacturer",
+        "Assembler",
+        "Refinery",
+        "Constructor",
+        "Smelter"
+      ],
+      "character": "Golden caterium lines replace copper infrastructure, creating a premium electronics facility with efficient quickwire networks.",
+      "recipes": [
+        {
+          "product": "Computer",
+          "recipe_name": "Alternate: Caterium Computer",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 16,
+          "outputs": [
+            {
+              "item": "Computer",
+              "quantity": 1,
+              "per_min": 3.75
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 4,
+              "per_min": 15.0
+            },
+            {
+              "item": "Quickwire",
+              "quantity": 14,
+              "per_min": 52.5
+            },
+            {
+              "item": "Rubber",
+              "quantity": 6,
+              "per_min": 22.5
+            }
+          ]
+        },
+        {
+          "product": "Circuit Board",
+          "recipe_name": "Alternate: Caterium Circuit Board",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 48,
+          "outputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 7,
+              "per_min": 8.75
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Quickwire",
+              "quantity": 30,
+              "per_min": 37.5
+            },
+            {
+              "item": "Plastic",
+              "quantity": 10,
+              "per_min": 12.5
+            }
+          ]
+        },
+        {
+          "product": "Quickwire",
+          "recipe_name": "Quickwire",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 5,
+          "outputs": [
+            {
+              "item": "Quickwire",
+              "quantity": 5,
+              "per_min": 60.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 1,
+              "per_min": 12.0
+            }
+          ]
+        },
+        {
+          "product": "Caterium Ingot",
+          "recipe_name": "Caterium Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 1,
+              "per_min": 15.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ore",
+              "quantity": 3,
+              "per_min": 45.0
+            }
+          ]
+        },
+        {
+          "product": "Rubber",
+          "recipe_name": "Residual Rubber",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Rubber",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Polymer Resin",
+              "quantity": 4,
+              "per_min": 40.0
+            },
+            {
+              "item": "Water",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Polymer Resin",
+          "recipe_name": "Alternate: Polymer Resin",
+          "alternate": true,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Polymer Resin",
+              "quantity": 13,
+              "per_min": 130.0
+            },
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 2000,
+              "per_min": 20000.0,
+              "is_byproduct": true,
+              "note": "mL; 20 m3/min"
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 6000,
+              "per_min": 60000.0,
+              "note": "mL; 60 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Plastic",
+          "recipe_name": "Plastic",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Plastic",
+              "quantity": 2,
+              "per_min": 20.0
+            },
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 1000,
+              "per_min": 10000.0,
+              "is_byproduct": true,
+              "note": "mL; 10 m3/min"
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 3000,
+              "per_min": 30000.0,
+              "note": "mL; 30 m3/min"
+            }
+          ]
+        }
+      ],
+      "byproduct_loop": {
+        "description": "Heavy Oil Residue byproduct can be converted to Petroleum Coke or Fuel as needed",
+        "flow": "Crude Oil -> Plastic/Polymer Resin -> Heavy Oil Residue (byproduct)"
+      }
+    },
+    {
+      "id": "oil-ecosystem",
+      "name": "Petroleos",
+      "theme": "Petroleum Byproduct Circle",
+      "backstory": "A closed-loop oil refinery that consumes every byproduct, using petroleum coke and heavy oil residue to eliminate plastic waste and create rubber-insulated components.",
+      "raw_resources": [
+        "Copper Ore",
+        "Crude Oil",
+        "Water"
+      ],
+      "eliminated": [
+        "Direct Plastic production",
+        "Standalone oil products"
+      ],
+      "building_types": [
+        "Manufacturer",
+        "Assembler",
+        "Refinery",
+        "Constructor",
+        "Smelter"
+      ],
+      "character": "Dark refineries processing thick oil residue into electronics, with petroleum coke furnaces and rubber-coated components throughout.",
+      "recipes": [
+        {
+          "product": "Computer",
+          "recipe_name": "Alternate: Caterium Computer",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 16,
+          "outputs": [
+            {
+              "item": "Computer",
+              "quantity": 1,
+              "per_min": 3.75
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 4,
+              "per_min": 15.0
+            },
+            {
+              "item": "Quickwire",
+              "quantity": 14,
+              "per_min": 52.5
+            },
+            {
+              "item": "Rubber",
+              "quantity": 6,
+              "per_min": 22.5
+            }
+          ]
+        },
+        {
+          "product": "Circuit Board",
+          "recipe_name": "Alternate: Electrode Circuit Board",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 12,
+          "outputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 1,
+              "per_min": 5.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Petroleum Coke",
+              "quantity": 8,
+              "per_min": 40.0
+            },
+            {
+              "item": "Rubber",
+              "quantity": 4,
+              "per_min": 20.0
+            }
+          ]
+        },
+        {
+          "product": "Petroleum Coke",
+          "recipe_name": "Petroleum Coke",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Petroleum Coke",
+              "quantity": 12,
+              "per_min": 120.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Heavy Oil Residue",
+          "recipe_name": "Alternate: Heavy Oil Residue",
+          "alternate": true,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            },
+            {
+              "item": "Polymer Resin",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 3000,
+              "per_min": 30000.0,
+              "note": "mL; 30 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Rubber",
+          "recipe_name": "Residual Rubber",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Rubber",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Polymer Resin",
+              "quantity": 4,
+              "per_min": 40.0
+            },
+            {
+              "item": "Water",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Quickwire",
+          "recipe_name": "Quickwire",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 5,
+          "outputs": [
+            {
+              "item": "Quickwire",
+              "quantity": 5,
+              "per_min": 60.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 1,
+              "per_min": 12.0
+            }
+          ]
+        },
+        {
+          "product": "Caterium Ingot",
+          "recipe_name": "Caterium Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 1,
+              "per_min": 15.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ore",
+              "quantity": 3,
+              "per_min": 45.0
+            }
+          ]
+        }
+      ],
+      "byproduct_loop": {
+        "description": "Complete oil ecosystem where Heavy Oil Residue feeds Petroleum Coke, and Polymer Resin feeds Rubber",
+        "flow": "Crude Oil -> Heavy Oil Residue + Polymer Resin -> Petroleum Coke + Rubber -> Circuit Board"
+      }
+    },
+    {
+      "id": "silicon-valley",
+      "name": "Crystallis",
+      "theme": "Quartz-Based Circuits",
+      "backstory": "Mineral electronics using silica from raw quartz instead of petroleum-based plastics, creating crystal-clear circuit boards with reduced oil dependency.",
+      "raw_resources": [
+        "Copper Ore",
+        "Crude Oil",
+        "Raw Quartz",
+        "Limestone"
+      ],
+      "eliminated": [
+        "Plastic in Circuit Boards"
+      ],
+      "building_types": [
+        "Manufacturer",
+        "Assembler",
+        "Refinery",
+        "Constructor",
+        "Smelter"
+      ],
+      "character": "Glittering quartz processing lines produce silicon-based circuit boards, with crystalline mineral components replacing petroleum plastics.",
+      "recipes": [
+        {
+          "product": "Computer",
+          "recipe_name": "Computer",
+          "alternate": false,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 24,
+          "outputs": [
+            {
+              "item": "Computer",
+              "quantity": 1,
+              "per_min": 2.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Cable",
+              "quantity": 8,
+              "per_min": 20.0
+            },
+            {
+              "item": "Circuit Board",
+              "quantity": 4,
+              "per_min": 10.0
+            },
+            {
+              "item": "Plastic",
+              "quantity": 16,
+              "per_min": 40.0
+            }
+          ]
+        },
+        {
+          "product": "Circuit Board",
+          "recipe_name": "Alternate: Silicon Circuit Board",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 24,
+          "outputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 5,
+              "per_min": 12.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 11,
+              "per_min": 27.5
+            },
+            {
+              "item": "Silica",
+              "quantity": 11,
+              "per_min": 27.5
+            }
+          ]
+        },
+        {
+          "product": "Silica",
+          "recipe_name": "Alternate: Cheap Silica",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 8,
+          "outputs": [
+            {
+              "item": "Silica",
+              "quantity": 7,
+              "per_min": 52.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Raw Quartz",
+              "quantity": 3,
+              "per_min": 22.5
+            },
+            {
+              "item": "Limestone",
+              "quantity": 5,
+              "per_min": 37.5
+            }
+          ]
+        },
+        {
+          "product": "Cable",
+          "recipe_name": "Cable",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Cable",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Wire",
+              "quantity": 2,
+              "per_min": 60.0
+            }
+          ]
+        },
+        {
+          "product": "Wire",
+          "recipe_name": "Wire",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {
+              "item": "Wire",
+              "quantity": 2,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 1,
+              "per_min": 15.0
+            }
+          ]
+        },
+        {
+          "product": "Copper Sheet",
+          "recipe_name": "Copper Sheet",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 1,
+              "per_min": 10.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ]
+        },
+        {
+          "product": "Copper Ingot",
+          "recipe_name": "Copper Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ore",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ]
+        },
+        {
+          "product": "Plastic",
+          "recipe_name": "Plastic",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Plastic",
+              "quantity": 2,
+              "per_min": 20.0
+            },
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 1000,
+              "per_min": 10000.0,
+              "is_byproduct": true,
+              "note": "mL; 10 m3/min"
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 3000,
+              "per_min": 30000.0,
+              "note": "mL; 30 m3/min"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iron-wire",
+      "name": "Ferronet",
+      "theme": "Iron Wire Networks",
+      "backstory": "Uses iron for all wiring infrastructure instead of copper, preserving copper exclusively for circuit board sheets and creating a dual-metal production line.",
+      "raw_resources": [
+        "Copper Ore",
+        "Iron Ore",
+        "Crude Oil"
+      ],
+      "eliminated": [
+        "Copper Wire"
+      ],
+      "building_types": [
+        "Manufacturer",
+        "Assembler",
+        "Refinery",
+        "Constructor",
+        "Smelter"
+      ],
+      "character": "Steel-gray iron cables snake through copper circuit assembly, a factory that separates metal roles with iron handling connectivity and copper managing circuitry.",
+      "recipes": [
+        {
+          "product": "Computer",
+          "recipe_name": "Computer",
+          "alternate": false,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 24,
+          "outputs": [
+            {
+              "item": "Computer",
+              "quantity": 1,
+              "per_min": 2.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Cable",
+              "quantity": 8,
+              "per_min": 20.0
+            },
+            {
+              "item": "Circuit Board",
+              "quantity": 4,
+              "per_min": 10.0
+            },
+            {
+              "item": "Plastic",
+              "quantity": 16,
+              "per_min": 40.0
+            }
+          ]
+        },
+        {
+          "product": "Cable",
+          "recipe_name": "Cable",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Cable",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Wire",
+              "quantity": 2,
+              "per_min": 60.0
+            }
+          ]
+        },
+        {
+          "product": "Wire",
+          "recipe_name": "Alternate: Iron Wire",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 24,
+          "outputs": [
+            {
+              "item": "Wire",
+              "quantity": 9,
+              "per_min": 22.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Iron Ingot",
+              "quantity": 5,
+              "per_min": 12.5
+            }
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Iron Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Iron Ingot",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Iron Ore",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ]
+        },
+        {
+          "product": "Circuit Board",
+          "recipe_name": "Circuit Board",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 8,
+          "outputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 1,
+              "per_min": 7.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 2,
+              "per_min": 15.0
+            },
+            {
+              "item": "Plastic",
+              "quantity": 4,
+              "per_min": 30.0
+            }
+          ]
+        },
+        {
+          "product": "Copper Sheet",
+          "recipe_name": "Copper Sheet",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 1,
+              "per_min": 10.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ]
+        },
+        {
+          "product": "Copper Ingot",
+          "recipe_name": "Copper Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ore",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ]
+        },
+        {
+          "product": "Plastic",
+          "recipe_name": "Plastic",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Plastic",
+              "quantity": 2,
+              "per_min": 20.0
+            },
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 1000,
+              "per_min": 10000.0,
+              "is_byproduct": true,
+              "note": "mL; 10 m3/min"
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 3000,
+              "per_min": 30000.0,
+              "note": "mL; 30 m3/min"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coated-cables",
+      "name": "Hydrocarbon",
+      "theme": "Oil-Coated Infrastructure",
+      "backstory": "Integrates heavy oil residue directly into cable production, creating an oil-infused wiring system that consumes petroleum byproducts throughout the chain.",
+      "raw_resources": [
+        "Copper Ore",
+        "Crude Oil",
+        "Water"
+      ],
+      "eliminated": [
+        "Standalone Plastic production for computers"
+      ],
+      "building_types": [
+        "Manufacturer",
+        "Assembler",
+        "Refinery",
+        "Constructor",
+        "Smelter"
+      ],
+      "character": "Oil-slicked cables and rubber-insulated components, a refinery-adjacent factory where crude oil permeates every production stage.",
+      "recipes": [
+        {
+          "product": "Computer",
+          "recipe_name": "Alternate: Caterium Computer",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 16,
+          "outputs": [
+            {
+              "item": "Computer",
+              "quantity": 1,
+              "per_min": 3.75
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 4,
+              "per_min": 15.0
+            },
+            {
+              "item": "Quickwire",
+              "quantity": 14,
+              "per_min": 52.5
+            },
+            {
+              "item": "Rubber",
+              "quantity": 6,
+              "per_min": 22.5
+            }
+          ]
+        },
+        {
+          "product": "Circuit Board",
+          "recipe_name": "Circuit Board",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 8,
+          "outputs": [
+            {
+              "item": "Circuit Board",
+              "quantity": 1,
+              "per_min": 7.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 2,
+              "per_min": 15.0
+            },
+            {
+              "item": "Plastic",
+              "quantity": 4,
+              "per_min": 30.0
+            }
+          ]
+        },
+        {
+          "product": "Quickwire",
+          "recipe_name": "Quickwire",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 5,
+          "outputs": [
+            {
+              "item": "Quickwire",
+              "quantity": 5,
+              "per_min": 60.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 1,
+              "per_min": 12.0
+            }
+          ]
+        },
+        {
+          "product": "Caterium Ingot",
+          "recipe_name": "Alternate: Tempered Caterium Ingot",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 8,
+          "outputs": [
+            {
+              "item": "Caterium Ingot",
+              "quantity": 3,
+              "per_min": 22.5
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Caterium Ore",
+              "quantity": 6,
+              "per_min": 45.0
+            },
+            {
+              "item": "Petroleum Coke",
+              "quantity": 2,
+              "per_min": 15.0
+            }
+          ]
+        },
+        {
+          "product": "Petroleum Coke",
+          "recipe_name": "Petroleum Coke",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Petroleum Coke",
+              "quantity": 12,
+              "per_min": 120.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Rubber",
+          "recipe_name": "Residual Rubber",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Rubber",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Polymer Resin",
+              "quantity": 4,
+              "per_min": 40.0
+            },
+            {
+              "item": "Water",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Polymer Resin",
+          "recipe_name": "Alternate: Heavy Oil Residue",
+          "alternate": true,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Heavy Oil Residue",
+              "quantity": 4000,
+              "per_min": 40000.0,
+              "note": "mL; 40 m3/min"
+            },
+            {
+              "item": "Polymer Resin",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Crude Oil",
+              "quantity": 3000,
+              "per_min": 30000.0,
+              "note": "mL; 30 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Plastic",
+          "recipe_name": "Residual Plastic",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Plastic",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Polymer Resin",
+              "quantity": 6,
+              "per_min": 60.0
+            },
+            {
+              "item": "Water",
+              "quantity": 2000,
+              "per_min": 20000.0,
+              "note": "mL; 20 m3/min"
+            }
+          ]
+        },
+        {
+          "product": "Copper Sheet",
+          "recipe_name": "Copper Sheet",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {
+              "item": "Copper Sheet",
+              "quantity": 1,
+              "per_min": 10.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 2,
+              "per_min": 20.0
+            }
+          ]
+        },
+        {
+          "product": "Copper Ingot",
+          "recipe_name": "Copper Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {
+              "item": "Copper Ingot",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ],
+          "inputs": [
+            {
+              "item": "Copper Ore",
+              "quantity": 1,
+              "per_min": 30.0
+            }
+          ]
+        }
+      ],
+      "byproduct_loop": {
+        "description": "Heavy Oil Residue feeds into both Petroleum Coke for Caterium smelting and is produced from Crude Oil refinement",
+        "flow": "Crude Oil -> Heavy Oil Residue + Polymer Resin -> Petroleum Coke (for Caterium) + Rubber + Plastic"
+      }
+    }
+  ]
+}

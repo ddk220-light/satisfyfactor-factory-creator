@@ -1,0 +1,20 @@
+{
+  "ore": "Ores",
+  "ingot": "Ingots",
+  "mineral": "Minerals",
+  "animal": "Aliens",
+  "liquid": "Liquids",
+  "gas": "Gas",
+  "standard": "Standard Parts",
+  "industrial": "Industrial Parts",
+  "electronic": "Electronics",
+  "communication": "Communications",
+  "quantum": "Quantum Technology",
+  "container": "Containers",
+  "fuel": "Fuels",
+  "consumed": "Consumed",
+  "ammo": "Ammos",
+  "nuclear": "Nuclear",
+  "waste": "Waste",
+  "special": "Special"
+}

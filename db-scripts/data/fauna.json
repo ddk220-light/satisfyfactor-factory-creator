@@ -1,0 +1,366 @@
+{
+  "Char_SpaceRabbit_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Wildlife/SpaceRabbit/Char_SpaceRabbit.Char_SpaceRabbit_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpaceRabbit_C_XXX",
+    "name": "Lizard Doggo",
+    "category": "wildlife",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_LizardDoggo_256.png?v=1725286522",
+    "description": "The Lizard Doggo is a short reptilian dog-like creature, which can be tamed by the pioneer.",
+    "health": 15,
+    "behavior": "Friendly (tameable)",
+    "mapColor": "#b3b3b3",
+    "mapLayer": "playerSpaceRabbitLayer",
+    "url": "/en/fauna/detail/id/Char_SpaceRabbit_C/name/Lizard+Doggo"
+  },
+  "Char_SpaceGiraffe_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Wildlife/SpaceGiraffe/Char_SpaceGiraffe.Char_SpaceGiraffe_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpaceGiraffe_C_XXX",
+    "name": "Space Giraffe-Tick-Penguin-Whale Thing",
+    "category": "wildlife",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpaceTick_256.png?v=1725286521",
+    "description": "The Space Giraffe-Tick-Penguin-Whale Thing is a passive land creature found throughout the world.",
+    "health": 200,
+    "behavior": "Passive",
+    "mapColor": "#b3b3b3",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpaceGiraffe_C/name/Space+Giraffe-Tick-Penguin-Whale+Thing"
+  },
+  "Char_NonFlyingBird_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Wildlife/NonFlyingBird/Char_NonFlyingBird.Char_NonFlyingBird_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_NonFlyingBird_C_XXX",
+    "name": "Non Flying Bird",
+    "category": "wildlife",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_NonFlyingBird_256.png?v=1725286522",
+    "description": "The Space Giraffe-Tick-Penguin-Whale Thing is a passive land creature found throughout the world.",
+    "health": 10,
+    "behavior": "Passive",
+    "mapColor": "#b3b3b3",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_NonFlyingBird_C/name/Non+Flying+Bird"
+  },
+  "Char_Hog_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Hog/Char_Hog.Char_Hog_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_Hog_C_XXX",
+    "name": "Fluffy-tailed Hog",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_Hog_256.png?v=1725286521",
+    "description": "The Fluffy-tailed Hog (a.k.a 'Hog'), is a melee hostile creature that deals damage with its tackle attack.",
+    "health": 20,
+    "damage": 10,
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_Hog_C/name/Fluffy-tailed+Hog"
+  },
+  "Char_AlphaHog_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Hog/AlphaHog/Char_AlphaHog.Char_AlphaHog_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_AlphaHog_C_XXX",
+    "name": "Alpha Hog",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_HogAlpha_256.png?v=1725286521",
+    "description": "The Alpha Hog (a.k.a 'Hog'), is a melee hostile creature that deals damage with its tackle attack.",
+    "health": 80,
+    "damage": [
+      20,
+      30
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_AlphaHog_C/name/Alpha+Hog"
+  },
+  "Char_CliffHog_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Hog/CliffHog/Char_CliffHog.Char_CliffHog_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_CliffHog_C_XXX",
+    "name": "Cliff Hog",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_CliffHog_256.png?v=1725286522",
+    "description": "The Cliff Hog (a.k.a 'Hog'), is a melee hostile creature that deals damage with its tackle attack.",
+    "health": 90,
+    "damage": [
+      15,
+      20
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_CliffHog_C/name/Cliff+Hog"
+  },
+  "Char_NuclearHog_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Hog/NuclearHog/Char_NuclearHog.Char_NuclearHog_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_NuclearHog_C_XXX",
+    "name": "Nuclear Hog",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_NuclearHog_256.png?v=1725286522",
+    "description": "The Nuclear Hog (a.k.a 'Hog'), is a melee hostile creature that deals damage with its tackle attack.",
+    "health": 150,
+    "damage": [
+      15,
+      20
+    ],
+    "behavior": "Hostile",
+    "effect": "Passive radiation",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_NuclearHog_C/name/Nuclear+Hog"
+  },
+  "Char_Johnny_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Hog/Johnny/Char_Johnny.Char_Johnny_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_Johnny_C_XXX",
+    "name": "Johnny 'The Jetpack' Hog",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_Hog_256.png?v=1725286521",
+    "description": "The Fluffy-tailed Hog (a.k.a 'Hog'), is a melee hostile creature that deals damage with its tackle attack.",
+    "health": 80,
+    "damage": 100,
+    "behavior": "Hostile",
+    "effect": "Explosion",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_Johnny_C/name/Johnny+%27The+Jetpack%27+Hog"
+  },
+  "Char_Spitter_Alternative_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/AlternativeSpitter/Char_Spitter_Alternative.Char_Spitter_Alternative_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_Spitter_Alternative_C_XXX",
+    "name": "Green Alpha Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/faunaIcons/Char_Spitter_Small_C.png?v=1638444933",
+    "description": "Green Alpha Spitter are the larger and more powerful variant of the Spitter.",
+    "health": 80,
+    "damage": [
+      5,
+      20
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_Spitter_Alternative_C/name/Green+Alpha+Spitter"
+  },
+  "Char_SpitterDesertSmall_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterDesert/Char_SpitterDesertSmall.Char_SpitterDesertSmall_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterDesertSmall_C_XXX",
+    "name": "Desert Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterDesert_256.png?v=1725286521",
+    "description": "The Spitter is a ranged hostile creature that deals damage with its fireball attack.",
+    "health": 20,
+    "damage": [
+      1,
+      11
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterDesertSmall_C/name/Desert+Spitter"
+  },
+  "Char_SpitterDesertAlpha_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterDesert/Char_SpitterDesertAlpha.Char_SpitterDesertAlpha_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterDesertAlpha_C_XXX",
+    "name": "Desert Alpha Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterDesertAlpha_256.png?v=1725286520",
+    "description": "Alpha Spitter are the larger and more powerful variant of the Spitter.",
+    "health": 60,
+    "damage": [
+      1,
+      12
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterDesertAlpha_C/name/Desert+Alpha+Spitter"
+  },
+  "Char_SpitterForestSmall_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterForest/Char_SpitterForestSmall.Char_SpitterForestSmall_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterForestSmall_C_XXX",
+    "name": "Forest Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterForest_256.png?v=1725286522",
+    "description": "The Spitter is a ranged hostile creature that deals damage with its fireball attack.",
+    "health": 30,
+    "damage": [
+      1,
+      12
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterForestSmall_C/name/Forest+Spitter"
+  },
+  "Char_SpitterForestAlpha_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterForest/Char_SpitterForestAlpha.Char_SpitterForestAlpha_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterForestAlpha_C_XXX",
+    "name": "Forest Alpha Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterForestAlpha_256.png?v=1725286520",
+    "description": "Alpha Spitter are the larger and more powerful variant of the Spitter.",
+    "health": 80,
+    "damage": [
+      1,
+      16
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterForestAlpha_C/name/Forest+Alpha+Spitter"
+  },
+  "Char_SpitterForestRedSmall_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterForestRed/Char_SpitterForestRedSmall.Char_SpitterForestRedSmall_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterForestRedSmall_C_XXX",
+    "name": "Red Forest Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterRForest_256.png?v=1725286522",
+    "description": "The Spitter is a ranged hostile creature that deals damage with its fireball attack.",
+    "health": 30,
+    "damage": [
+      1,
+      13
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterForestRedSmall_C/name/Red+Forest+Spitter"
+  },
+  "Char_SpitterForestRedAlpha_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterForestRed/Char_SpitterForestRedAlpha.Char_SpitterForestRedAlpha_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterForestRedAlpha_C_XXX",
+    "name": "Red Forest Alpha Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterRForestAlpha_256.png?v=1725286523",
+    "description": "Alpha Spitter are the larger and more powerful variant of the Spitter.",
+    "health": 80,
+    "damage": [
+      1,
+      12
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterForestRedAlpha_C/name/Red+Forest+Alpha+Spitter"
+  },
+  "Char_SpitterAquaticSmall_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterAquatic/Char_SpitterAquaticSmall.Char_SpitterAquaticSmall_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterAquaticSmall_C_XXX",
+    "name": "Aquatic Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterAqua_256.png?v=1725286520",
+    "description": "The Spitter is a ranged hostile creature that deals damage with its fireball attack.",
+    "health": 20,
+    "damage": [
+      1,
+      13
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterAquaticSmall_C/name/Aquatic+Spitter"
+  },
+  "Char_SpitterAquaticAlpha_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Spitter/SpitterAquatic/Char_SpitterAquaticAlpha.Char_SpitterAquaticAlpha_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_SpitterAquaticAlpha_C_XXX",
+    "name": "Aquatic Alpha Spitter",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_SpitterAquaAlpha_256.png?v=1725286521",
+    "description": "Alpha Spitter are the larger and more powerful variant of the Spitter.",
+    "health": 60,
+    "damage": [
+      1,
+      12
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_SpitterAquaticAlpha_C/name/Aquatic+Alpha+Spitter"
+  },
+  "Char_Stinger_Child_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Stinger/SmallStinger/Char_Stinger_Child.Char_Stinger_Child_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_Stinger_Child_C_XXX",
+    "name": "Small Stinger",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_StingerChild_256.png?v=1725286521",
+    "description": "Stinger is a spider-like creature found mostly in caves and jungles. Its body consists of four pointy legs attached to their torso, and another 4 similar pointy appendages attached to its head which it uses for combat.",
+    "health": 10,
+    "damage": 5,
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_Stinger_Child_C/name/Small+Stinger"
+  },
+  "Char_Stinger_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Stinger/Char_Stinger.Char_Stinger_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_Stinger_C_XXX",
+    "name": "Big Stinger",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_Stinger_256.png?v=1725286521",
+    "description": "Stinger is a spider-like creature found mostly in caves and jungles. Its body consists of four pointy legs attached to their torso, and another 4 similar pointy appendages attached to its head which it uses for combat.",
+    "health": 50,
+    "damage": [
+      30,
+      50
+    ],
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_Stinger_C/name/Big+Stinger"
+  },
+  "Char_EliteStinger_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Stinger/BigStinger/Char_EliteStinger.Char_EliteStinger_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_EliteStinger_C_XXX",
+    "name": "Elite Stinger",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_StingerElite_256.png?v=1725286522",
+    "description": "Stinger is a spider-like creature found mostly in caves and jungles. Its body consists of four pointy legs attached to their torso, and another 4 similar pointy appendages attached to its head which it uses for combat.",
+    "health": 100,
+    "damage": [
+      30,
+      50
+    ],
+    "behavior": "Hostile",
+    "effect": "May release multiple Poison Gas clouds",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/Char_EliteStinger_C/name/Elite+Stinger"
+  },
+  "Char_CrabHatcher_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/CrabHatcher/Char_CrabHatcher.Char_CrabHatcher_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_CrabHatcher_C_XXX",
+    "name": "Flying Crab Hatcher",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_Hatcher_256.png?v=1725286521",
+    "description": "Flying Crab Hatchers are plant-like creatures with six glowing, hanging bulbs.",
+    "health": 1,
+    "behavior": "Hostile, stationary",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "showByDefault": false,
+    "url": "/en/fauna/detail/id/Char_CrabHatcher_C/name/Flying+Crab+Hatcher"
+  },
+  "Char_BigCrabHatcher_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/CrabHatcher/Char_BigCrabHatcher.Char_BigCrabHatcher_C",
+    "pathName": "Persistent_Level:PersistentLevel.Char_BigCrabHatcher_C_XXX",
+    "name": "Big Flying Crab Hatcher",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/gameStable1.0/IconDesc_Hatcher_256.png?v=1725286521",
+    "description": "Flying Crab Hatchers are plant-like creatures with six glowing, hanging bulbs.",
+    "health": 1,
+    "behavior": "Hostile, stationary",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "showByDefault": false,
+    "url": "/en/fauna/detail/id/Char_BigCrabHatcher_C/name/Big+Flying+Crab+Hatcher"
+  },
+  "BP_FlyingBabyCrab_C": {
+    "className": "/Game/FactoryGame/Character/Creature/Enemy/Crab/BabyCrab/BP_FlyingBabyCrab.BP_FlyingBabyCrab_C",
+    "pathName": "Persistent_Level:PersistentLevel.BP_FlyingBabyCrab_C_XXX",
+    "name": "Flying Crab",
+    "category": "enemy",
+    "image": "https://static.satisfactory-calculator.com/img/faunaIcons/Char_BabyCrab_C.png?v=1638440041",
+    "description": "The Flying Crab is a small, hostile flying creature that damages the player upon contact.",
+    "health": 1,
+    "damage": 10,
+    "behavior": "Hostile",
+    "mapColor": "#b34848",
+    "mapLayer": "playerFaunaLayer",
+    "url": "/en/fauna/detail/id/BP_FlyingBabyCrab_C/name/Flying+Crab"
+  }
+}

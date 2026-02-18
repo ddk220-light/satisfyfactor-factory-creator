@@ -1,0 +1,1159 @@
+{
+  "meta": {
+    "game": "Satisfactory",
+    "target_item": "Heavy Modular Frame",
+    "exploration_goal": "Alternate recipe chains producing Heavy Modular Frame with distinct resource profiles and factory identities",
+    "created": "2026-02-15",
+    "notes": {
+      "fluid_units": "Database stores fluids in mL. Divide by 1000 for m3/min.",
+      "per_min": "Calculated as quantity / duration * 60",
+      "rate_basis": "All per_min values are per single building at 100% clock speed"
+    }
+  },
+  "factories": [
+    {
+      "id": "ferrium",
+      "name": "Ferrium",
+      "theme": "Pure Iron",
+      "backstory": "A city forged from nothing but iron and stone, where two belts enter and frames emerge — simplicity as the ultimate sophistication.",
+      "raw_resources": ["Iron Ore", "Limestone"],
+      "eliminated": ["Screw", "Iron Rod", "Steel Ingot", "Steel Beam", "Coal", "Copper Ore", "Crude Oil", "Copper Ingot", "Caterium Ore", "Rubber", "Plastic"],
+      "building_types": ["Smelter", "Constructor", "Assembler", "Manufacturer"],
+      "character": "Monolithic. Every intermediate derives from iron. No Foundries, no Refineries. Two raw inputs, one output. The purest HMF factory possible.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Alternate: Heavy Encased Frame",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 64,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 3, "per_min": 2.8125}
+          ],
+          "inputs": [
+            {"item": "Concrete", "quantity": 22, "per_min": 20.625},
+            {"item": "Modular Frame", "quantity": 8, "per_min": 7.5},
+            {"item": "Steel Pipe", "quantity": 36, "per_min": 33.75},
+            {"item": "Encased Industrial Beam", "quantity": 10, "per_min": 9.375}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Alternate: Steeled Frame",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 3, "per_min": 3.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 2, "per_min": 2.0},
+            {"item": "Steel Pipe", "quantity": 10, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Alternate: Stitched Iron Plate",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 32,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 3, "per_min": 5.625}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 10, "per_min": 18.75},
+            {"item": "Wire", "quantity": 20, "per_min": 37.5}
+          ]
+        },
+        {
+          "product": "Wire",
+          "recipe_name": "Alternate: Iron Wire",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 24,
+          "outputs": [
+            {"item": "Wire", "quantity": 9, "per_min": 22.5}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 5, "per_min": 12.5}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Iron Plate",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Pipe",
+          "recipe_name": "Alternate: Iron Pipe",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Steel Pipe", "quantity": 5, "per_min": 25.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 20, "per_min": 100.0}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Alternate: Encased Industrial Pipe",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 15,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 4.0}
+          ],
+          "inputs": [
+            {"item": "Steel Pipe", "quantity": 6, "per_min": 24.0},
+            {"item": "Concrete", "quantity": 5, "per_min": 20.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Concrete",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Concrete", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Limestone", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Iron Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 30.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 1, "per_min": 30.0}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "naphtheon",
+      "name": "Naphtheon",
+      "theme": "Oil Ecosystem",
+      "backstory": "A refinery-metropolis where crude oil's by-products feed the furnaces that forge steel, and nothing is ever wasted.",
+      "raw_resources": ["Iron Ore", "Crude Oil", "Limestone"],
+      "eliminated": ["Coal"],
+      "building_types": ["Smelter", "Constructor", "Assembler", "Manufacturer", "Refinery", "Foundry"],
+      "character": "Circular economy. Heavy Oil Residue from Plastic and Rubber becomes Petroleum Coke for steel smelting. Oil pipes run alongside iron belts. Three raw resources, zero waste.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Alternate: Heavy Flexible Frame",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 16,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 1, "per_min": 3.75}
+          ],
+          "inputs": [
+            {"item": "Screw", "quantity": 104, "per_min": 390.0},
+            {"item": "Modular Frame", "quantity": 5, "per_min": 18.75},
+            {"item": "Rubber", "quantity": 20, "per_min": 75.0},
+            {"item": "Encased Industrial Beam", "quantity": 3, "per_min": 11.25}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Modular Frame",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 2, "per_min": 2.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 3, "per_min": 3.0},
+            {"item": "Iron Rod", "quantity": 12, "per_min": 12.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Alternate: Adhered Iron Plate",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 16,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 1, "per_min": 3.75}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 3, "per_min": 11.25},
+            {"item": "Rubber", "quantity": 1, "per_min": 3.75}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Alternate: Coated Iron Plate",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 8,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 10, "per_min": 75.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 5, "per_min": 37.5},
+            {"item": "Plastic", "quantity": 1, "per_min": 7.5}
+          ]
+        },
+        {
+          "product": "Screw",
+          "recipe_name": "Screws",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Screw", "quantity": 4, "per_min": 40.0}
+          ],
+          "inputs": [
+            {"item": "Iron Rod", "quantity": 1, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Iron Rod",
+          "recipe_name": "Iron Rod",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Iron Rod", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 15.0}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Iron Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 30.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 1, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Encased Industrial Beam",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 10,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 6.0}
+          ],
+          "inputs": [
+            {"item": "Steel Beam", "quantity": 3, "per_min": 18.0},
+            {"item": "Concrete", "quantity": 6, "per_min": 36.0}
+          ]
+        },
+        {
+          "product": "Steel Beam",
+          "recipe_name": "Steel Beam",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Steel Beam", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 4, "per_min": 60.0}
+          ]
+        },
+        {
+          "product": "Steel Ingot",
+          "recipe_name": "Alternate: Coke Steel Ingot",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Steel Ingot", "quantity": 20, "per_min": 100.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 15, "per_min": 75.0},
+            {"item": "Petroleum Coke", "quantity": 15, "per_min": 75.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Alternate: Rubber Concrete",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Concrete", "quantity": 9, "per_min": 90.0}
+          ],
+          "inputs": [
+            {"item": "Rubber", "quantity": 2, "per_min": 20.0},
+            {"item": "Limestone", "quantity": 10, "per_min": 100.0}
+          ]
+        },
+        {
+          "product": "Rubber",
+          "recipe_name": "Rubber",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Rubber", "quantity": 2, "per_min": 20.0},
+            {"item": "Heavy Oil Residue", "quantity": 2000, "per_min": 20000.0, "is_byproduct": true, "note": "mL; 20 m3/min"}
+          ],
+          "inputs": [
+            {"item": "Crude Oil", "quantity": 3000, "per_min": 30000.0, "note": "mL; 30 m3/min"}
+          ]
+        },
+        {
+          "product": "Plastic",
+          "recipe_name": "Plastic",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Plastic", "quantity": 2, "per_min": 20.0},
+            {"item": "Heavy Oil Residue", "quantity": 1000, "per_min": 10000.0, "is_byproduct": true, "note": "mL; 10 m3/min"}
+          ],
+          "inputs": [
+            {"item": "Crude Oil", "quantity": 3000, "per_min": 30000.0, "note": "mL; 30 m3/min"}
+          ]
+        },
+        {
+          "product": "Petroleum Coke",
+          "recipe_name": "Petroleum Coke",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Petroleum Coke", "quantity": 12, "per_min": 120.0}
+          ],
+          "inputs": [
+            {"item": "Heavy Oil Residue", "quantity": 4000, "per_min": 40000.0, "note": "mL; 40 m3/min"}
+          ]
+        }
+      ],
+      "byproduct_loop": {
+        "description": "Heavy Oil Residue from Plastic and Rubber refineries feeds Petroleum Coke production, which feeds Coke Steel Ingot smelting. No coal needed.",
+        "flow": "Crude Oil -> Plastic/Rubber + Heavy Oil Residue -> Petroleum Coke -> Steel Ingot"
+      }
+    },
+    {
+      "id": "forgeholm",
+      "name": "Forgeholm",
+      "theme": "Steel Spine",
+      "backstory": "An industrial fortress where molten steel flows through every artery and a single Constructor stamps out 260 screws a minute from a beam.",
+      "raw_resources": ["Iron Ore", "Coal", "Limestone"],
+      "eliminated": ["Iron Rod", "Copper Ore", "Copper Ingot", "Crude Oil", "Rubber", "Plastic"],
+      "building_types": ["Smelter", "Foundry", "Constructor", "Assembler", "Manufacturer"],
+      "character": "Steel mill. Foundries dominate the floor making Steel Ingot. Steel Screws at 260/min are the star — one building does the work of six. Limestone appears only for EIB concrete. Pure iron-and-coal industry.",
+      "notes": "Concrete is minimized but unavoidable — EIB always requires it. Encased Industrial Pipe uses 5 concrete per cycle vs default EIB's 6.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Heavy Modular Frame",
+          "alternate": false,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 30,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 1, "per_min": 2.0}
+          ],
+          "inputs": [
+            {"item": "Screw", "quantity": 120, "per_min": 240.0},
+            {"item": "Modular Frame", "quantity": 5, "per_min": 10.0},
+            {"item": "Steel Pipe", "quantity": 20, "per_min": 40.0},
+            {"item": "Encased Industrial Beam", "quantity": 5, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Alternate: Steeled Frame",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 3, "per_min": 3.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 2, "per_min": 2.0},
+            {"item": "Steel Pipe", "quantity": 10, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Reinforced Iron Plate",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 1, "per_min": 5.0}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 6, "per_min": 30.0},
+            {"item": "Screw", "quantity": 12, "per_min": 60.0}
+          ]
+        },
+        {
+          "product": "Screw",
+          "recipe_name": "Alternate: Steel Screws",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Screw", "quantity": 52, "per_min": 260.0}
+          ],
+          "inputs": [
+            {"item": "Steel Beam", "quantity": 1, "per_min": 5.0}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Alternate: Steel Cast Plate",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 3, "per_min": 45.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 15.0},
+            {"item": "Steel Ingot", "quantity": 1, "per_min": 15.0}
+          ]
+        },
+        {
+          "product": "Steel Pipe",
+          "recipe_name": "Steel Pipe",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Steel Pipe", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Beam",
+          "recipe_name": "Steel Beam",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Steel Beam", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 4, "per_min": 60.0}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Alternate: Encased Industrial Pipe",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 15,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 4.0}
+          ],
+          "inputs": [
+            {"item": "Steel Pipe", "quantity": 6, "per_min": 24.0},
+            {"item": "Concrete", "quantity": 5, "per_min": 20.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Concrete",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Concrete", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Limestone", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Steel Ingot",
+          "recipe_name": "Steel Ingot",
+          "alternate": false,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Steel Ingot", "quantity": 3, "per_min": 45.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 3, "per_min": 45.0},
+            {"item": "Coal", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Iron Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 30.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 1, "per_min": 30.0}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "luxara",
+      "name": "Luxara",
+      "theme": "Aluminum Replacement",
+      "backstory": "A gleaming high-tech spire where lightweight aluminum replaces heavy iron in rods and beams, trading brute force for elegance.",
+      "raw_resources": ["Iron Ore", "Coal", "Limestone", "Bauxite", "Water"],
+      "eliminated": [],
+      "building_types": ["Smelter", "Foundry", "Refinery", "Constructor", "Assembler", "Manufacturer"],
+      "character": "High-tech. The complex Bauxite refining chain (Alumina Solution -> Aluminum Scrap -> Aluminum Ingot) replaces simple iron smelting for rods and beams. Fewer buildings needed per item thanks to 3.5x throughput on Aluminum Rod.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Heavy Modular Frame",
+          "alternate": false,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 30,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 1, "per_min": 2.0}
+          ],
+          "inputs": [
+            {"item": "Screw", "quantity": 120, "per_min": 240.0},
+            {"item": "Modular Frame", "quantity": 5, "per_min": 10.0},
+            {"item": "Steel Pipe", "quantity": 20, "per_min": 40.0},
+            {"item": "Encased Industrial Beam", "quantity": 5, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Modular Frame",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 2, "per_min": 2.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 3, "per_min": 3.0},
+            {"item": "Iron Rod", "quantity": 12, "per_min": 12.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Reinforced Iron Plate",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 1, "per_min": 5.0}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 6, "per_min": 30.0},
+            {"item": "Screw", "quantity": 12, "per_min": 60.0}
+          ]
+        },
+        {
+          "product": "Screw",
+          "recipe_name": "Screws",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Screw", "quantity": 4, "per_min": 40.0}
+          ],
+          "inputs": [
+            {"item": "Iron Rod", "quantity": 1, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Iron Rod",
+          "recipe_name": "Alternate: Aluminum Rod",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 8,
+          "outputs": [
+            {"item": "Iron Rod", "quantity": 7, "per_min": 52.5}
+          ],
+          "inputs": [
+            {"item": "Aluminum Ingot", "quantity": 1, "per_min": 7.5}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Iron Plate",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Pipe",
+          "recipe_name": "Steel Pipe",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Steel Pipe", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Beam",
+          "recipe_name": "Alternate: Aluminum Beam",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 8,
+          "outputs": [
+            {"item": "Steel Beam", "quantity": 3, "per_min": 22.5}
+          ],
+          "inputs": [
+            {"item": "Aluminum Ingot", "quantity": 3, "per_min": 22.5}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Encased Industrial Beam",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 10,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 6.0}
+          ],
+          "inputs": [
+            {"item": "Steel Beam", "quantity": 3, "per_min": 18.0},
+            {"item": "Concrete", "quantity": 6, "per_min": 36.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Concrete",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Concrete", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Limestone", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Iron Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 30.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 1, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Ingot",
+          "recipe_name": "Steel Ingot",
+          "alternate": false,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Steel Ingot", "quantity": 3, "per_min": 45.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 3, "per_min": 45.0},
+            {"item": "Coal", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Aluminum Ingot",
+          "recipe_name": "Aluminum Ingot",
+          "alternate": false,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Aluminum Ingot", "quantity": 4, "per_min": 60.0}
+          ],
+          "inputs": [
+            {"item": "Aluminum Scrap", "quantity": 6, "per_min": 90.0},
+            {"item": "Silica", "quantity": 5, "per_min": 75.0}
+          ]
+        },
+        {
+          "product": "Aluminum Scrap",
+          "recipe_name": "Aluminum Scrap",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 1,
+          "outputs": [
+            {"item": "Aluminum Scrap", "quantity": 6, "per_min": 360.0},
+            {"item": "Water", "quantity": 2000, "per_min": 120000.0, "is_byproduct": true, "note": "mL; 120 m3/min"}
+          ],
+          "inputs": [
+            {"item": "Alumina Solution", "quantity": 4000, "per_min": 240000.0, "note": "mL; 240 m3/min"},
+            {"item": "Coal", "quantity": 2, "per_min": 120.0}
+          ]
+        },
+        {
+          "product": "Alumina Solution",
+          "recipe_name": "Alumina Solution",
+          "alternate": false,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Alumina Solution", "quantity": 12000, "per_min": 120000.0, "note": "mL; 120 m3/min"},
+            {"item": "Silica", "quantity": 5, "per_min": 50.0, "is_byproduct": true}
+          ],
+          "inputs": [
+            {"item": "Bauxite", "quantity": 12, "per_min": 120.0},
+            {"item": "Water", "quantity": 18000, "per_min": 180000.0, "note": "mL; 180 m3/min"}
+          ]
+        }
+      ],
+      "subchain_notes": {
+        "aluminum": "Bauxite + Water -> Alumina Solution (+ Silica byproduct) -> Aluminum Scrap (+ Water byproduct, with Coal) -> Aluminum Ingot (with Silica). The Silica byproduct from Alumina Solution can partially feed the Aluminum Ingot recipe."
+      }
+    },
+    {
+      "id": "calcithos",
+      "name": "Calcithos",
+      "theme": "Limestone Empire",
+      "backstory": "Built atop endless quarries where concrete pours into everything from beams to pipes, and limestone is king.",
+      "raw_resources": ["Iron Ore", "Coal", "Limestone", "Water"],
+      "eliminated": [],
+      "building_types": ["Smelter", "Foundry", "Refinery", "Constructor", "Assembler", "Manufacturer"],
+      "character": "Quarry-industrial. Limestone is the most abundant resource in the game, and this factory exploits it. Molded Beam and Molded Steel Pipe use Concrete as a key ingredient. Wet Concrete from Refineries produces at 80/min. Foundries dominate.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Alternate: Heavy Encased Frame",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 64,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 3, "per_min": 2.8125}
+          ],
+          "inputs": [
+            {"item": "Concrete", "quantity": 22, "per_min": 20.625},
+            {"item": "Modular Frame", "quantity": 8, "per_min": 7.5},
+            {"item": "Steel Pipe", "quantity": 36, "per_min": 33.75},
+            {"item": "Encased Industrial Beam", "quantity": 10, "per_min": 9.375}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Alternate: Steeled Frame",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 3, "per_min": 3.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 2, "per_min": 2.0},
+            {"item": "Steel Pipe", "quantity": 10, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Reinforced Iron Plate",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 1, "per_min": 5.0}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 6, "per_min": 30.0},
+            {"item": "Screw", "quantity": 12, "per_min": 60.0}
+          ]
+        },
+        {
+          "product": "Screw",
+          "recipe_name": "Screws",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Screw", "quantity": 4, "per_min": 40.0}
+          ],
+          "inputs": [
+            {"item": "Iron Rod", "quantity": 1, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Iron Rod",
+          "recipe_name": "Iron Rod",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Iron Rod", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 1, "per_min": 15.0}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Iron Plate",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Pipe",
+          "recipe_name": "Alternate: Molded Steel Pipe",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Steel Pipe", "quantity": 5, "per_min": 50.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 5, "per_min": 50.0},
+            {"item": "Concrete", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Beam",
+          "recipe_name": "Alternate: Molded Beam",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Steel Beam", "quantity": 9, "per_min": 45.0}
+          ],
+          "inputs": [
+            {"item": "Steel Ingot", "quantity": 24, "per_min": 120.0},
+            {"item": "Concrete", "quantity": 16, "per_min": 80.0}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Encased Industrial Beam",
+          "alternate": false,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 10,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 6.0}
+          ],
+          "inputs": [
+            {"item": "Steel Beam", "quantity": 3, "per_min": 18.0},
+            {"item": "Concrete", "quantity": 6, "per_min": 36.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Alternate: Wet Concrete",
+          "alternate": true,
+          "building": "Refinery",
+          "power_mw": 30,
+          "duration_seconds": 3,
+          "outputs": [
+            {"item": "Concrete", "quantity": 4, "per_min": 80.0}
+          ],
+          "inputs": [
+            {"item": "Limestone", "quantity": 6, "per_min": 120.0},
+            {"item": "Water", "quantity": 5000, "per_min": 100000.0, "note": "mL; 100 m3/min"}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Alternate: Basic Iron Ingot",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 10, "per_min": 50.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 5, "per_min": 25.0},
+            {"item": "Limestone", "quantity": 8, "per_min": 40.0}
+          ]
+        },
+        {
+          "product": "Steel Ingot",
+          "recipe_name": "Steel Ingot",
+          "alternate": false,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Steel Ingot", "quantity": 3, "per_min": 45.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 3, "per_min": 45.0},
+            {"item": "Coal", "quantity": 3, "per_min": 45.0}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cathera",
+      "name": "Cathera",
+      "theme": "Copper & Caterium",
+      "backstory": "A multi-metal bazaar where copper and caterium wires hum with exotic energy, and coal is a forgotten relic.",
+      "raw_resources": ["Iron Ore", "Copper Ore", "Caterium Ore", "Limestone"],
+      "eliminated": ["Screw", "Iron Rod", "Steel Ingot", "Steel Beam", "Coal", "Crude Oil", "Rubber", "Plastic"],
+      "building_types": ["Smelter", "Foundry", "Constructor", "Assembler", "Manufacturer"],
+      "character": "Multi-ore diversity. Three smelting lines (Iron Alloy in Foundries, Copper in Smelters, Caterium in Smelters) feed diverging paths that reconverge at RIP. Copper enters at two levels — alloyed into Iron Ingot AND smelted for Fused Wire. No coal, no oil. Exotic ores as primary inputs.",
+      "recipes": [
+        {
+          "product": "Heavy Modular Frame",
+          "recipe_name": "Alternate: Heavy Encased Frame",
+          "alternate": true,
+          "building": "Manufacturer",
+          "power_mw": 55,
+          "duration_seconds": 64,
+          "outputs": [
+            {"item": "Heavy Modular Frame", "quantity": 3, "per_min": 2.8125}
+          ],
+          "inputs": [
+            {"item": "Concrete", "quantity": 22, "per_min": 20.625},
+            {"item": "Modular Frame", "quantity": 8, "per_min": 7.5},
+            {"item": "Steel Pipe", "quantity": 36, "per_min": 33.75},
+            {"item": "Encased Industrial Beam", "quantity": 10, "per_min": 9.375}
+          ]
+        },
+        {
+          "product": "Modular Frame",
+          "recipe_name": "Alternate: Steeled Frame",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 60,
+          "outputs": [
+            {"item": "Modular Frame", "quantity": 3, "per_min": 3.0}
+          ],
+          "inputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 2, "per_min": 2.0},
+            {"item": "Steel Pipe", "quantity": 10, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Reinforced Iron Plate",
+          "recipe_name": "Alternate: Stitched Iron Plate",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 32,
+          "outputs": [
+            {"item": "Reinforced Iron Plate", "quantity": 3, "per_min": 5.625}
+          ],
+          "inputs": [
+            {"item": "Iron Plate", "quantity": 10, "per_min": 18.75},
+            {"item": "Wire", "quantity": 20, "per_min": 37.5}
+          ]
+        },
+        {
+          "product": "Wire",
+          "recipe_name": "Alternate: Fused Wire",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 20,
+          "outputs": [
+            {"item": "Wire", "quantity": 30, "per_min": 90.0}
+          ],
+          "inputs": [
+            {"item": "Copper Ingot", "quantity": 4, "per_min": 12.0},
+            {"item": "Caterium Ingot", "quantity": 1, "per_min": 3.0}
+          ]
+        },
+        {
+          "product": "Iron Plate",
+          "recipe_name": "Iron Plate",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 6,
+          "outputs": [
+            {"item": "Iron Plate", "quantity": 2, "per_min": 20.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 3, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Steel Pipe",
+          "recipe_name": "Alternate: Iron Pipe",
+          "alternate": true,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Steel Pipe", "quantity": 5, "per_min": 25.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ingot", "quantity": 20, "per_min": 100.0}
+          ]
+        },
+        {
+          "product": "Encased Industrial Beam",
+          "recipe_name": "Alternate: Encased Industrial Pipe",
+          "alternate": true,
+          "building": "Assembler",
+          "power_mw": 15,
+          "duration_seconds": 15,
+          "outputs": [
+            {"item": "Encased Industrial Beam", "quantity": 1, "per_min": 4.0}
+          ],
+          "inputs": [
+            {"item": "Steel Pipe", "quantity": 6, "per_min": 24.0},
+            {"item": "Concrete", "quantity": 5, "per_min": 20.0}
+          ]
+        },
+        {
+          "product": "Concrete",
+          "recipe_name": "Concrete",
+          "alternate": false,
+          "building": "Constructor",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Concrete", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Limestone", "quantity": 3, "per_min": 45.0}
+          ]
+        },
+        {
+          "product": "Iron Ingot",
+          "recipe_name": "Alternate: Iron Alloy Ingot",
+          "alternate": true,
+          "building": "Foundry",
+          "power_mw": 16,
+          "duration_seconds": 12,
+          "outputs": [
+            {"item": "Iron Ingot", "quantity": 15, "per_min": 75.0}
+          ],
+          "inputs": [
+            {"item": "Iron Ore", "quantity": 8, "per_min": 40.0},
+            {"item": "Copper Ore", "quantity": 2, "per_min": 10.0}
+          ]
+        },
+        {
+          "product": "Copper Ingot",
+          "recipe_name": "Copper Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 2,
+          "outputs": [
+            {"item": "Copper Ingot", "quantity": 1, "per_min": 30.0}
+          ],
+          "inputs": [
+            {"item": "Copper Ore", "quantity": 1, "per_min": 30.0}
+          ]
+        },
+        {
+          "product": "Caterium Ingot",
+          "recipe_name": "Caterium Ingot",
+          "alternate": false,
+          "building": "Smelter",
+          "power_mw": 4,
+          "duration_seconds": 4,
+          "outputs": [
+            {"item": "Caterium Ingot", "quantity": 1, "per_min": 15.0}
+          ],
+          "inputs": [
+            {"item": "Caterium Ore", "quantity": 3, "per_min": 45.0}
+          ]
+        }
+      ]
+    }
+  ]
+}

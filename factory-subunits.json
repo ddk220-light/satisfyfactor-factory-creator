@@ -1,0 +1,1455 @@
+{
+  "meta": {
+    "title": "HMF-95 Factory Modules (v3 \u2014 Shard-Optimized)",
+    "description": "Smallest repeatable module per factory: 1 HMF Manufacturer at 100% with all upstream buildings. Overclocked where beneficial to reduce building count. Stamp-copy each module to reach target output.",
+    "module_basis": "1 Manufacturer (100% clock)",
+    "shard_budget": 200,
+    "shards_used": 196,
+    "date": "2026-02-15",
+    "source_plan": "factory-plan.json"
+  },
+  "modules": {
+    "ferrium": {
+      "factory": "ferrium",
+      "theme": "Pure Iron",
+      "module_basis": "1 Manufacturer at 100%",
+      "hmf_recipe": "Alternate: Heavy Encased Frame",
+      "hmf_per_min": 2.8125,
+      "raw_inputs": {
+        "Iron Ore": {
+          "per_min": 503.52,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Limestone": {
+          "per_min": 202.5,
+          "is_fluid": false,
+          "note": "items/min"
+        }
+      },
+      "steps": [
+        {
+          "recipe": "Iron Ingot",
+          "item": "Iron Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 16.784,
+          "buildings_ceil": 17,
+          "last_clock_pct": 78.4,
+          "inputs": {
+            "Iron Ore": 503.5185
+          },
+          "outputs": {
+            "Iron Ingot": 503.5185
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "16x at 100% + 1x at 78.4%"
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.5,
+          "buildings_ceil": 5,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Limestone": 202.5
+          },
+          "outputs": {
+            "Concrete": 67.5
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.6,
+          "buildings_ceil": 5,
+          "last_clock_pct": 60.0,
+          "inputs": {
+            "Iron Ingot": 460.0
+          },
+          "outputs": {
+            "Steel Pipe": 115.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 60.0%"
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 0.8333,
+          "buildings_ceil": 1,
+          "last_clock_pct": 83.3,
+          "inputs": {
+            "Iron Ingot": 25.0
+          },
+          "outputs": {
+            "Iron Plate": 16.6667
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 83.3%"
+        },
+        {
+          "recipe": "Alternate: Iron Wire",
+          "item": "Wire",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 1.4815,
+          "buildings_ceil": 1,
+          "last_clock_pct": 148.2,
+          "inputs": {
+            "Iron Ingot": 18.5185
+          },
+          "outputs": {
+            "Wire": 33.3333
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "1x at 148.2% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 2.3438,
+          "buildings_ceil": 2,
+          "last_clock_pct": 117.2,
+          "inputs": {
+            "Concrete": 46.875,
+            "Steel Pipe": 56.25
+          },
+          "outputs": {
+            "Encased Industrial Beam": 9.375
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "2x at 117.2% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 0.8889,
+          "buildings_ceil": 1,
+          "last_clock_pct": 88.9,
+          "inputs": {
+            "Iron Plate": 16.6667,
+            "Wire": 33.3333
+          },
+          "outputs": {
+            "Reinforced Iron Plate": 5.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 88.9%"
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 2.5,
+          "buildings_ceil": 2,
+          "last_clock_pct": 125.0,
+          "inputs": {
+            "Reinforced Iron Plate": 5.0,
+            "Steel Pipe": 25.0
+          },
+          "outputs": {
+            "Modular Frame": 7.5
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "2x at 125.0% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Heavy Encased Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "power_mw": 55.0,
+          "buildings_exact": 1.0,
+          "buildings_ceil": 1,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Concrete": 20.625,
+            "Modular Frame": 7.5,
+            "Steel Pipe": 33.75,
+            "Encased Industrial Beam": 9.375
+          },
+          "outputs": {
+            "Heavy Modular Frame": 2.8125
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100%"
+        }
+      ],
+      "building_totals": {
+        "Manufacturer": 1,
+        "Assembler": 5,
+        "Constructor": 12,
+        "Smelter": 17
+      },
+      "total_buildings": 35,
+      "total_power_mw": 257.5,
+      "shards_per_module": 5,
+      "target_hmf": 18.94,
+      "copies_needed_exact": 6.7342,
+      "copies_needed_ceil": 7,
+      "total_shards_all_copies": 35,
+      "optimizations_applied": [
+        {
+          "item": "Modular Frame",
+          "old_buildings": 3,
+          "new_buildings": 2,
+          "new_clock_pct": 125.0,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Encased Industrial Beam",
+          "old_buildings": 3,
+          "new_buildings": 2,
+          "new_clock_pct": 117.2,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Wire",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 148.2,
+          "shards_per_building": 1
+        }
+      ]
+    },
+    "naphtheon": {
+      "factory": "naphtheon",
+      "theme": "Oil Ecosystem",
+      "module_basis": "1 Manufacturer at 100%",
+      "hmf_recipe": "Alternate: Heavy Flexible Frame",
+      "hmf_per_min": 3.75,
+      "raw_inputs": {
+        "Crude Oil": {
+          "per_min": 189.84,
+          "is_fluid": true,
+          "note": "m\u00b3/min"
+        },
+        "Iron Ore": {
+          "per_min": 353.44,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Limestone": {
+          "per_min": 75.0,
+          "is_fluid": false,
+          "note": "items/min"
+        }
+      },
+      "steps": [
+        {
+          "recipe": "Iron Ingot",
+          "item": "Iron Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 8.4062,
+          "buildings_ceil": 9,
+          "last_clock_pct": 40.6,
+          "inputs": {
+            "Iron Ore": 252.1875
+          },
+          "outputs": {
+            "Iron Ingot": 252.1875
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "8x at 100% + 1x at 40.6%"
+        },
+        {
+          "recipe": "Petroleum Coke",
+          "item": "Petroleum Coke",
+          "building": "Refinery",
+          "power_mw": 30.0,
+          "buildings_exact": 0.8438,
+          "buildings_ceil": 1,
+          "last_clock_pct": 84.4,
+          "inputs": {
+            "Heavy Oil Residue": 33.75
+          },
+          "outputs": {
+            "Petroleum Coke": 101.25
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 84.4%"
+        },
+        {
+          "recipe": "Alternate: Coke Steel Ingot",
+          "item": "Steel Ingot",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 1.35,
+          "buildings_ceil": 2,
+          "last_clock_pct": 35.0,
+          "inputs": {
+            "Petroleum Coke": 101.25,
+            "Iron Ore": 101.25
+          },
+          "outputs": {
+            "Steel Ingot": 135.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100% + 1x at 35.0%"
+        },
+        {
+          "recipe": "Plastic",
+          "item": "Plastic",
+          "building": "Refinery",
+          "power_mw": 30.0,
+          "buildings_exact": 0.4219,
+          "buildings_ceil": 1,
+          "last_clock_pct": 42.2,
+          "inputs": {
+            "Crude Oil": 12.6562
+          },
+          "outputs": {
+            "Heavy Oil Residue": 4.2188,
+            "Plastic": 8.4375
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 42.2%"
+        },
+        {
+          "recipe": "Rubber",
+          "item": "Rubber",
+          "building": "Refinery",
+          "power_mw": 30.0,
+          "buildings_exact": 5.9062,
+          "buildings_ceil": 5,
+          "last_clock_pct": 118.1,
+          "inputs": {
+            "Crude Oil": 177.1875
+          },
+          "outputs": {
+            "Heavy Oil Residue": 118.125,
+            "Rubber": 118.125
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "5x at 118.1% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Rubber Concrete",
+          "item": "Concrete",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 0.75,
+          "buildings_ceil": 1,
+          "last_clock_pct": 75.0,
+          "inputs": {
+            "Rubber": 15.0,
+            "Limestone": 75.0
+          },
+          "outputs": {
+            "Concrete": 67.5
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 75.0%"
+        },
+        {
+          "recipe": "Steel Beam",
+          "item": "Steel Beam",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 2.25,
+          "buildings_ceil": 3,
+          "last_clock_pct": 25.0,
+          "inputs": {
+            "Steel Ingot": 135.0
+          },
+          "outputs": {
+            "Steel Beam": 33.75
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "2x at 100% + 1x at 25.0%"
+        },
+        {
+          "recipe": "Iron Rod",
+          "item": "Iron Rod",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 14.0,
+          "buildings_ceil": 14,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Iron Ingot": 210.0
+          },
+          "outputs": {
+            "Iron Rod": 210.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "14x at 100%"
+        },
+        {
+          "recipe": "Screws",
+          "item": "Screws",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 9.75,
+          "buildings_ceil": 10,
+          "last_clock_pct": 75.0,
+          "inputs": {
+            "Iron Rod": 97.5
+          },
+          "outputs": {
+            "Screws": 390.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "9x at 100% + 1x at 75.0%"
+        },
+        {
+          "recipe": "Alternate: Coated Iron Plate",
+          "item": "Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 1.125,
+          "buildings_ceil": 1,
+          "last_clock_pct": 112.5,
+          "inputs": {
+            "Iron Ingot": 42.1875,
+            "Plastic": 8.4375
+          },
+          "outputs": {
+            "Iron Plate": 84.375
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "1x at 112.5% (1 shard each)"
+        },
+        {
+          "recipe": "Encased Industrial Beam",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 1.875,
+          "buildings_ceil": 1,
+          "last_clock_pct": 187.5,
+          "inputs": {
+            "Concrete": 67.5,
+            "Steel Beam": 33.75
+          },
+          "outputs": {
+            "Encased Industrial Beam": 11.25
+          },
+          "shards_per_building": 2,
+          "overclock_detail": "1x at 187.5% (2 shards each)"
+        },
+        {
+          "recipe": "Alternate: Adhered Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 7.5,
+          "buildings_ceil": 8,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Iron Plate": 84.375,
+            "Rubber": 28.125
+          },
+          "outputs": {
+            "Reinforced Iron Plate": 28.125
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "7x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Modular Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 9.375,
+          "buildings_ceil": 10,
+          "last_clock_pct": 37.5,
+          "inputs": {
+            "Reinforced Iron Plate": 28.125,
+            "Iron Rod": 112.5
+          },
+          "outputs": {
+            "Modular Frame": 18.75
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "9x at 100% + 1x at 37.5%"
+        },
+        {
+          "recipe": "Alternate: Heavy Flexible Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "power_mw": 55.0,
+          "buildings_exact": 1.0,
+          "buildings_ceil": 1,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Screws": 390.0,
+            "Modular Frame": 18.75,
+            "Rubber": 75.0,
+            "Encased Industrial Beam": 11.25
+          },
+          "outputs": {
+            "Heavy Modular Frame": 3.75
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100%"
+        }
+      ],
+      "building_totals": {
+        "Manufacturer": 1,
+        "Assembler": 21,
+        "Constructor": 27,
+        "Refinery": 7,
+        "Foundry": 2,
+        "Smelter": 9
+      },
+      "total_buildings": 67,
+      "total_power_mw": 744.4,
+      "shards_per_module": 8,
+      "target_hmf": 21.3,
+      "copies_needed_exact": 5.68,
+      "copies_needed_ceil": 6,
+      "total_shards_all_copies": 48,
+      "byproduct_surplus": {
+        "Heavy Oil Residue": 88.59
+      },
+      "optimizations_applied": [
+        {
+          "item": "Rubber",
+          "old_buildings": 6,
+          "new_buildings": 5,
+          "new_clock_pct": 118.1,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Iron Plate",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 112.5,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Encased Industrial Beam",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 187.5,
+          "shards_per_building": 2
+        }
+      ]
+    },
+    "forgeholm": {
+      "factory": "forgeholm",
+      "theme": "Steel Spine",
+      "module_basis": "1 Manufacturer at 100%",
+      "hmf_recipe": "Heavy Modular Frame",
+      "hmf_per_min": 2.0,
+      "raw_inputs": {
+        "Coal": {
+          "per_min": 237.95,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Iron Ore": {
+          "per_min": 251.28,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Limestone": {
+          "per_min": 150.0,
+          "is_fluid": false,
+          "note": "items/min"
+        }
+      },
+      "steps": [
+        {
+          "recipe": "Iron Ingot",
+          "item": "Iron Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 0.4444,
+          "buildings_ceil": 1,
+          "last_clock_pct": 44.4,
+          "inputs": {
+            "Iron Ore": 13.3333
+          },
+          "outputs": {
+            "Iron Ingot": 13.3333
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 44.4%"
+        },
+        {
+          "recipe": "Steel Ingot",
+          "item": "Steel Ingot",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 5.2877,
+          "buildings_ceil": 6,
+          "last_clock_pct": 28.8,
+          "inputs": {
+            "Coal": 237.9487,
+            "Iron Ore": 237.9487
+          },
+          "outputs": {
+            "Steel Ingot": 237.9487
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "5x at 100% + 1x at 28.8%"
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 3.3333,
+          "buildings_ceil": 4,
+          "last_clock_pct": 33.3,
+          "inputs": {
+            "Limestone": 150.0
+          },
+          "outputs": {
+            "Concrete": 50.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "3x at 100% + 1x at 33.3%"
+        },
+        {
+          "recipe": "Steel Beam",
+          "item": "Steel Beam",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 0.4103,
+          "buildings_ceil": 1,
+          "last_clock_pct": 41.0,
+          "inputs": {
+            "Steel Ingot": 24.6154
+          },
+          "outputs": {
+            "Steel Beam": 6.1538
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 41.0%"
+        },
+        {
+          "recipe": "Steel Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 6.6667,
+          "buildings_ceil": 7,
+          "last_clock_pct": 66.7,
+          "inputs": {
+            "Steel Ingot": 200.0
+          },
+          "outputs": {
+            "Steel Pipe": 133.3333
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "6x at 100% + 1x at 66.7%"
+        },
+        {
+          "recipe": "Alternate: Steel Cast Plate",
+          "item": "Iron Plate",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 0.8889,
+          "buildings_ceil": 1,
+          "last_clock_pct": 88.9,
+          "inputs": {
+            "Iron Ingot": 13.3333,
+            "Steel Ingot": 13.3333
+          },
+          "outputs": {
+            "Iron Plate": 40.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 88.9%"
+        },
+        {
+          "recipe": "Alternate: Steel Screws",
+          "item": "Screws",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 1.2308,
+          "buildings_ceil": 2,
+          "last_clock_pct": 23.1,
+          "inputs": {
+            "Steel Beam": 6.1538
+          },
+          "outputs": {
+            "Screws": 320.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100% + 1x at 23.1%"
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 2.5,
+          "buildings_ceil": 2,
+          "last_clock_pct": 125.0,
+          "inputs": {
+            "Concrete": 50.0,
+            "Steel Pipe": 60.0
+          },
+          "outputs": {
+            "Encased Industrial Beam": 10.0
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "2x at 125.0% (1 shard each)"
+        },
+        {
+          "recipe": "Reinforced Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 1.3333,
+          "buildings_ceil": 1,
+          "last_clock_pct": 133.3,
+          "inputs": {
+            "Iron Plate": 40.0,
+            "Screws": 80.0
+          },
+          "outputs": {
+            "Reinforced Iron Plate": 6.6667
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "1x at 133.3% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 3.3333,
+          "buildings_ceil": 3,
+          "last_clock_pct": 111.1,
+          "inputs": {
+            "Reinforced Iron Plate": 6.6667,
+            "Steel Pipe": 33.3333
+          },
+          "outputs": {
+            "Modular Frame": 10.0
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "3x at 111.1% (1 shard each)"
+        },
+        {
+          "recipe": "Heavy Modular Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "power_mw": 55.0,
+          "buildings_exact": 1.0,
+          "buildings_ceil": 1,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Screws": 240.0,
+            "Modular Frame": 10.0,
+            "Steel Pipe": 40.0,
+            "Encased Industrial Beam": 10.0
+          },
+          "outputs": {
+            "Heavy Modular Frame": 2.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100%"
+        }
+      ],
+      "building_totals": {
+        "Manufacturer": 1,
+        "Assembler": 6,
+        "Constructor": 14,
+        "Foundry": 7,
+        "Smelter": 1
+      },
+      "total_buildings": 29,
+      "total_power_mw": 312.2,
+      "shards_per_module": 6,
+      "target_hmf": 17.27,
+      "copies_needed_exact": 8.635,
+      "copies_needed_ceil": 9,
+      "total_shards_all_copies": 54,
+      "optimizations_applied": [
+        {
+          "item": "Reinforced Iron Plate",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 133.3,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Encased Industrial Beam",
+          "old_buildings": 3,
+          "new_buildings": 2,
+          "new_clock_pct": 125.0,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Modular Frame",
+          "old_buildings": 4,
+          "new_buildings": 3,
+          "new_clock_pct": 111.1,
+          "shards_per_building": 1
+        }
+      ]
+    },
+    "luxara": {
+      "factory": "luxara",
+      "theme": "Aluminum Replacement",
+      "module_basis": "1 Manufacturer at 100%",
+      "hmf_recipe": "Heavy Modular Frame",
+      "hmf_per_min": 2.0,
+      "raw_inputs": {
+        "Bauxite": {
+          "per_min": 53.57,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Coal": {
+          "per_min": 86.79,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Iron Ore": {
+          "per_min": 195.0,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Limestone": {
+          "per_min": 180.0,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Silica": {
+          "per_min": 44.64,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Water": {
+          "per_min": 53.57,
+          "is_fluid": true,
+          "note": "m\u00b3/min"
+        }
+      },
+      "steps": [
+        {
+          "recipe": "Iron Ingot",
+          "item": "Iron Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 4.5,
+          "buildings_ceil": 5,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Iron Ore": 135.0
+          },
+          "outputs": {
+            "Iron Ingot": 135.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Steel Ingot",
+          "item": "Steel Ingot",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 1.3333,
+          "buildings_ceil": 2,
+          "last_clock_pct": 33.3,
+          "inputs": {
+            "Coal": 60.0,
+            "Iron Ore": 60.0
+          },
+          "outputs": {
+            "Steel Ingot": 60.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100% + 1x at 33.3%"
+        },
+        {
+          "recipe": "Alumina Solution",
+          "item": "Alumina Solution",
+          "building": "Refinery",
+          "power_mw": 30.0,
+          "buildings_exact": 0.4464,
+          "buildings_ceil": 1,
+          "last_clock_pct": 44.6,
+          "inputs": {
+            "Bauxite": 53.5714,
+            "Water": 80.3571
+          },
+          "outputs": {
+            "Alumina Solution": 53.5714,
+            "Silica": 22.3214
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 44.6%"
+        },
+        {
+          "recipe": "Aluminum Scrap",
+          "item": "Aluminum Scrap",
+          "building": "Refinery",
+          "power_mw": 30.0,
+          "buildings_exact": 0.2232,
+          "buildings_ceil": 1,
+          "last_clock_pct": 22.3,
+          "inputs": {
+            "Alumina Solution": 53.5714,
+            "Coal": 26.7857
+          },
+          "outputs": {
+            "Aluminum Scrap": 80.3571,
+            "Water": 26.7857
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 22.3%"
+        },
+        {
+          "recipe": "Aluminum Ingot",
+          "item": "Aluminum Ingot",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 0.8929,
+          "buildings_ceil": 1,
+          "last_clock_pct": 89.3,
+          "inputs": {
+            "Aluminum Scrap": 80.3571,
+            "Silica": 66.9643
+          },
+          "outputs": {
+            "Aluminum Ingot": 53.5714
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 89.3%"
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.0,
+          "buildings_ceil": 4,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Limestone": 180.0
+          },
+          "outputs": {
+            "Concrete": 60.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100%"
+        },
+        {
+          "recipe": "Steel Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 2.0,
+          "buildings_ceil": 2,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Steel Ingot": 60.0
+          },
+          "outputs": {
+            "Steel Pipe": 40.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "2x at 100%"
+        },
+        {
+          "recipe": "Alternate: Aluminum Beam",
+          "item": "Steel Beam",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 1.3333,
+          "buildings_ceil": 1,
+          "last_clock_pct": 133.3,
+          "inputs": {
+            "Aluminum Ingot": 30.0
+          },
+          "outputs": {
+            "Steel Beam": 30.0
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "1x at 133.3% (1 shard each)"
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.5,
+          "buildings_ceil": 5,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Iron Ingot": 135.0
+          },
+          "outputs": {
+            "Iron Plate": 90.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Alternate: Aluminum Rod",
+          "item": "Iron Rod",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 3.1429,
+          "buildings_ceil": 4,
+          "last_clock_pct": 14.3,
+          "inputs": {
+            "Aluminum Ingot": 23.5714
+          },
+          "outputs": {
+            "Iron Rod": 165.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "3x at 100% + 1x at 14.3%"
+        },
+        {
+          "recipe": "Screws",
+          "item": "Screws",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 10.5,
+          "buildings_ceil": 11,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Iron Rod": 105.0
+          },
+          "outputs": {
+            "Screws": 420.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "10x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Encased Industrial Beam",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 1.6667,
+          "buildings_ceil": 1,
+          "last_clock_pct": 166.7,
+          "inputs": {
+            "Concrete": 60.0,
+            "Steel Beam": 30.0
+          },
+          "outputs": {
+            "Encased Industrial Beam": 10.0
+          },
+          "shards_per_building": 2,
+          "overclock_detail": "1x at 166.7% (2 shards each)"
+        },
+        {
+          "recipe": "Reinforced Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 3.0,
+          "buildings_ceil": 3,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Iron Plate": 90.0,
+            "Screws": 180.0
+          },
+          "outputs": {
+            "Reinforced Iron Plate": 15.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "3x at 100%"
+        },
+        {
+          "recipe": "Modular Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 5.0,
+          "buildings_ceil": 5,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Reinforced Iron Plate": 15.0,
+            "Iron Rod": 60.0
+          },
+          "outputs": {
+            "Modular Frame": 10.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "5x at 100%"
+        },
+        {
+          "recipe": "Heavy Modular Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "power_mw": 55.0,
+          "buildings_exact": 1.0,
+          "buildings_ceil": 1,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Screws": 240.0,
+            "Modular Frame": 10.0,
+            "Steel Pipe": 40.0,
+            "Encased Industrial Beam": 10.0
+          },
+          "outputs": {
+            "Heavy Modular Frame": 2.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100%"
+        }
+      ],
+      "building_totals": {
+        "Manufacturer": 1,
+        "Assembler": 9,
+        "Constructor": 27,
+        "Foundry": 3,
+        "Refinery": 2,
+        "Smelter": 5
+      },
+      "total_buildings": 47,
+      "total_power_mw": 371.4,
+      "shards_per_module": 3,
+      "target_hmf": 8.41,
+      "copies_needed_exact": 4.205,
+      "copies_needed_ceil": 5,
+      "total_shards_all_copies": 15,
+      "optimizations_applied": [
+        {
+          "item": "Encased Industrial Beam",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 166.7,
+          "shards_per_building": 2
+        },
+        {
+          "item": "Steel Beam",
+          "old_buildings": 2,
+          "new_buildings": 1,
+          "new_clock_pct": 133.3,
+          "shards_per_building": 1
+        }
+      ]
+    },
+    "cathera": {
+      "factory": "cathera",
+      "theme": "Copper & Caterium",
+      "module_basis": "1 Manufacturer at 100%",
+      "hmf_recipe": "Alternate: Heavy Encased Frame",
+      "hmf_per_min": 2.8125,
+      "raw_inputs": {
+        "Caterium Ore": {
+          "per_min": 3.33,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Copper Ore": {
+          "per_min": 69.11,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Iron Ore": {
+          "per_min": 258.67,
+          "is_fluid": false,
+          "note": "items/min"
+        },
+        "Limestone": {
+          "per_min": 202.5,
+          "is_fluid": false,
+          "note": "items/min"
+        }
+      },
+      "steps": [
+        {
+          "recipe": "Caterium Ingot",
+          "item": "Caterium Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 0.0741,
+          "buildings_ceil": 1,
+          "last_clock_pct": 7.4,
+          "inputs": {
+            "Caterium Ore": 3.3333
+          },
+          "outputs": {
+            "Caterium Ingot": 1.1111
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 7.4%"
+        },
+        {
+          "recipe": "Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Smelter",
+          "power_mw": 4.0,
+          "buildings_exact": 0.1481,
+          "buildings_ceil": 1,
+          "last_clock_pct": 14.8,
+          "inputs": {
+            "Copper Ore": 4.4444
+          },
+          "outputs": {
+            "Copper Ingot": 4.4444
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 14.8%"
+        },
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "item": "Iron Ingot",
+          "building": "Foundry",
+          "power_mw": 16.0,
+          "buildings_exact": 6.4667,
+          "buildings_ceil": 7,
+          "last_clock_pct": 46.7,
+          "inputs": {
+            "Copper Ore": 64.6667,
+            "Iron Ore": 258.6667
+          },
+          "outputs": {
+            "Iron Ingot": 485.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "6x at 100% + 1x at 46.7%"
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.5,
+          "buildings_ceil": 5,
+          "last_clock_pct": 50.0,
+          "inputs": {
+            "Limestone": 202.5
+          },
+          "outputs": {
+            "Concrete": 67.5
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 50.0%"
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 4.6,
+          "buildings_ceil": 5,
+          "last_clock_pct": 60.0,
+          "inputs": {
+            "Iron Ingot": 460.0
+          },
+          "outputs": {
+            "Steel Pipe": 115.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "4x at 100% + 1x at 60.0%"
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "power_mw": 4.0,
+          "buildings_exact": 0.8333,
+          "buildings_ceil": 1,
+          "last_clock_pct": 83.3,
+          "inputs": {
+            "Iron Ingot": 25.0
+          },
+          "outputs": {
+            "Iron Plate": 16.6667
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 83.3%"
+        },
+        {
+          "recipe": "Alternate: Fused Wire",
+          "item": "Wire",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 0.3704,
+          "buildings_ceil": 1,
+          "last_clock_pct": 37.0,
+          "inputs": {
+            "Copper Ingot": 4.4444,
+            "Caterium Ingot": 1.1111
+          },
+          "outputs": {
+            "Wire": 33.3333
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 37.0%"
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 2.3438,
+          "buildings_ceil": 2,
+          "last_clock_pct": 117.2,
+          "inputs": {
+            "Concrete": 46.875,
+            "Steel Pipe": 56.25
+          },
+          "outputs": {
+            "Encased Industrial Beam": 9.375
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "2x at 117.2% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 0.8889,
+          "buildings_ceil": 1,
+          "last_clock_pct": 88.9,
+          "inputs": {
+            "Iron Plate": 16.6667,
+            "Wire": 33.3333
+          },
+          "outputs": {
+            "Reinforced Iron Plate": 5.0
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 88.9%"
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "power_mw": 15.0,
+          "buildings_exact": 2.5,
+          "buildings_ceil": 2,
+          "last_clock_pct": 125.0,
+          "inputs": {
+            "Reinforced Iron Plate": 5.0,
+            "Steel Pipe": 25.0
+          },
+          "outputs": {
+            "Modular Frame": 7.5
+          },
+          "shards_per_building": 1,
+          "overclock_detail": "2x at 125.0% (1 shard each)"
+        },
+        {
+          "recipe": "Alternate: Heavy Encased Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "power_mw": 55.0,
+          "buildings_exact": 1.0,
+          "buildings_ceil": 1,
+          "last_clock_pct": 100.0,
+          "inputs": {
+            "Concrete": 20.625,
+            "Modular Frame": 7.5,
+            "Steel Pipe": 33.75,
+            "Encased Industrial Beam": 9.375
+          },
+          "outputs": {
+            "Heavy Modular Frame": 2.8125
+          },
+          "shards_per_building": 0,
+          "overclock_detail": "1x at 100%"
+        }
+      ],
+      "building_totals": {
+        "Manufacturer": 1,
+        "Assembler": 6,
+        "Constructor": 11,
+        "Foundry": 7,
+        "Smelter": 2
+      },
+      "total_buildings": 27,
+      "total_power_mw": 290.2,
+      "shards_per_module": 4,
+      "target_hmf": 29.09,
+      "copies_needed_exact": 10.3431,
+      "copies_needed_ceil": 11,
+      "total_shards_all_copies": 44,
+      "optimizations_applied": [
+        {
+          "item": "Modular Frame",
+          "old_buildings": 3,
+          "new_buildings": 2,
+          "new_clock_pct": 125.0,
+          "shards_per_building": 1
+        },
+        {
+          "item": "Encased Industrial Beam",
+          "old_buildings": 3,
+          "new_buildings": 2,
+          "new_clock_pct": 117.2,
+          "shards_per_building": 1
+        }
+      ]
+    }
+  },
+  "summary": [
+    {
+      "factory": "ferrium",
+      "theme": "Pure Iron",
+      "hmf_per_module": 2.8125,
+      "buildings_per_module": 35,
+      "shards_per_module": 5,
+      "copies_needed": 7,
+      "total_buildings_all_copies": 245,
+      "total_shards_all_copies": 35,
+      "target_hmf": 18.94
+    },
+    {
+      "factory": "naphtheon",
+      "theme": "Oil Ecosystem",
+      "hmf_per_module": 3.75,
+      "buildings_per_module": 67,
+      "shards_per_module": 8,
+      "copies_needed": 6,
+      "total_buildings_all_copies": 402,
+      "total_shards_all_copies": 48,
+      "target_hmf": 21.3
+    },
+    {
+      "factory": "forgeholm",
+      "theme": "Steel Spine",
+      "hmf_per_module": 2.0,
+      "buildings_per_module": 29,
+      "shards_per_module": 6,
+      "copies_needed": 9,
+      "total_buildings_all_copies": 261,
+      "total_shards_all_copies": 54,
+      "target_hmf": 17.27
+    },
+    {
+      "factory": "luxara",
+      "theme": "Aluminum Replacement",
+      "hmf_per_module": 2.0,
+      "buildings_per_module": 47,
+      "shards_per_module": 3,
+      "copies_needed": 5,
+      "total_buildings_all_copies": 235,
+      "total_shards_all_copies": 15,
+      "target_hmf": 8.41
+    },
+    {
+      "factory": "cathera",
+      "theme": "Copper & Caterium",
+      "hmf_per_module": 2.8125,
+      "buildings_per_module": 27,
+      "shards_per_module": 4,
+      "copies_needed": 11,
+      "total_buildings_all_copies": 297,
+      "total_shards_all_copies": 44,
+      "target_hmf": 29.09
+    }
+  ]
+}
