@@ -81,9 +81,9 @@ canvas.grabbing{cursor:grabbing}
 .resource-supply .surplus{color:#555}
 .flow-diagram{padding:20px;min-height:120px;position:relative;overflow-x:auto}
 .flow-columns{display:flex;gap:0;align-items:stretch;min-width:max-content}
-.flow-column{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 28px;min-width:130px}
-.flow-node{background:#16213e;border:1px solid #333;border-radius:4px;padding:8px 10px;font-size:11px;min-width:120px;position:relative;cursor:default}
-.flow-node .item-name{font-weight:bold;color:#e0e0e0;font-size:12px;margin-bottom:3px}
+.flow-column{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:0 16px;min-width:110px}
+.flow-node{background:#16213e;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:10px;min-width:100px;position:relative;cursor:pointer;transition:border-color 0.15s}
+.flow-node .item-name{font-weight:bold;color:#e0e0e0;font-size:11px;margin-bottom:2px}
 .flow-node .building-info{color:#888}
 .flow-node .output-rate{color:#aaa;font-size:10px;margin-top:2px}
 .flow-node.raw-input{background:#0d1117;border-style:dashed;border-color:#555}
@@ -95,13 +95,30 @@ canvas.grabbing{cursor:grabbing}
 .flow-node .shard-badge{display:inline-block;font-size:9px;color:#f39c12;margin-left:4px}
 .flow-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
 .flow-svg text{fill:#666;font-size:9px;font-family:'Courier New',monospace}
-.flow-tooltip{position:absolute;background:rgba(20,20,40,0.97);color:#ddd;padding:10px 14px;border-radius:4px;font-size:11px;font-family:'Courier New',monospace;pointer-events:none;display:none;border:1px solid #555;max-width:300px;z-index:200;white-space:pre-line;line-height:1.5}
+.flow-tooltip{position:fixed;background:rgba(20,20,40,0.97);color:#ddd;padding:10px 14px;border-radius:4px;font-size:11px;font-family:'Courier New',monospace;pointer-events:none;display:none;border:1px solid #555;max-width:300px;z-index:200;white-space:pre-line;line-height:1.5}
+.flow-node.selected{border-color:#7f8fa6;box-shadow:0 0 8px rgba(127,143,166,0.3)}
+.mini-module{margin:8px 20px 16px;border:1px solid #333;border-radius:4px;background:#0d1117;overflow:hidden}
+.mini-module-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mini-module-header h4{font-size:12px;color:#e0e0e0;margin:0}
+.mini-module-header .copies-badge{font-size:10px;padding:2px 8px;background:#f39c12;color:#111;border-radius:3px;font-weight:bold}
+.belt-bar{margin:0 14px 10px;height:14px;background:#1a1a2e;border-radius:3px;position:relative;overflow:hidden}
+.belt-bar-fill{height:100%;border-radius:3px}
+.belt-bar-label{position:absolute;top:0;left:0;right:0;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#ccc;font-weight:bold}
+.mini-module-body{padding:0 14px 10px;font-size:10px;color:#aaa}
+.mini-module-body .raw-list{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.mini-module-body .buildings-list{display:flex;gap:8px;flex-wrap:wrap}
+.mini-module-body .buildings-list span{white-space:nowrap}
+.manufacturer-card{margin:8px 20px 4px;padding:12px 14px;border:2px dashed #555;border-radius:4px;background:#1a1a2e}
+.manufacturer-card h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.manufacturer-card .mfr-inputs{display:flex;gap:6px;flex-wrap:wrap}
+.manufacturer-card .mfr-pill{padding:3px 8px;background:#16213e;border:1px solid #333;border-radius:12px;font-size:10px;color:#ccc}
 </style>
 </head>
 <body>
 <div id="tab-bar">
   <button class="tab-btn active" onclick="switchTab('map')">Map</button>
   <button class="tab-btn" onclick="switchTab('factories')">Factories</button>
+  <button class="tab-btn" onclick="switchTab('crazy')">Factory Crazy</button>
 </div>
 <div id="tab-content">
   <div id="map-view">
@@ -119,6 +136,9 @@ canvas.grabbing{cursor:grabbing}
   <div id="factories-view">
     <div id="factories-content"></div>
   </div>
+  <div id="crazy-view" style="display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:24px 32px;font-family:'Courier New',monospace">
+    <div id="crazy-content" style="max-width:1400px;margin:0 auto;width:100%"></div>
+  </div>
 </div>
 <div id="tooltip"></div>
 
@@ -129,11 +149,108 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById('map-view').style.display = tab === 'map' ? 'flex' : 'none';
   document.getElementById('factories-view').style.display = tab === 'factories' ? 'flex' : 'none';
+  document.getElementById('crazy-view').style.display = tab === 'crazy' ? 'flex' : 'none';
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === tab);
+    var btnTab = btn.textContent.trim().toLowerCase().replace(' ', '');
+    btn.classList.toggle('active', btnTab === tab || (btnTab === 'factorycrazy' && tab === 'crazy'));
   });
   if (tab === 'map') { resize(); draw(); }
   if (tab === 'factories' && !factoriesLoaded) { loadFactories(); }
+  if (tab === 'crazy' && !crazyLoaded) { loadCrazy(); }
+}
+let crazyLoaded = false;
+async function loadCrazy() {
+  try {
+    const resp = await fetch('factory-crazy.json');
+    const data = await resp.json();
+    crazyLoaded = true;
+    renderCrazyTab(data);
+  } catch (e) {
+    document.getElementById('crazy-content').innerHTML = '<p style="color:#e74c3c">Failed to load factory-crazy.json: ' + e.message + '</p>';
+  }
+}
+function renderCrazyTab(data) {
+  var el = document.getElementById('crazy-content');
+  var html = '';
+  var RESOURCE_COLORS_MAP = {
+    'Iron Ore': '#e74c3c', 'Limestone': '#95a5a6', 'Copper Ore': '#e67e22',
+    'Coal': '#555', 'Crude Oil': '#9b59b6', 'Caterium Ore': '#f1c40f',
+    'Bauxite': '#e91e63', 'Water': '#4fc3f7', 'Silica': '#00bcd4'
+  };
+
+  html += '<div class="summary-banner">';
+  html += '<h2>' + data.meta.title + '</h2>';
+  html += '<div class="meta">' + data.meta.description + ' | Belt limit: ' + data.meta.belt_limit + '/min</div>';
+  html += '</div>';
+
+  for (var fid in data.factories) {
+    if (!data.factories.hasOwnProperty(fid)) continue;
+    var fac = data.factories[fid];
+    var color = FACTORY_COLORS[fid] || '#666';
+
+    html += '<div class="factory-card">';
+    html += '<div class="factory-card-header" style="border-left-color:' + color + '">';
+    html += '<h3 style="color:' + color + '">' + fid.toUpperCase() + ' \u2014 ' + fac.theme + '</h3>';
+    html += '<div class="recipe">' + fac.hmf_recipe + '</div>';
+    html += '<div class="stats">';
+    html += '<span class="stat"><b>' + fac.hmf_per_min + '</b> HMF/min per module</span>';
+    html += '<span class="stat">\u00d7' + fac.factory_copies + ' factory copies \u2192 <b>' + fac.target_hmf + '</b> HMF/min</span>';
+    html += '</div>';
+    html += '</div>';
+
+    var mfr = fac.manufacturer;
+    html += '<div class="manufacturer-card">';
+    html += '<h4>\u2605 Manufacturer \u2014 ' + mfr.recipe + ' (' + mfr.power_mw + ' MW)</h4>';
+    html += '<div class="mfr-inputs">';
+    for (var inp in mfr.inputs) {
+      html += '<span class="mfr-pill">' + inp + ' ' + mfr.inputs[inp] + '/min</span>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    for (var i = 0; i < fac.mini_modules.length; i++) {
+      var mm = fac.mini_modules[i];
+      var pct = Math.min(mm.belt_utilization * 100, 100);
+      var barColor = pct > 90 ? '#e74c3c' : pct > 70 ? '#f39c12' : '#2ecc71';
+
+      html += '<div class="mini-module">';
+      html += '<div class="mini-module-header">';
+      html += '<h4>' + mm.name + ' \u2192 ' + mm.product_rate + '/min</h4>';
+      if (mm.copies_needed > 1) {
+        html += '<span class="copies-badge">\u00d7' + mm.copies_needed + ' copies</span>';
+      }
+      html += '</div>';
+
+      html += '<div class="belt-bar">';
+      html += '<div class="belt-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div>';
+      html += '<div class="belt-bar-label">' + mm.belt_items_per_min + ' / 780 items/min (' + pct.toFixed(1) + '%)</div>';
+      html += '</div>';
+
+      html += '<div class="mini-module-body">';
+      html += '<div class="raw-list">';
+      for (var r in mm.raw_inputs_solid) {
+        var rc = RESOURCE_COLORS_MAP[r] || '#888';
+        html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + r + ' ' + mm.raw_inputs_solid[r].toFixed(1) + '/min</span>';
+      }
+      for (var r in mm.raw_inputs_fluid) {
+        html += '<span class="raw-pill"><span class="dot" style="background:#4fc3f7"></span>' + r + ' ' + mm.raw_inputs_fluid[r].toFixed(1) + ' m\u00b3/min</span>';
+      }
+      html += '</div>';
+
+      html += '<div class="buildings-list">';
+      for (var b in mm.building_totals) {
+        html += '<span>' + b + ' \u00d7' + mm.building_totals[b] + '</span>';
+      }
+      html += '<span style="color:#666">| ' + mm.total_buildings + ' total</span>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
 }
 let factoriesLoaded = false;
 async function loadFactories() {
@@ -412,48 +529,94 @@ function renderFlowDiagram(fid, mod) {
 
   el.innerHTML = html;
 
-  // Tooltip setup
+  // Tooltip setup — click-based so it persists during scroll
   var tooltipEl = document.createElement('div');
   tooltipEl.className = 'flow-tooltip';
-  el.appendChild(tooltipEl);
+  document.body.appendChild(tooltipEl);
 
-  el.addEventListener('mousemove', function(e) {
-    var nodeEl = e.target.closest('.flow-node');
-    if (!nodeEl) { tooltipEl.style.display = 'none'; return; }
+  var activeNode = null;
+
+  function showTooltip(nodeEl) {
     var item = nodeEl.getAttribute('data-item');
+    var content = '';
 
     if (nodeEl.classList.contains('raw-input')) {
       var rawInfo = mod.raw_inputs[item];
-      if (!rawInfo) { tooltipEl.style.display = 'none'; return; }
-      tooltipEl.innerHTML = '<b>' + item + '</b> (Raw Input)\n' + rawInfo.per_min + ' ' + rawInfo.note;
+      if (!rawInfo) return;
+      content = '<b>' + item + '</b> (Raw Input)\n' + rawInfo.per_min + ' ' + rawInfo.note;
     } else {
       var step = mod.steps.find(function(s) { return s.item === item; });
-      if (!step) { tooltipEl.style.display = 'none'; return; }
-      var tt = '<b>' + step.item + '</b>\n';
-      tt += 'Recipe: ' + step.recipe + '\n';
-      tt += 'Building: ' + step.building + '\n';
-      tt += 'Count: ' + step.buildings_exact.toFixed(2) + ' \u2192 ' + step.buildings_ceil + ' (ceil)\n';
-      tt += 'Clock: ' + step.overclock_detail + '\n';
-      tt += 'Power: ' + step.power_mw + ' MW each\n';
-      if (step.shards_per_building > 0) tt += 'Shards: ' + step.shards_per_building + ' per building\n';
-      tt += '\nInputs:';
+      if (!step) return;
+      content = '<b>' + step.item + '</b>\n';
+      content += 'Recipe: ' + step.recipe + '\n';
+      content += 'Building: ' + step.building + '\n';
+      content += 'Count: ' + step.buildings_exact.toFixed(2) + ' \u2192 ' + step.buildings_ceil + ' (ceil)\n';
+      content += 'Clock: ' + step.overclock_detail + '\n';
+      content += 'Power: ' + step.power_mw + ' MW each\n';
+      if (step.shards_per_building > 0) content += 'Shards: ' + step.shards_per_building + ' per building\n';
+      content += '\nInputs:';
       for (var inp in step.inputs) {
-        tt += '\n  ' + inp + ': ' + step.inputs[inp].toFixed(2) + '/min';
+        content += '\n  ' + inp + ': ' + step.inputs[inp].toFixed(2) + '/min';
       }
-      tt += '\nOutputs:';
+      content += '\nOutputs:';
       for (var out in step.outputs) {
-        tt += '\n  ' + out + ': ' + step.outputs[out].toFixed(2) + '/min';
+        content += '\n  ' + out + ': ' + step.outputs[out].toFixed(2) + '/min';
       }
-      tooltipEl.innerHTML = tt;
     }
 
-    var elRect = el.getBoundingClientRect();
+    tooltipEl.innerHTML = content;
     tooltipEl.style.display = 'block';
-    tooltipEl.style.left = (e.clientX - elRect.left + 12) + 'px';
-    tooltipEl.style.top = (e.clientY - elRect.top + 12) + 'px';
+
+    // Position fixed relative to viewport, clamped to stay visible
+    var rect = nodeEl.getBoundingClientRect();
+    var tx = rect.right + 8;
+    var ty = rect.top;
+    tooltipEl.style.left = tx + 'px';
+    tooltipEl.style.top = ty + 'px';
+    requestAnimationFrame(function() {
+      var ttRect = tooltipEl.getBoundingClientRect();
+      if (ttRect.right > window.innerWidth - 8) tx = rect.left - ttRect.width - 8;
+      if (ttRect.bottom > window.innerHeight - 8) ty = window.innerHeight - ttRect.height - 8;
+      if (ty < 8) ty = 8;
+      tooltipEl.style.left = tx + 'px';
+      tooltipEl.style.top = ty + 'px';
+    });
+  }
+
+  function dismissTooltip() {
+    tooltipEl.style.display = 'none';
+    if (activeNode) { activeNode.classList.remove('selected'); activeNode = null; }
+  }
+
+  el.addEventListener('click', function(e) {
+    var nodeEl = e.target.closest('.flow-node');
+    if (!nodeEl) { dismissTooltip(); return; }
+    e.stopPropagation();
+
+    // Dismiss any other open tooltips first
+    if (window._flowDismissHandlers) {
+      window._flowDismissHandlers.forEach(function(fn) { fn(); });
+    }
+
+    if (activeNode === nodeEl) {
+      dismissTooltip();
+    } else {
+      activeNode = nodeEl;
+      nodeEl.classList.add('selected');
+      showTooltip(nodeEl);
+    }
   });
 
-  el.addEventListener('mouseleave', function() { tooltipEl.style.display = 'none'; });
+  // Register dismiss handler globally (only one document listener)
+  if (!window._flowDismissHandlers) {
+    window._flowDismissHandlers = [];
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.flow-diagram')) {
+        window._flowDismissHandlers.forEach(function(fn) { fn(); });
+      }
+    });
+  }
+  window._flowDismissHandlers.push(dismissTooltip);
 }
 
 function drawConnectors(fid, mod) {
