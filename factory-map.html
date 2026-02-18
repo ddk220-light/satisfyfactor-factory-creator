@@ -112,6 +112,18 @@ canvas.grabbing{cursor:grabbing}
 .manufacturer-card h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .manufacturer-card .mfr-inputs{display:flex;gap:6px;flex-wrap:wrap}
 .manufacturer-card .mfr-pill{padding:3px 8px;background:#16213e;border:1px solid #333;border-radius:12px;font-size:10px;color:#ccc}
+.stage-header{padding:10px 20px;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#888;border-top:1px solid #333;background:#16213e}
+.surplus-badge{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:bold;margin-left:8px}
+.surplus-badge.ok{background:#2ecc71;color:#111}
+.surplus-badge.warn{background:#f39c12;color:#111}
+.surplus-badge.high{background:#e74c3c;color:#fff}
+.stage1-table{width:100%;border-collapse:collapse;font-size:11px;margin:0}
+.stage1-table th{text-align:left;color:#666;font-weight:normal;padding:4px 10px;font-size:10px;text-transform:uppercase;border-bottom:1px solid #333}
+.stage1-table td{padding:6px 10px;border-bottom:1px solid #222}
+.stage1-table tr:last-child td{border-bottom:none}
+.stage1-summary{padding:12px 20px;border-top:1px solid #333;font-size:11px;color:#aaa}
+.stage1-summary .raw-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.belt-count{font-size:9px;color:#666;margin-left:2px}
 </style>
 </head>
 <body>
@@ -172,16 +184,24 @@ async function loadCrazy() {
 function renderCrazyTab(data) {
   var el = document.getElementById('crazy-content');
   var html = '';
+  var S1_COLORS = {
+    'Steel Ingot': '#3498db', 'Iron Ingot': '#e74c3c', 'Concrete': '#95a5a6',
+    'Copper Ingot': '#e67e22', 'Caterium Ingot': '#f1c40f', 'Plastic': '#9b59b6',
+    'Rubber': '#2ecc71', 'Aluminum Ingot': '#e91e63'
+  };
   var RESOURCE_COLORS_MAP = {
     'Iron Ore': '#e74c3c', 'Limestone': '#95a5a6', 'Copper Ore': '#e67e22',
     'Coal': '#555', 'Crude Oil': '#9b59b6', 'Caterium Ore': '#f1c40f',
     'Bauxite': '#e91e63', 'Water': '#4fc3f7', 'Silica': '#00bcd4'
   };
 
+  // Summary banner
   html += '<div class="summary-banner">';
   html += '<h2>' + data.meta.title + '</h2>';
-  html += '<div class="meta">' + data.meta.description + ' | Belt limit: ' + data.meta.belt_limit + '/min</div>';
+  html += '<div class="meta">' + data.meta.description + ' | Belt: ' + data.meta.belt_limit + '/min | Max ' + data.meta.max_buildings + ' bldgs/module</div>';
   html += '</div>';
+
+  var flowContainers = []; // track {id, mod} for rendering after DOM insert
 
   for (var fid in data.factories) {
     if (!data.factories.hasOwnProperty(fid)) continue;
@@ -189,15 +209,18 @@ function renderCrazyTab(data) {
     var color = FACTORY_COLORS[fid] || '#666';
 
     html += '<div class="factory-card">';
+
+    // Header
     html += '<div class="factory-card-header" style="border-left-color:' + color + '">';
     html += '<h3 style="color:' + color + '">' + fid.toUpperCase() + ' \u2014 ' + fac.theme + '</h3>';
     html += '<div class="recipe">' + fac.hmf_recipe + '</div>';
     html += '<div class="stats">';
     html += '<span class="stat"><b>' + fac.hmf_per_min + '</b> HMF/min per module</span>';
-    html += '<span class="stat">\u00d7' + fac.factory_copies + ' factory copies \u2192 <b>' + fac.target_hmf + '</b> HMF/min</span>';
+    html += '<span class="stat">\u00d7' + fac.num_manufacturers + ' manufacturers \u2192 <b>' + fac.target_hmf + '</b> HMF/min</span>';
     html += '</div>';
     html += '</div>';
 
+    // Manufacturer card
     var mfr = fac.manufacturer;
     html += '<div class="manufacturer-card">';
     html += '<h4>\u2605 Manufacturer \u2014 ' + mfr.recipe + ' (' + mfr.power_mw + ' MW)</h4>';
@@ -208,49 +231,234 @@ function renderCrazyTab(data) {
     html += '</div>';
     html += '</div>';
 
-    for (var i = 0; i < fac.mini_modules.length; i++) {
-      var mm = fac.mini_modules[i];
-      var pct = Math.min(mm.belt_utilization * 100, 100);
-      var barColor = pct > 90 ? '#e74c3c' : pct > 70 ? '#f39c12' : '#2ecc71';
+    // === STAGE 2 ===
+    html += '<div class="stage-header">\u25B6 Stage 2 \u2014 Intermediate \u2192 Manufacturer Inputs</div>';
+
+    for (var i = 0; i < fac.stage2_modules.length; i++) {
+      var mm = fac.stage2_modules[i];
+      var beltPct = Math.min(mm.belt_load / 780 * 100, 100);
+      var barColor = beltPct > 90 ? '#e74c3c' : beltPct > 70 ? '#f39c12' : '#2ecc71';
+      var surplusCls = mm.surplus_pct <= 5 ? 'ok' : mm.surplus_pct <= 10 ? 'warn' : 'high';
 
       html += '<div class="mini-module">';
       html += '<div class="mini-module-header">';
-      html += '<h4>' + mm.name + ' \u2192 ' + mm.product_rate + '/min</h4>';
-      if (mm.copies_needed > 1) {
-        html += '<span class="copies-badge">\u00d7' + mm.copies_needed + ' copies</span>';
+      html += '<h4>' + mm.name + ' \u2192 ' + mm.demand + '/min';
+      html += '<span class="surplus-badge ' + surplusCls + '">' + mm.surplus_pct.toFixed(1) + '% surplus</span>';
+      html += '</h4>';
+      html += '<div style="display:flex;align-items:center;gap:8px">';
+      if (mm.copies > 1) {
+        html += '<span class="copies-badge">\u00d7' + mm.copies + ' copies</span>';
       }
+      html += '<span style="font-size:10px;color:#888">' + mm.buildings_per_copy + ' bldgs/copy</span>';
+      html += '</div>';
       html += '</div>';
 
+      // Belt bar
       html += '<div class="belt-bar">';
-      html += '<div class="belt-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div>';
-      html += '<div class="belt-bar-label">' + mm.belt_items_per_min + ' / 780 items/min (' + pct.toFixed(1) + '%)</div>';
+      html += '<div class="belt-bar-fill" style="width:' + beltPct + '%;background:' + barColor + '"></div>';
+      html += '<div class="belt-bar-label">' + mm.belt_load + ' / 780 items/min (' + beltPct.toFixed(1) + '%)</div>';
       html += '</div>';
 
+      // Inputs from Stage 1
       html += '<div class="mini-module-body">';
       html += '<div class="raw-list">';
-      for (var r in mm.raw_inputs_solid) {
-        var rc = RESOURCE_COLORS_MAP[r] || '#888';
-        html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + r + ' ' + mm.raw_inputs_solid[r].toFixed(1) + '/min</span>';
-      }
-      for (var r in mm.raw_inputs_fluid) {
-        html += '<span class="raw-pill"><span class="dot" style="background:#4fc3f7"></span>' + r + ' ' + mm.raw_inputs_fluid[r].toFixed(1) + ' m\u00b3/min</span>';
+      for (var r in mm.inputs) {
+        var rc = S1_COLORS[r] || '#888';
+        html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + r + ' ' + mm.inputs[r].toFixed(1) + '/min</span>';
       }
       html += '</div>';
 
+      // Building totals
       html += '<div class="buildings-list">';
       for (var b in mm.building_totals) {
         html += '<span>' + b + ' \u00d7' + mm.building_totals[b] + '</span>';
       }
-      html += '<span style="color:#666">| ' + mm.total_buildings + ' total</span>';
       html += '</div>';
       html += '</div>';
-      html += '</div>';
+
+      // Flow diagram container
+      var flowId = 'flow-s2-' + fid + '-' + i;
+      html += '<div class="flow-diagram" id="' + flowId + '"></div>';
+
+      // Build synthetic mod for flow diagram rendering
+      var synthRawInputs = {};
+      for (var ri in mm.inputs) {
+        synthRawInputs[ri] = { per_min: mm.inputs[ri], is_fluid: false };
+      }
+      flowContainers.push({ id: flowId, mod: { raw_inputs: synthRawInputs, steps: mm.steps } });
+
+      html += '</div>'; // end mini-module
     }
 
+    // === STAGE 1 ===
+    var s1 = fac.stage1;
+    html += '<div class="stage-header">\u25B6 Stage 1 \u2014 Raw Resources \u2192 Basic Intermediates (' + s1.total_buildings + ' buildings)</div>';
+
+    html += '<div style="padding:12px 20px">';
+    html += '<table class="stage1-table"><thead><tr>';
+    html += '<th>Product</th><th>Demand</th><th>Steps</th><th>Buildings</th>';
+    html += '</tr></thead><tbody>';
+    for (var j = 0; j < s1.modules.length; j++) {
+      var pm = s1.modules[j];
+      var pColor = S1_COLORS[pm.product] || '#ccc';
+      var stepInfo = pm.steps.map(function(st) { return st.buildings_ceil + '\u00d7 ' + st.building; }).join(', ');
+      html += '<tr>';
+      html += '<td style="color:' + pColor + ';font-weight:bold">' + pm.product + '</td>';
+      html += '<td>' + pm.demand.toFixed(0) + '/min</td>';
+      html += '<td style="color:#888">' + stepInfo + '</td>';
+      html += '<td>' + pm.total_buildings + '</td>';
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
     html += '</div>';
+
+    // Raw resources summary
+    html += '<div class="stage1-summary">';
+    html += '<strong>Raw Resources (all ' + fac.num_manufacturers + ' copies):</strong>';
+    html += '<div class="raw-list">';
+    for (var rr in s1.raw_resources) {
+      var rc = RESOURCE_COLORS_MAP[rr] || '#888';
+      var belts = Math.ceil(s1.raw_resources[rr] / 780);
+      html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + rr + ' ' + s1.raw_resources[rr].toFixed(0);
+      if (belts > 1) html += '<span class="belt-count"> (' + belts + ' belts)</span>';
+      html += '/min</span>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    html += '</div>'; // end factory card
   }
 
   el.innerHTML = html;
+
+  // Render flow diagrams for Stage 2 modules
+  requestAnimationFrame(function() {
+    for (var k = 0; k < flowContainers.length; k++) {
+      var fc = flowContainers[k];
+      renderCrazyFlow(fc.id, fc.mod);
+    }
+    requestAnimationFrame(function() {
+      for (var k = 0; k < flowContainers.length; k++) {
+        drawCrazyConnectors(flowContainers[k].id, flowContainers[k].mod);
+      }
+    });
+  });
+}
+
+function renderCrazyFlow(containerId, mod) {
+  var dag = buildDAG(mod.steps);
+  var el = document.getElementById(containerId);
+  if (!el) return;
+
+  var html = '<div class="flow-columns">';
+  for (var col = 0; col <= dag.maxLayer; col++) {
+    html += '<div class="flow-column">';
+    for (var n = 0; n < dag.columns[col].length; n++) {
+      var node = dag.columns[col][n];
+      if (node.type === 'raw') {
+        var rawInfo = mod.raw_inputs[node.item];
+        var rate = rawInfo ? rawInfo.per_min.toFixed(1) : '';
+        html += '<div class="flow-node raw-input" data-item="' + node.item + '">';
+        html += '<div class="item-name">' + node.item + '</div>';
+        html += '<div class="output-rate">' + rate + '/min</div>';
+        html += '</div>';
+      } else {
+        var step = node.step;
+        var isOC = step.shards_per_building > 0;
+        var cls = 'flow-node' + (isOC ? ' overclocked' : '');
+        html += '<div class="' + cls + '" data-item="' + step.item + '">';
+        html += '<div class="item-name">' + step.item + '</div>';
+        html += '<div class="building-info">' + step.buildings_ceil + '\u00d7 ' + step.building;
+        if (isOC) html += '<span class="shard-badge">\u26a1 ' + step.shards_per_building + '</span>';
+        html += '</div>';
+        var outRate = step.outputs[step.item] || Object.values(step.outputs)[0];
+        html += '<div class="output-rate">' + outRate.toFixed(1) + '/min</div>';
+        html += '</div>';
+      }
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function drawCrazyConnectors(containerId, mod) {
+  var dag = buildDAG(mod.steps);
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var containerRect = container.getBoundingClientRect();
+
+  var nodeEls = container.querySelectorAll('.flow-node');
+  var nodeRects = {};
+  for (var i = 0; i < nodeEls.length; i++) {
+    var nel = nodeEls[i];
+    var item = nel.getAttribute('data-item');
+    var rect = nel.getBoundingClientRect();
+    nodeRects[item] = {
+      left: rect.left - containerRect.left,
+      right: rect.right - containerRect.left,
+      top: rect.top - containerRect.top,
+      bottom: rect.bottom - containerRect.top,
+      cy: (rect.top + rect.bottom) / 2 - containerRect.top
+    };
+  }
+
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS, 'svg');
+  svg.classList.add('flow-svg');
+  svg.setAttribute('width', container.scrollWidth);
+  svg.setAttribute('height', container.scrollHeight);
+
+  var markerId = 'arrow-' + containerId.replace(/[^a-z0-9]/gi, '-');
+  var defs = document.createElementNS(svgNS, 'defs');
+  var marker = document.createElementNS(svgNS, 'marker');
+  marker.setAttribute('id', markerId);
+  marker.setAttribute('viewBox', '0 0 10 10');
+  marker.setAttribute('refX', '10');
+  marker.setAttribute('refY', '5');
+  marker.setAttribute('markerWidth', '6');
+  marker.setAttribute('markerHeight', '6');
+  marker.setAttribute('orient', 'auto');
+  var arrowPath = document.createElementNS(svgNS, 'path');
+  arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+  arrowPath.setAttribute('fill', '#555');
+  marker.appendChild(arrowPath);
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  for (var i = 0; i < dag.edges.length; i++) {
+    var edge = dag.edges[i];
+    var fromRect = nodeRects[edge.from];
+    var toRect = nodeRects[edge.to];
+    if (!fromRect || !toRect) continue;
+
+    var x1 = fromRect.right, y1 = fromRect.cy;
+    var x2 = toRect.left, y2 = toRect.cy;
+
+    var line = document.createElementNS(svgNS, 'path');
+    if (Math.abs(y1 - y2) < 2) {
+      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2);
+    } else {
+      var midX = (x1 + x2) / 2;
+      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + midX + ' ' + y1 + ' L ' + midX + ' ' + y2 + ' L ' + x2 + ' ' + y2);
+    }
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#555');
+    line.setAttribute('stroke-width', '1.5');
+    line.setAttribute('marker-end', 'url(#' + markerId + ')');
+    svg.appendChild(line);
+
+    var labelX = (x1 + x2) / 2;
+    var labelY = Math.abs(y1 - y2) < 2 ? y1 - 8 : (y1 + y2) / 2 - 8;
+    var text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', labelX);
+    text.setAttribute('y', labelY);
+    text.setAttribute('text-anchor', 'middle');
+    text.textContent = edge.rate.toFixed(0) + '/m';
+    svg.appendChild(text);
+  }
+
+  container.insertBefore(svg, container.firstChild);
 }
 let factoriesLoaded = false;
 async function loadFactories() {

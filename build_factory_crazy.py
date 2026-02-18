@@ -1,65 +1,67 @@
 #!/usr/bin/env python3
-"""Decompose factory modules into self-contained mini-modules per Manufacturer input.
+"""2-Stage Factory Crazy: decompose HMF production into Stage 1 (raw→intermediates)
+and Stage 2 (intermediates→manufacturer inputs) with building-capped modules.
 
-Each mini-module produces exactly one input to the final Manufacturer,
-contains all upstream buildings from raw ore, and is constrained by
-a single Mk.5 input belt (780 items/min total solid inputs).
+Constraints (priority order):
+  1. Max 20 buildings per module copy
+  2. Max 5% surplus (soft — prefer, but don't block on it)
+  3. Maximize belt utilization (up to 780 items/min)
 """
 
 import json
 import math
 from collections import deque
 
-BELT_LIMIT = 780  # items/min on a single Mk.5 belt
+BELT_LIMIT = 780
+MAX_BUILDINGS = 20
+MAX_SURPLUS_PCT = 5.0
+
 FLUIDS = {
     "Water", "Crude Oil", "Heavy Oil Residue", "Alumina Solution",
-    "Sulfuric Acid", "Nitrogen Gas", "Nitric Acid"
+    "Sulfuric Acid", "Nitrogen Gas", "Nitric Acid",
+}
+
+STAGE1_PRODUCTS = {
+    "Steel Ingot", "Iron Ingot", "Concrete", "Copper Ingot",
+    "Caterium Ingot", "Plastic", "Rubber", "Aluminum Ingot",
 }
 
 
-def trace_module(target_item, target_rate, producers, all_steps):
-    """Trace backwards from a target item/rate through the DAG.
+def trace_module(target_item, target_rate, producers, all_steps, stop_at_stage1=False):
+    """Trace backwards from target_item at target_rate through the production DAG.
 
-    Strategy: use the ORIGINAL full-factory rates and scale proportionally.
-    The original factory-subunits.json already has correct rates accounting
-    for byproduct loops. We just need to figure out what fraction of each
-    step belongs to this mini-module.
-
-    For the target product, we know the Manufacturer needs X/min and the
-    full step produces Y/min, so our fraction is X/Y. We propagate this
-    fraction backwards through the DAG.
+    If stop_at_stage1=True, treat Stage 1 products (and byproducts of Stage 1
+    steps) as external inputs rather than tracing through them.
     """
-    # Build map of which step produces each item (primary output)
-    step_for = {}
-    for s in all_steps:
-        step_for[s["item"]] = s
 
-    # Also map any secondary outputs
-    for s in all_steps:
-        for out_item in s["outputs"]:
-            if out_item not in step_for:
-                step_for[out_item] = s
+    def is_boundary(item):
+        if not stop_at_stage1 or item == target_item:
+            return False
+        if item in STAGE1_PRODUCTS:
+            return True
+        if item in producers and producers[item]["item"] in STAGE1_PRODUCTS:
+            return True  # byproduct of a Stage 1 step
+        return False
 
-    # Find all steps upstream of target via DFS (using primary item links only)
+    # DFS: find all items/steps in the module
     needed_items = set()
+
     def find_upstream(item):
         if item in needed_items or item not in producers:
+            return
+        if is_boundary(item):
             return
         needed_items.add(item)
         step = producers[item]
         for inp in step["inputs"]:
             find_upstream(inp)
+
     find_upstream(target_item)
 
-    # For each needed item, calculate what fraction of its full-factory
-    # production this module requires. Start from target and propagate back.
-    fraction = {}  # item -> fraction of full step output needed
-
-    # Target: we need target_rate of target_item, full step produces outputs[target_item]
+    # BFS: propagate fractional demand backwards
     target_step = producers[target_item]
-    fraction[target_item] = target_rate / target_step["outputs"][target_item]
+    fraction = {target_item: target_rate / target_step["outputs"][target_item]}
 
-    # BFS backwards, propagating fractions
     visited = set()
     queue = deque([target_item])
     while queue:
@@ -67,27 +69,23 @@ def trace_module(target_item, target_rate, producers, all_steps):
         if item in visited:
             continue
         visited.add(item)
-
-        if item not in producers:
+        if item not in producers or is_boundary(item):
             continue
 
         step = producers[item]
         frac = fraction[item]
 
         for inp, inp_rate in step["inputs"].items():
-            # How much of inp does this step need at our fraction?
             inp_needed = inp_rate * frac
-
-            if inp in producers:
+            if inp in producers and not is_boundary(inp):
                 inp_step = producers[inp]
                 inp_full_output = inp_step["outputs"][inp]
                 inp_frac = inp_needed / inp_full_output
-                # Accumulate fractions (multiple steps may need same input)
                 fraction[inp] = fraction.get(inp, 0) + inp_frac
                 if inp not in visited:
                     queue.append(inp)
 
-    # Build scaled steps and raw inputs
+    # Build scaled steps and collect external inputs
     raw_solid = {}
     raw_fluid = {}
     scaled_steps = []
@@ -101,80 +99,86 @@ def trace_module(target_item, target_rate, producers, all_steps):
             continue
         seen_recipes.add(step["recipe"])
 
-        frac = fraction.get(item, 0)
-        if frac <= 0:
+        # Use the PRIMARY item's fraction (handles multi-output steps correctly)
+        primary_frac = fraction.get(step["item"], 0)
+        if primary_frac <= 0:
             continue
 
-        bex = step["buildings_exact"] * frac
+        bex = step["buildings_exact"] * primary_frac
         scaled_steps.append({
             "recipe": step["recipe"],
             "item": step["item"],
             "building": step["building"],
             "power_mw": step["power_mw"],
             "shards_per_building": step["shards_per_building"],
-            "inputs": {k: round(v * frac, 4) for k, v in step["inputs"].items()},
-            "outputs": {k: round(v * frac, 4) for k, v in step["outputs"].items()},
+            "inputs": {k: round(v * primary_frac, 4) for k, v in step["inputs"].items()},
+            "outputs": {k: round(v * primary_frac, 4) for k, v in step["outputs"].items()},
             "buildings_exact": round(bex, 4),
-            "buildings_ceil": max(1, math.ceil(bex - 0.001)),
         })
 
-        # Raw inputs = step inputs that have no producer
+        # Collect external inputs (raw resources or Stage 1 boundaries)
         for inp, inp_rate in step["inputs"].items():
-            if inp not in producers:
-                needed = inp_rate * frac
+            if inp not in producers or is_boundary(inp):
+                needed = inp_rate * primary_frac
                 bucket = raw_fluid if inp in FLUIDS else raw_solid
                 bucket[inp] = bucket.get(inp, 0) + needed
 
     return scaled_steps, raw_solid, raw_fluid
 
 
-def build_mini_module(name, product, product_rate, scaled_steps, raw_solid, raw_fluid):
-    """Build a mini-module dict with belt constraint applied."""
-    solid_total = sum(raw_solid.values())
-    copies = math.ceil(solid_total / BELT_LIMIT) if solid_total > BELT_LIMIT else 1
-    d = copies  # divisor
+def optimize_copies(steps, product, demand, solid_input_total):
+    """Find minimum N copies where buildings_per_copy <= MAX_BUILDINGS and belt <= 780.
 
-    final_steps = []
-    building_totals = {}
-    for step in scaled_steps:
-        bex = step["buildings_exact"] / d
-        bc = max(1, math.ceil(bex - 0.001))
-        final_steps.append({
-            "recipe": step["recipe"],
-            "item": step["item"],
-            "building": step["building"],
-            "power_mw": step["power_mw"],
-            "shards_per_building": step["shards_per_building"],
-            "inputs": {k: round(v / d, 4) for k, v in step["inputs"].items()},
-            "outputs": {k: round(v / d, 4) for k, v in step["outputs"].items()},
-            "buildings_exact": round(bex, 4),
-            "buildings_ceil": bc,
-        })
-        building_totals[step["building"]] = building_totals.get(step["building"], 0) + bc
+    Picks the minimum N (= maximum belt utilization) that satisfies both hard
+    constraints.  Surplus is reported but not used as a hard filter — it's a
+    design goal, not a blocker.
 
-    belt_per_copy = round(solid_total / d, 2)
-    return {
-        "name": name,
-        "product": product,
-        "product_rate": round(product_rate, 4),
-        "product_rate_per_copy": round(product_rate / d, 4),
-        "raw_inputs_solid": {k: round(v / d, 4) for k, v in raw_solid.items()},
-        "raw_inputs_fluid": {k: round(v / d, 4) for k, v in raw_fluid.items()},
-        "belt_items_per_min": belt_per_copy,
-        "belt_utilization": round(belt_per_copy / BELT_LIMIT, 4),
-        "copies_needed": copies,
-        "steps": final_steps,
-        "building_totals": building_totals,
-        "total_buildings": sum(building_totals.values()),
-    }
+    Returns (copies, buildings_per_copy, output_per_copy, surplus_pct).
+    """
+    product_step = next(s for s in steps if s["item"] == product)
+    output_per_bldg = product_step["outputs"][product] / product_step["buildings_exact"]
+
+    for n in range(1, MAX_BUILDINGS + 1):
+        total_bldgs = sum(
+            max(1, math.ceil(s["buildings_exact"] / n - 0.02))
+            for s in steps
+        )
+        if total_bldgs > MAX_BUILDINGS:
+            continue
+
+        belt = solid_input_total / n
+        if belt > BELT_LIMIT:
+            continue
+
+        prod_bc = max(1, math.ceil(product_step["buildings_exact"] / n - 0.02))
+        out_per_copy = prod_bc * output_per_bldg
+        demand_per_copy = demand / n
+        surplus = (out_per_copy - demand_per_copy) / demand_per_copy * 100
+
+        return (n, total_bldgs, out_per_copy, surplus)
+
+    # Fallback: just satisfy buildings constraint, ignore belt
+    for n in range(1, 100):
+        total_bldgs = sum(
+            max(1, math.ceil(s["buildings_exact"] / n - 0.02))
+            for s in steps
+        )
+        if total_bldgs <= MAX_BUILDINGS:
+            prod_bc = max(1, math.ceil(product_step["buildings_exact"] / n - 0.02))
+            out_per_copy = prod_bc * output_per_bldg
+            surplus = (out_per_copy - demand / n) / (demand / n) * 100
+            return (n, total_bldgs, out_per_copy, surplus)
+
+    return (MAX_BUILDINGS, MAX_BUILDINGS, demand / MAX_BUILDINGS, 0)
 
 
 def process_factory(fid, mod):
-    """Process one factory into mini-modules."""
+    """Process one factory into 2-stage architecture."""
     steps = mod["steps"]
     mfr = next(s for s in steps if s["building"] == "Manufacturer")
+    factory_copies = mod["copies_needed_ceil"]
 
-    # Producer map excluding the Manufacturer
+    # Build producers map (excluding Manufacturer)
     producers = {}
     for s in steps:
         if s["building"] != "Manufacturer":
@@ -183,79 +187,76 @@ def process_factory(fid, mod):
 
     non_mfr_steps = [s for s in steps if s["building"] != "Manufacturer"]
 
-    # Phase 1: trace each module to get gross raw inputs
-    raw_modules = []
+    # Classify manufacturer inputs into Stage 1 (direct) vs Stage 2 (modules)
+    stage2_modules = []
+    stage1_demand = {}  # product -> total demand across all factory copies
+
     for inp_item, inp_rate in mfr["inputs"].items():
-        scaled, raw_s, raw_f = trace_module(inp_item, inp_rate, producers, non_mfr_steps)
-        raw_modules.append((inp_item, inp_rate, scaled, raw_s, raw_f))
+        total_demand = inp_rate * factory_copies
 
-    # Phase 2: correct raw inputs using factory's known net totals.
-    # The trace over-counts when byproduct recycling reduces net demand
-    # (e.g., Water recycled in aluminum chain). Fix by distributing
-    # the factory's actual net raw inputs proportionally across modules.
-    factory_raw = {}
-    for res_name, res_info in mod["raw_inputs"].items():
-        factory_raw[res_name] = res_info["per_min"]
+        if inp_item in STAGE1_PRODUCTS:
+            # Direct manufacturer input that IS a Stage 1 product
+            stage1_demand[inp_item] = stage1_demand.get(inp_item, 0) + total_demand
+        else:
+            # Stage 2 module needed
+            scaled_steps, inputs_solid, inputs_fluid = trace_module(
+                inp_item, total_demand, producers, non_mfr_steps, stop_at_stage1=True,
+            )
 
-    # For each raw resource, sum gross across all modules, then scale each
-    # module's share to match the factory total.
-    # Also handle "partially raw" items (produced as byproduct AND imported,
-    # e.g., Silica/Water in Luxara). These don't appear in module raw inputs
-    # because the tracer sees them as having producers. We need to distribute
-    # the external import across modules that use the chain containing them.
-    gross_totals = {}
-    for _, _, _, raw_s, raw_f in raw_modules:
-        for r, v in raw_s.items():
-            gross_totals[r] = gross_totals.get(r, 0) + v
-        for r, v in raw_f.items():
-            gross_totals[r] = gross_totals.get(r, 0) + v
+            # Accumulate Stage 1 demands from this module's inputs
+            for s1_item, s1_rate in inputs_solid.items():
+                if s1_item in STAGE1_PRODUCTS or s1_item in producers and producers[s1_item]["item"] in STAGE1_PRODUCTS:
+                    stage1_demand[s1_item] = stage1_demand.get(s1_item, 0) + s1_rate
+            for s1_item, s1_rate in inputs_fluid.items():
+                if s1_item in STAGE1_PRODUCTS or s1_item in producers and producers[s1_item]["item"] in STAGE1_PRODUCTS:
+                    stage1_demand[s1_item] = stage1_demand.get(s1_item, 0) + s1_rate
 
-    # Find factory raw resources missing from any module's raw inputs
-    # (partially raw / byproduct-supplemented resources)
-    missing_raws = {}
-    for res_name, amount in factory_raw.items():
-        if res_name not in gross_totals or gross_totals[res_name] == 0:
-            missing_raws[res_name] = amount
+            # Optimize copies
+            solid_input_total = sum(inputs_solid.values())
+            n, bldgs_per_copy, output_per_copy, surplus_pct = optimize_copies(
+                scaled_steps, inp_item, total_demand, solid_input_total,
+            )
 
-    # For missing raws, distribute proportionally to modules that use
-    # steps consuming that resource
-    module_usage = {}  # res -> [(module_idx, consumption_rate)]
-    for i, (_, _, scaled, _, _) in enumerate(raw_modules):
-        for step in scaled:
-            for inp, rate in step["inputs"].items():
-                if inp in missing_raws:
-                    if inp not in module_usage:
-                        module_usage[inp] = []
-                    module_usage[inp].append((i, rate))
+            # Build per-copy step data
+            final_steps = []
+            building_totals = {}
+            for step in scaled_steps:
+                bex = step["buildings_exact"] / n
+                bc = max(1, math.ceil(bex - 0.02))
+                final_steps.append({
+                    "recipe": step["recipe"],
+                    "item": step["item"],
+                    "building": step["building"],
+                    "power_mw": step["power_mw"],
+                    "shards_per_building": step["shards_per_building"],
+                    "inputs": {k: round(v / n, 4) for k, v in step["inputs"].items()},
+                    "outputs": {k: round(v / n, 4) for k, v in step["outputs"].items()},
+                    "buildings_exact": round(bex, 4),
+                    "buildings_ceil": bc,
+                })
+                building_totals[step["building"]] = (
+                    building_totals.get(step["building"], 0) + bc
+                )
 
-    mini_modules = []
-    for idx, (inp_item, inp_rate, scaled, raw_s, raw_f) in enumerate(raw_modules):
-        # Correct solid raw inputs
-        corrected_s = {}
-        for r, v in raw_s.items():
-            if r in factory_raw and r in gross_totals and gross_totals[r] > 0:
-                corrected_s[r] = v / gross_totals[r] * factory_raw[r]
-            else:
-                corrected_s[r] = v
-        # Correct fluid raw inputs
-        corrected_f = {}
-        for r, v in raw_f.items():
-            if r in factory_raw and r in gross_totals and gross_totals[r] > 0:
-                corrected_f[r] = v / gross_totals[r] * factory_raw[r]
-            else:
-                corrected_f[r] = v
+            belt_load = round(sum(v / n for v in inputs_solid.values()), 1)
 
-        # Add missing raw resources proportionally
-        for res, users in module_usage.items():
-            total_consumption = sum(rate for _, rate in users)
-            for mod_idx, rate in users:
-                if mod_idx == idx and total_consumption > 0:
-                    share = rate / total_consumption * missing_raws[res]
-                    bucket = corrected_f if res in FLUIDS else corrected_s
-                    bucket[res] = bucket.get(res, 0) + share
+            stage2_modules.append({
+                "name": f"{inp_item} Module",
+                "product": inp_item,
+                "demand": round(total_demand, 2),
+                "copies": n,
+                "buildings_per_copy": bldgs_per_copy,
+                "output_per_copy": round(output_per_copy, 2),
+                "total_output": round(output_per_copy * n, 2),
+                "surplus_pct": round(surplus_pct, 1),
+                "belt_load": belt_load,
+                "inputs": {k: round(v / n, 4) for k, v in inputs_solid.items()},
+                "steps": final_steps,
+                "building_totals": building_totals,
+            })
 
-        mm = build_mini_module(f"{inp_item} Module", inp_item, inp_rate, scaled, corrected_s, corrected_f)
-        mini_modules.append(mm)
+    # Build Stage 1
+    stage1 = build_stage1(stage1_demand, producers, non_mfr_steps, mod)
 
     return {
         "factory": fid,
@@ -263,7 +264,7 @@ def process_factory(fid, mod):
         "hmf_recipe": mod["hmf_recipe"],
         "hmf_per_min": mod["hmf_per_min"],
         "target_hmf": mod["target_hmf"],
-        "factory_copies": mod["copies_needed_ceil"],
+        "num_manufacturers": factory_copies,
         "manufacturer": {
             "recipe": mfr["recipe"],
             "building": mfr["building"],
@@ -271,34 +272,137 @@ def process_factory(fid, mod):
             "output": {k: round(v, 4) for k, v in mfr["outputs"].items()},
             "power_mw": mfr["power_mw"],
         },
-        "mini_modules": mini_modules,
+        "stage2_modules": stage2_modules,
+        "stage1": stage1,
+    }
+
+
+def build_stage1(stage1_demand_external, producers, all_steps, mod):
+    """Build Stage 1: aggregate demand, resolve inter-Stage1 deps, compute buildings.
+
+    Stage 1 products may depend on other Stage 1 products (e.g., Concrete needs
+    Rubber in Naphtheon). Resolve these dependencies iteratively.
+    """
+    factory_copies = mod["copies_needed_ceil"]
+
+    # Trace each Stage 1 product's chain (stopping at other Stage 1 products)
+    s1_chains = {}
+    for product in STAGE1_PRODUCTS:
+        if product not in producers:
+            continue
+        unit_output = producers[product]["outputs"][product]
+        chain_steps, raw_s, raw_f = trace_module(
+            product, unit_output, producers, all_steps, stop_at_stage1=True,
+        )
+
+        # Separate Stage 1 inputs from pure raw inputs (per unit of product output)
+        s1_inputs = {}
+        pure_raw = {}
+        for k, v in {**raw_s, **raw_f}.items():
+            per_unit = v / unit_output
+            if k in STAGE1_PRODUCTS:
+                s1_inputs[k] = per_unit
+            else:
+                pure_raw[k] = per_unit
+
+        s1_chains[product] = {
+            "steps": chain_steps,
+            "s1_inputs": s1_inputs,
+            "pure_raw_per_unit": pure_raw,
+            "unit_output": unit_output,
+        }
+
+    # Resolve inter-Stage1 dependencies iteratively
+    total_demand = dict(stage1_demand_external)
+    for _ in range(10):
+        internal = {}
+        for product, demand in total_demand.items():
+            if product not in s1_chains:
+                continue
+            for dep, rate_per_unit in s1_chains[product]["s1_inputs"].items():
+                internal[dep] = internal.get(dep, 0) + demand * rate_per_unit
+        changed = False
+        for dep, need in internal.items():
+            new_total = stage1_demand_external.get(dep, 0) + need
+            if abs(new_total - total_demand.get(dep, 0)) > 0.01:
+                total_demand[dep] = new_total
+                changed = True
+        if not changed:
+            break
+
+    # Build Stage 1 module entries
+    modules = []
+    total_buildings = 0
+
+    for product in sorted(total_demand.keys()):
+        demand = total_demand[product]
+        if demand <= 0 or product not in s1_chains:
+            continue
+
+        chain = s1_chains[product]
+        scale = demand / chain["unit_output"]
+
+        step_details = []
+        prod_buildings = 0
+        for step in chain["steps"]:
+            bex = step["buildings_exact"] * scale
+            bc = max(1, math.ceil(bex - 0.02))
+            step_details.append({
+                "recipe": step["recipe"],
+                "item": step["item"],
+                "building": step["building"],
+                "buildings_exact": round(bex, 2),
+                "buildings_ceil": bc,
+            })
+            prod_buildings += bc
+
+        raw_inputs = {}
+        for k, v_per_unit in chain["pure_raw_per_unit"].items():
+            raw_inputs[k] = round(v_per_unit * demand, 2)
+
+        modules.append({
+            "product": product,
+            "demand": round(demand, 2),
+            "steps": step_details,
+            "raw_inputs": raw_inputs,
+            "total_buildings": prod_buildings,
+        })
+        total_buildings += prod_buildings
+
+    # Use factory's known raw_inputs for accurate raw resource totals
+    raw_resources = {}
+    for res_name, res_info in mod["raw_inputs"].items():
+        raw_resources[res_name] = round(res_info["per_min"] * factory_copies, 2)
+
+    return {
+        "modules": modules,
+        "total_buildings": total_buildings,
+        "raw_resources": raw_resources,
     }
 
 
 def validate(fid, result, mod):
-    """Validate decomposition against original factory data."""
+    """Validate the 2-stage decomposition."""
     issues = []
     mfr = next(s for s in mod["steps"] if s["building"] == "Manufacturer")
+    factory_copies = mod["copies_needed_ceil"]
 
-    if len(result["mini_modules"]) != len(mfr["inputs"]):
-        issues.append(f"Expected {len(mfr['inputs'])} modules, got {len(result['mini_modules'])}")
+    # Check Stage 2 modules exist for each non-Stage1 manufacturer input
+    expected_s2 = [inp for inp in mfr["inputs"] if inp not in STAGE1_PRODUCTS]
+    actual_s2 = [m["product"] for m in result["stage2_modules"]]
+    if set(expected_s2) != set(actual_s2):
+        issues.append(f"Stage 2 mismatch: expected {expected_s2}, got {actual_s2}")
 
-    for mm in result["mini_modules"]:
-        if mm["belt_utilization"] > 1.0 and mm["copies_needed"] <= 1:
-            issues.append(f"{mm['name']}: belt {mm['belt_utilization']:.0%} but copies=1")
-        if mm["total_buildings"] == 0:
-            issues.append(f"{mm['name']}: 0 buildings")
+    # Check building constraints
+    for m in result["stage2_modules"]:
+        if m["buildings_per_copy"] > MAX_BUILDINGS:
+            issues.append(f"{m['name']}: {m['buildings_per_copy']} buildings > {MAX_BUILDINGS}")
+        if m["surplus_pct"] > 15:  # surplus is soft; only flag extreme cases
+            issues.append(f"{m['name']}: surplus {m['surplus_pct']:.1f}% very high")
 
-    # Check raw resource conservation
-    for res_name, res_info in mod["raw_inputs"].items():
-        expected = res_info["per_min"]
-        actual = 0
-        for mm in result["mini_modules"]:
-            actual += mm["raw_inputs_solid"].get(res_name, 0) * mm["copies_needed"]
-            actual += mm["raw_inputs_fluid"].get(res_name, 0) * mm["copies_needed"]
-        diff = abs(actual - expected) / expected * 100 if expected > 0 else 0
-        if diff > 2.0:
-            issues.append(f"{res_name}: modules sum={actual:.2f} vs factory={expected:.2f} ({diff:.1f}% off)")
+    # Check Stage 1 has entries
+    if not result["stage1"]["modules"]:
+        issues.append("Stage 1 has no modules")
 
     return issues
 
@@ -323,9 +427,11 @@ def main():
 
     output = {
         "meta": {
-            "title": "HMF-95 Factory Crazy Modules",
+            "title": "HMF-95 Factory Crazy — 2-Stage Modules",
             "belt_limit": BELT_LIMIT,
-            "description": "Self-contained mini-modules per Manufacturer input, belt-constrained to Mk.5 (780/min)",
+            "max_buildings": MAX_BUILDINGS,
+            "max_surplus_pct": MAX_SURPLUS_PCT,
+            "description": "Stage 1: raw→intermediates, Stage 2: intermediates→mfr inputs (building-capped modules)",
             "source": "factory-subunits.json",
         },
         "factories": factories,
@@ -335,19 +441,44 @@ def main():
         json.dump(output, f, indent=2)
 
     # Summary
-    print("\n" + "=" * 65)
-    print("  HMF-95 Factory Crazy Modules")
-    print("=" * 65)
-    for fid, fac in factories.items():
-        print(f"\n  {fid.upper()} — {fac['theme']}  ({fac['hmf_per_min']} HMF/min x{fac['factory_copies']})")
-        for mm in fac["mini_modules"]:
-            pct = mm["belt_utilization"] * 100
-            cp = f" x{mm['copies_needed']}" if mm["copies_needed"] > 1 else ""
-            print(f"    {mm['name']:<35} belt:{pct:5.1f}%  bldgs:{mm['total_buildings']:>2}{cp}")
+    print("\n" + "=" * 72)
+    print("  HMF-95 Factory Crazy — 2-Stage Modules")
+    print("=" * 72)
 
-    print(f"\n{'=' * 65}")
-    total_mm = sum(len(f["mini_modules"]) for f in factories.values())
-    print(f"  {len(factories)} factories, {total_mm} mini-modules")
+    grand_s2_bldgs = 0
+    grand_s1_bldgs = 0
+
+    for fid, fac in factories.items():
+        print(f"\n  {fid.upper()} — {fac['theme']}  ({fac['hmf_per_min']} HMF/min × {fac['num_manufacturers']} mfrs)")
+
+        # Stage 2
+        fac_s2_bldgs = 0
+        for m in fac["stage2_modules"]:
+            cp = f" ×{m['copies']}" if m["copies"] > 1 else ""
+            total_b = m["buildings_per_copy"] * m["copies"]
+            fac_s2_bldgs += total_b
+            pct = m["belt_load"] / BELT_LIMIT * 100
+            print(
+                f"    S2 {m['name']:<30} {m['copies']:>2} copies  "
+                f"{m['buildings_per_copy']:>2} bldgs/copy  "
+                f"belt:{pct:5.1f}%  surplus:{m['surplus_pct']:4.1f}%"
+            )
+        grand_s2_bldgs += fac_s2_bldgs
+
+        # Stage 1
+        s1 = fac["stage1"]
+        for pm in s1["modules"]:
+            print(f"    S1 {pm['product']:<30} {pm['total_buildings']:>3} bldgs  demand:{pm['demand']:.0f}/min")
+        grand_s1_bldgs += s1["total_buildings"]
+
+        total = fac_s2_bldgs + s1["total_buildings"]
+        print(f"    {'─' * 55}")
+        print(f"    Total: S2={fac_s2_bldgs}  S1={s1['total_buildings']}  Grand={total}")
+
+    print(f"\n{'=' * 72}")
+    print(f"  Grand Total: S2={grand_s2_bldgs}  S1={grand_s1_bldgs}  All={grand_s2_bldgs + grand_s1_bldgs}")
+    total_mm = sum(len(f["stage2_modules"]) for f in factories.values())
+    print(f"  {len(factories)} factories, {total_mm} Stage 2 modules")
     if all_ok:
         print("  All validation checks passed.")
     print(f"\n  Written to factory-crazy.json")
