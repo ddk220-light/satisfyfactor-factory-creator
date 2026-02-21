@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .venv/
-node_modules/
-frontend/dist/
 .env
+.DS_Store
+satisfactory.db-shm
+satisfactory.db-wal
+satisfy/
