@@ -432,6 +432,85 @@ def validate(fid, result, mod):
     return issues
 
 
+def optimize_shards(factories, budget=SHARD_BUDGET):
+    """Global shard optimization across all Stage 2 modules.
+
+    For each step with fractional buildings, check if we can overclock
+    fewer buildings to save one building per copy. Allocate shards greedily
+    from a global budget, prioritizing larger buildings (more space saved).
+    """
+    candidates = []
+
+    for fid, fac in factories.items():
+        for mi, mm in enumerate(fac["stage2_modules"]):
+            copies = mm["copies"]
+            for si, step in enumerate(mm["steps"]):
+                be = step["buildings_exact"]
+                bc = step["buildings_ceil"]
+                if bc <= 1:
+                    continue  # can't save a building from a 1-building step
+
+                frac = be - int(be)
+                if frac < 0.001 or frac > 0.999:
+                    continue  # already effectively integer
+
+                new_count = bc - 1
+                new_clock = (be / new_count) * 100
+                if new_clock > 250:
+                    continue
+
+                shards_needed = shards_for_clock(new_clock)
+                if shards_needed is None or shards_needed == 0:
+                    continue
+
+                total_shards = shards_needed * new_count * copies
+
+                candidates.append({
+                    "fid": fid,
+                    "module_idx": mi,
+                    "step_idx": si,
+                    "building": step["building"],
+                    "item": step["item"],
+                    "old_count": bc,
+                    "new_count": new_count,
+                    "new_clock": round(new_clock, 1),
+                    "shards_per_building": shards_needed,
+                    "total_shards": total_shards,
+                    "copies": copies,
+                })
+
+    # Sort: largest buildings first (most space saved), then fewest total shards
+    candidates.sort(
+        key=lambda c: (-BUILDING_FOOTPRINT.get(c["building"], 0), c["total_shards"])
+    )
+
+    # Greedily allocate from budget
+    shards_used = 0
+    applied = []
+    for c in candidates:
+        if shards_used + c["total_shards"] <= budget:
+            shards_used += c["total_shards"]
+            applied.append(c)
+
+    # Apply optimizations
+    for opt in applied:
+        fac = factories[opt["fid"]]
+        mm = fac["stage2_modules"][opt["module_idx"]]
+        step = mm["steps"][opt["step_idx"]]
+        step["buildings_ceil"] = opt["new_count"]
+        step["shards_per_building"] = opt["shards_per_building"]
+
+        # Recalculate module totals
+        mm["buildings_per_copy"] = sum(s["buildings_ceil"] for s in mm["steps"])
+        mm["building_totals"] = {}
+        for s in mm["steps"]:
+            mm["building_totals"][s["building"]] = (
+                mm["building_totals"].get(s["building"], 0) + s["buildings_ceil"]
+            )
+
+    return applied, shards_used
+
+
 def main():
     with open("factory-subunits.json") as f:
         data = json.load(f)
