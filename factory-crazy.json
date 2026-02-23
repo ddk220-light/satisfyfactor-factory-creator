@@ -5,7 +5,9 @@
     "max_buildings": 20,
     "max_surplus_pct": 5.0,
     "description": "Stage 1: raw\u2192intermediates, Stage 2: intermediates\u2192mfr inputs (building-capped modules)",
-    "source": "factory-subunits.json"
+    "source": "factory-subunits.json",
+    "shard_budget": 200,
+    "shards_used": 199
   },
   "factories": {
     "ferrium": {
@@ -35,7 +37,7 @@
           "product": "Modular Frame",
           "demand": 52.5,
           "copies": 3,
-          "buildings_per_copy": 18,
+          "buildings_per_copy": 14,
           "output_per_copy": 18.0,
           "total_output": 54.0,
           "surplus_pct": 2.9,
@@ -45,26 +47,26 @@
           },
           "steps": [
             {
-              "recipe": "Alternate: Iron Pipe",
-              "item": "Steel Pipe",
+              "recipe": "Iron Plate",
+              "item": "Iron Plate",
               "building": "Constructor",
               "power_mw": 4.0,
-              "shards_per_building": 0,
+              "shards_per_building": 2,
               "inputs": {
-                "Iron Ingot": 233.3333
+                "Iron Ingot": 58.3333
               },
               "outputs": {
-                "Steel Pipe": 58.3333
+                "Iron Plate": 38.889
               },
-              "buildings_exact": 2.3333,
-              "buildings_ceil": 3
+              "buildings_exact": 1.9444,
+              "buildings_ceil": 1
             },
             {
               "recipe": "Alternate: Iron Wire",
               "item": "Wire",
               "building": "Constructor",
               "power_mw": 4.0,
-              "shards_per_building": 1,
+              "shards_per_building": 0,
               "inputs": {
                 "Iron Ingot": 43.2098
               },
@@ -73,6 +75,37 @@
               },
               "buildings_exact": 3.4568,
               "buildings_ceil": 4
+            },
+            {
+              "recipe": "Alternate: Iron Pipe",
+              "item": "Steel Pipe",
+              "building": "Constructor",
+              "power_mw": 4.0,
+              "shards_per_building": 1,
+              "inputs": {
+                "Iron Ingot": 233.3333
+              },
+              "outputs": {
+                "Steel Pipe": 58.3333
+              },
+              "buildings_exact": 2.3333,
+              "buildings_ceil": 2
+            },
+            {
+              "recipe": "Alternate: Stitched Iron Plate",
+              "item": "Reinforced Iron Plate",
+              "building": "Assembler",
+              "power_mw": 15.0,
+              "shards_per_building": 1,
+              "inputs": {
+                "Iron Plate": 38.889,
+                "Wire": 77.7777
+              },
+              "outputs": {
+                "Reinforced Iron Plate": 11.6667
+              },
+              "buildings_exact": 2.0741,
+              "buildings_ceil": 2
             },
             {
               "recipe": "Alternate: Steeled Frame",
@@ -88,43 +121,12 @@
                 "Modular Frame": 17.5
               },
               "buildings_exact": 5.8333,
-              "buildings_ceil": 6
-            },
-            {
-              "recipe": "Alternate: Stitched Iron Plate",
-              "item": "Reinforced Iron Plate",
-              "building": "Assembler",
-              "power_mw": 15.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Plate": 38.889,
-                "Wire": 77.7777
-              },
-              "outputs": {
-                "Reinforced Iron Plate": 11.6667
-              },
-              "buildings_exact": 2.0741,
-              "buildings_ceil": 3
-            },
-            {
-              "recipe": "Iron Plate",
-              "item": "Iron Plate",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Ingot": 58.3333
-              },
-              "outputs": {
-                "Iron Plate": 38.889
-              },
-              "buildings_exact": 1.9444,
-              "buildings_ceil": 2
+              "buildings_ceil": 5
             }
           ],
           "building_totals": {
-            "Constructor": 9,
-            "Assembler": 9
+            "Constructor": 7,
+            "Assembler": 7
           }
         },
         {
@@ -132,7 +134,7 @@
           "product": "Steel Pipe",
           "demand": 236.25,
           "copies": 2,
-          "buildings_per_copy": 5,
+          "buildings_per_copy": 4,
           "output_per_copy": 125.0,
           "total_output": 250.0,
           "surplus_pct": 5.8,
@@ -146,7 +148,7 @@
               "item": "Steel Pipe",
               "building": "Constructor",
               "power_mw": 4.0,
-              "shards_per_building": 0,
+              "shards_per_building": 1,
               "inputs": {
                 "Iron Ingot": 472.5
               },
@@ -154,11 +156,11 @@
                 "Steel Pipe": 118.125
               },
               "buildings_exact": 4.725,
-              "buildings_ceil": 5
+              "buildings_ceil": 4
             }
           ],
           "building_totals": {
-            "Constructor": 5
+            "Constructor": 4
           }
         },
         {
@@ -166,7 +168,7 @@
           "product": "Encased Industrial Beam",
           "demand": 65.62,
           "copies": 3,
-          "buildings_per_copy": 12,
+          "buildings_per_copy": 11,
           "output_per_copy": 24.0,
           "total_output": 72.0,
           "surplus_pct": 9.7,
@@ -205,12 +207,12 @@
                 "Encased Industrial Beam": 21.875
               },
               "buildings_exact": 5.4689,
-              "buildings_ceil": 6
+              "buildings_ceil": 5
             }
           ],
           "building_totals": {
             "Constructor": 6,
-            "Assembler": 6
+            "Assembler": 5
           }
         }
       ],
@@ -295,21 +297,6 @@
           },
           "steps": [
             {
-              "recipe": "Screws",
-              "item": "Screws",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Rod": 117.0
-              },
-              "outputs": {
-                "Screws": 468.0
-              },
-              "buildings_exact": 11.7,
-              "buildings_ceil": 12
-            },
-            {
               "recipe": "Iron Rod",
               "item": "Iron Rod",
               "building": "Constructor",
@@ -323,6 +310,21 @@
               },
               "buildings_exact": 7.8,
               "buildings_ceil": 8
+            },
+            {
+              "recipe": "Screws",
+              "item": "Screws",
+              "building": "Constructor",
+              "power_mw": 4.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Iron Rod": 117.0
+              },
+              "outputs": {
+                "Screws": 468.0
+              },
+              "buildings_exact": 11.7,
+              "buildings_ceil": 12
             }
           ],
           "building_totals": {
@@ -340,11 +342,42 @@
           "surplus_pct": 12.0,
           "belt_load": 127.5,
           "inputs": {
-            "Rubber": 18.75,
             "Iron Ingot": 103.125,
+            "Rubber": 18.75,
             "Plastic": 5.625
           },
           "steps": [
+            {
+              "recipe": "Modular Frame",
+              "item": "Modular Frame",
+              "building": "Assembler",
+              "power_mw": 15.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Reinforced Iron Plate": 18.75,
+                "Iron Rod": 75.0
+              },
+              "outputs": {
+                "Modular Frame": 12.5
+              },
+              "buildings_exact": 6.25,
+              "buildings_ceil": 7
+            },
+            {
+              "recipe": "Iron Rod",
+              "item": "Iron Rod",
+              "building": "Constructor",
+              "power_mw": 4.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Iron Ingot": 75.0
+              },
+              "outputs": {
+                "Iron Rod": 75.0
+              },
+              "buildings_exact": 5.0,
+              "buildings_ceil": 5
+            },
             {
               "recipe": "Alternate: Adhered Iron Plate",
               "item": "Reinforced Iron Plate",
@@ -366,7 +399,7 @@
               "item": "Iron Plate",
               "building": "Assembler",
               "power_mw": 15.0,
-              "shards_per_building": 1,
+              "shards_per_building": 0,
               "inputs": {
                 "Iron Ingot": 28.125,
                 "Plastic": 5.625
@@ -376,37 +409,6 @@
               },
               "buildings_exact": 0.75,
               "buildings_ceil": 1
-            },
-            {
-              "recipe": "Iron Rod",
-              "item": "Iron Rod",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Ingot": 75.0
-              },
-              "outputs": {
-                "Iron Rod": 75.0
-              },
-              "buildings_exact": 5.0,
-              "buildings_ceil": 5
-            },
-            {
-              "recipe": "Modular Frame",
-              "item": "Modular Frame",
-              "building": "Assembler",
-              "power_mw": 15.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Reinforced Iron Plate": 18.75,
-                "Iron Rod": 75.0
-              },
-              "outputs": {
-                "Modular Frame": 12.5
-              },
-              "buildings_exact": 6.25,
-              "buildings_ceil": 7
             }
           ],
           "building_totals": {
@@ -419,7 +421,7 @@
           "product": "Encased Industrial Beam",
           "demand": 67.5,
           "copies": 2,
-          "buildings_per_copy": 13,
+          "buildings_per_copy": 12,
           "output_per_copy": 36.0,
           "total_output": 72.0,
           "surplus_pct": 6.7,
@@ -449,7 +451,7 @@
               "item": "Encased Industrial Beam",
               "building": "Assembler",
               "power_mw": 15.0,
-              "shards_per_building": 2,
+              "shards_per_building": 1,
               "inputs": {
                 "Concrete": 202.5,
                 "Steel Beam": 101.25
@@ -458,12 +460,12 @@
                 "Encased Industrial Beam": 33.75
               },
               "buildings_exact": 5.625,
-              "buildings_ceil": 6
+              "buildings_ceil": 5
             }
           ],
           "building_totals": {
             "Constructor": 7,
-            "Assembler": 6
+            "Assembler": 5
           }
         }
       ],
@@ -598,7 +600,7 @@
           "product": "Screws",
           "demand": 2160.0,
           "copies": 1,
-          "buildings_per_copy": 12,
+          "buildings_per_copy": 10,
           "output_per_copy": 2339.94,
           "total_output": 2339.94,
           "surplus_pct": 8.3,
@@ -612,7 +614,7 @@
               "item": "Steel Beam",
               "building": "Constructor",
               "power_mw": 4.0,
-              "shards_per_building": 0,
+              "shards_per_building": 1,
               "inputs": {
                 "Steel Ingot": 166.154
               },
@@ -620,14 +622,14 @@
                 "Steel Beam": 41.5382
               },
               "buildings_exact": 2.7695,
-              "buildings_ceil": 3
+              "buildings_ceil": 2
             },
             {
               "recipe": "Alternate: Steel Screws",
               "item": "Screws",
               "building": "Constructor",
               "power_mw": 4.0,
-              "shards_per_building": 0,
+              "shards_per_building": 1,
               "inputs": {
                 "Steel Beam": 41.5382
               },
@@ -635,11 +637,11 @@
                 "Screws": 2160.0
               },
               "buildings_exact": 8.3079,
-              "buildings_ceil": 9
+              "buildings_ceil": 8
             }
           ],
           "building_totals": {
-            "Constructor": 12
+            "Constructor": 10
           }
         },
         {
@@ -647,7 +649,7 @@
           "product": "Modular Frame",
           "demand": 90.0,
           "copies": 4,
-          "buildings_per_copy": 19,
+          "buildings_per_copy": 18,
           "output_per_copy": 24.0,
           "total_output": 96.0,
           "surplus_pct": 6.7,
@@ -657,21 +659,6 @@
             "Iron Ingot": 29.9999
           },
           "steps": [
-            {
-              "recipe": "Steel Pipe",
-              "item": "Steel Pipe",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Steel Ingot": 112.4999
-              },
-              "outputs": {
-                "Steel Pipe": 74.9999
-              },
-              "buildings_exact": 3.75,
-              "buildings_ceil": 4
-            },
             {
               "recipe": "Steel Beam",
               "item": "Steel Beam",
@@ -688,19 +675,51 @@
               "buildings_ceil": 1
             },
             {
-              "recipe": "Alternate: Steel Screws",
-              "item": "Screws",
+              "recipe": "Alternate: Steel Cast Plate",
+              "item": "Iron Plate",
+              "building": "Foundry",
+              "power_mw": 16.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Iron Ingot": 29.9999,
+                "Steel Ingot": 29.9999
+              },
+              "outputs": {
+                "Iron Plate": 90.0
+              },
+              "buildings_exact": 2.0,
+              "buildings_ceil": 2
+            },
+            {
+              "recipe": "Reinforced Iron Plate",
+              "item": "Reinforced Iron Plate",
+              "building": "Assembler",
+              "power_mw": 15.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Iron Plate": 90.0,
+                "Screws": 180.0
+              },
+              "outputs": {
+                "Reinforced Iron Plate": 15.0001
+              },
+              "buildings_exact": 2.9999,
+              "buildings_ceil": 3
+            },
+            {
+              "recipe": "Steel Pipe",
+              "item": "Steel Pipe",
               "building": "Constructor",
               "power_mw": 4.0,
               "shards_per_building": 0,
               "inputs": {
-                "Steel Beam": 3.4615
+                "Steel Ingot": 112.4999
               },
               "outputs": {
-                "Screws": 180.0
+                "Steel Pipe": 74.9999
               },
-              "buildings_exact": 0.6923,
-              "buildings_ceil": 1
+              "buildings_exact": 3.75,
+              "buildings_ceil": 4
             },
             {
               "recipe": "Alternate: Steeled Frame",
@@ -716,45 +735,28 @@
                 "Modular Frame": 22.5
               },
               "buildings_exact": 7.4999,
-              "buildings_ceil": 8
+              "buildings_ceil": 7
             },
             {
-              "recipe": "Reinforced Iron Plate",
-              "item": "Reinforced Iron Plate",
-              "building": "Assembler",
-              "power_mw": 15.0,
-              "shards_per_building": 1,
-              "inputs": {
-                "Iron Plate": 90.0,
-                "Screws": 180.0
-              },
-              "outputs": {
-                "Reinforced Iron Plate": 15.0001
-              },
-              "buildings_exact": 2.9999,
-              "buildings_ceil": 3
-            },
-            {
-              "recipe": "Alternate: Steel Cast Plate",
-              "item": "Iron Plate",
-              "building": "Foundry",
-              "power_mw": 16.0,
+              "recipe": "Alternate: Steel Screws",
+              "item": "Screws",
+              "building": "Constructor",
+              "power_mw": 4.0,
               "shards_per_building": 0,
               "inputs": {
-                "Iron Ingot": 29.9999,
-                "Steel Ingot": 29.9999
+                "Steel Beam": 3.4615
               },
               "outputs": {
-                "Iron Plate": 90.0
+                "Screws": 180.0
               },
-              "buildings_exact": 2.0,
-              "buildings_ceil": 2
+              "buildings_exact": 0.6923,
+              "buildings_ceil": 1
             }
           ],
           "building_totals": {
             "Constructor": 6,
-            "Assembler": 11,
-            "Foundry": 2
+            "Foundry": 2,
+            "Assembler": 10
           }
         },
         {
@@ -796,7 +798,7 @@
           "product": "Encased Industrial Beam",
           "demand": 90.0,
           "copies": 3,
-          "buildings_per_copy": 17,
+          "buildings_per_copy": 16,
           "output_per_copy": 32.0,
           "total_output": 96.0,
           "surplus_pct": 6.7,
@@ -835,12 +837,12 @@
                 "Encased Industrial Beam": 30.0
               },
               "buildings_exact": 7.5,
-              "buildings_ceil": 8
+              "buildings_ceil": 7
             }
           ],
           "building_totals": {
             "Constructor": 9,
-            "Assembler": 8
+            "Assembler": 7
           }
         }
       ],
@@ -934,7 +936,7 @@
           "product": "Screws",
           "demand": 1200.0,
           "copies": 2,
-          "buildings_per_copy": 18,
+          "buildings_per_copy": 17,
           "output_per_copy": 600.0,
           "total_output": 1200.0,
           "surplus_pct": 0.0,
@@ -943,6 +945,21 @@
             "Aluminum Ingot": 21.4285
           },
           "steps": [
+            {
+              "recipe": "Alternate: Aluminum Rod",
+              "item": "Iron Rod",
+              "building": "Constructor",
+              "power_mw": 4.0,
+              "shards_per_building": 1,
+              "inputs": {
+                "Aluminum Ingot": 21.4286
+              },
+              "outputs": {
+                "Iron Rod": 150.0
+              },
+              "buildings_exact": 2.8572,
+              "buildings_ceil": 2
+            },
             {
               "recipe": "Screws",
               "item": "Screws",
@@ -957,25 +974,10 @@
               },
               "buildings_exact": 15.0,
               "buildings_ceil": 15
-            },
-            {
-              "recipe": "Alternate: Aluminum Rod",
-              "item": "Iron Rod",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Aluminum Ingot": 21.4286
-              },
-              "outputs": {
-                "Iron Rod": 150.0
-              },
-              "buildings_exact": 2.8572,
-              "buildings_ceil": 3
             }
           ],
           "building_totals": {
-            "Constructor": 18
+            "Constructor": 17
           }
         },
         {
@@ -989,39 +991,23 @@
           "surplus_pct": 0.0,
           "belt_load": 150.0,
           "inputs": {
-            "Aluminum Ingot": 15.0,
-            "Iron Ingot": 135.0
+            "Iron Ingot": 135.0,
+            "Aluminum Ingot": 15.0
           },
           "steps": [
             {
-              "recipe": "Screws",
-              "item": "Screws",
+              "recipe": "Iron Plate",
+              "item": "Iron Plate",
               "building": "Constructor",
               "power_mw": 4.0,
               "shards_per_building": 0,
               "inputs": {
-                "Iron Rod": 45.0
+                "Iron Ingot": 135.0
               },
               "outputs": {
-                "Screws": 180.0
+                "Iron Plate": 90.0
               },
               "buildings_exact": 4.5,
-              "buildings_ceil": 5
-            },
-            {
-              "recipe": "Modular Frame",
-              "item": "Modular Frame",
-              "building": "Assembler",
-              "power_mw": 15.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Reinforced Iron Plate": 15.0,
-                "Iron Rod": 60.0
-              },
-              "outputs": {
-                "Modular Frame": 10.0
-              },
-              "buildings_exact": 5.0,
               "buildings_ceil": 5
             },
             {
@@ -1056,16 +1042,32 @@
               "buildings_ceil": 2
             },
             {
-              "recipe": "Iron Plate",
-              "item": "Iron Plate",
+              "recipe": "Modular Frame",
+              "item": "Modular Frame",
+              "building": "Assembler",
+              "power_mw": 15.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Reinforced Iron Plate": 15.0,
+                "Iron Rod": 60.0
+              },
+              "outputs": {
+                "Modular Frame": 10.0
+              },
+              "buildings_exact": 5.0,
+              "buildings_ceil": 5
+            },
+            {
+              "recipe": "Screws",
+              "item": "Screws",
               "building": "Constructor",
               "power_mw": 4.0,
               "shards_per_building": 0,
               "inputs": {
-                "Iron Ingot": 135.0
+                "Iron Rod": 45.0
               },
               "outputs": {
-                "Iron Plate": 90.0
+                "Screws": 180.0
               },
               "buildings_exact": 4.5,
               "buildings_ceil": 5
@@ -1115,7 +1117,7 @@
           "product": "Encased Industrial Beam",
           "demand": 50.0,
           "copies": 1,
-          "buildings_per_copy": 16,
+          "buildings_per_copy": 14,
           "output_per_copy": 54.0,
           "total_output": 54.0,
           "surplus_pct": 8.0,
@@ -1138,14 +1140,14 @@
                 "Steel Beam": 150.0
               },
               "buildings_exact": 6.6665,
-              "buildings_ceil": 7
+              "buildings_ceil": 6
             },
             {
               "recipe": "Encased Industrial Beam",
               "item": "Encased Industrial Beam",
               "building": "Assembler",
               "power_mw": 15.0,
-              "shards_per_building": 2,
+              "shards_per_building": 1,
               "inputs": {
                 "Concrete": 300.0,
                 "Steel Beam": 150.0
@@ -1154,12 +1156,12 @@
                 "Encased Industrial Beam": 50.0
               },
               "buildings_exact": 8.3335,
-              "buildings_ceil": 9
+              "buildings_ceil": 8
             }
           ],
           "building_totals": {
-            "Constructor": 7,
-            "Assembler": 9
+            "Constructor": 6,
+            "Assembler": 8
           }
         }
       ],
@@ -1288,7 +1290,7 @@
           "product": "Modular Frame",
           "demand": 82.5,
           "copies": 4,
-          "buildings_per_copy": 17,
+          "buildings_per_copy": 15,
           "output_per_copy": 21.0,
           "total_output": 84.0,
           "surplus_pct": 1.8,
@@ -1300,18 +1302,18 @@
           },
           "steps": [
             {
-              "recipe": "Alternate: Iron Pipe",
-              "item": "Steel Pipe",
+              "recipe": "Iron Plate",
+              "item": "Iron Plate",
               "building": "Constructor",
               "power_mw": 4.0,
               "shards_per_building": 0,
               "inputs": {
-                "Iron Ingot": 275.0
+                "Iron Ingot": 68.75
               },
               "outputs": {
-                "Steel Pipe": 68.75
+                "Iron Plate": 45.8334
               },
-              "buildings_exact": 2.75,
+              "buildings_exact": 2.2916,
               "buildings_ceil": 3
             },
             {
@@ -1331,6 +1333,37 @@
               "buildings_ceil": 1
             },
             {
+              "recipe": "Alternate: Iron Pipe",
+              "item": "Steel Pipe",
+              "building": "Constructor",
+              "power_mw": 4.0,
+              "shards_per_building": 0,
+              "inputs": {
+                "Iron Ingot": 275.0
+              },
+              "outputs": {
+                "Steel Pipe": 68.75
+              },
+              "buildings_exact": 2.75,
+              "buildings_ceil": 3
+            },
+            {
+              "recipe": "Alternate: Stitched Iron Plate",
+              "item": "Reinforced Iron Plate",
+              "building": "Assembler",
+              "power_mw": 15.0,
+              "shards_per_building": 1,
+              "inputs": {
+                "Iron Plate": 45.8334,
+                "Wire": 91.6666
+              },
+              "outputs": {
+                "Reinforced Iron Plate": 13.75
+              },
+              "buildings_exact": 2.4445,
+              "buildings_ceil": 2
+            },
+            {
               "recipe": "Alternate: Steeled Frame",
               "item": "Modular Frame",
               "building": "Assembler",
@@ -1344,43 +1377,12 @@
                 "Modular Frame": 20.625
               },
               "buildings_exact": 6.875,
-              "buildings_ceil": 7
-            },
-            {
-              "recipe": "Alternate: Stitched Iron Plate",
-              "item": "Reinforced Iron Plate",
-              "building": "Assembler",
-              "power_mw": 15.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Plate": 45.8334,
-                "Wire": 91.6666
-              },
-              "outputs": {
-                "Reinforced Iron Plate": 13.75
-              },
-              "buildings_exact": 2.4445,
-              "buildings_ceil": 3
-            },
-            {
-              "recipe": "Iron Plate",
-              "item": "Iron Plate",
-              "building": "Constructor",
-              "power_mw": 4.0,
-              "shards_per_building": 0,
-              "inputs": {
-                "Iron Ingot": 68.75
-              },
-              "outputs": {
-                "Iron Plate": 45.8334
-              },
-              "buildings_exact": 2.2916,
-              "buildings_ceil": 3
+              "buildings_ceil": 6
             }
           ],
           "building_totals": {
             "Constructor": 6,
-            "Assembler": 11
+            "Assembler": 9
           }
         },
         {
@@ -1422,7 +1424,7 @@
           "product": "Encased Industrial Beam",
           "demand": 103.12,
           "copies": 4,
-          "buildings_per_copy": 14,
+          "buildings_per_copy": 13,
           "output_per_copy": 28.0,
           "total_output": 112.0,
           "surplus_pct": 8.6,
@@ -1461,12 +1463,12 @@
                 "Encased Industrial Beam": 25.7812
               },
               "buildings_exact": 6.4455,
-              "buildings_ceil": 7
+              "buildings_ceil": 6
             }
           ],
           "building_totals": {
             "Constructor": 7,
-            "Assembler": 7
+            "Assembler": 6
           }
         }
       ],
