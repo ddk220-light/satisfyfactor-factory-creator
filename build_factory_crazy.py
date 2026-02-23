@@ -15,6 +15,31 @@ from collections import deque
 BELT_LIMIT = 780
 MAX_BUILDINGS = 20
 MAX_SURPLUS_PCT = 5.0
+SHARD_BUDGET = 200
+
+BUILDING_FOOTPRINT = {
+    "Manufacturer": 440,
+    "Blender": 304,
+    "Refinery": 200,
+    "Assembler": 150,
+    "Constructor": 80,
+    "Foundry": 72,
+    "Smelter": 54,
+}
+
+
+def shards_for_clock(clock_pct):
+    """Return number of power shards needed for a given clock speed."""
+    if clock_pct <= 100.0:
+        return 0
+    elif clock_pct <= 150.0:
+        return 1
+    elif clock_pct <= 200.0:
+        return 2
+    elif clock_pct <= 250.0:
+        return 3
+    return None  # can't overclock that much
+
 
 FLUIDS = {
     "Water", "Crude Oil", "Heavy Oil Residue", "Alumina Solution",
