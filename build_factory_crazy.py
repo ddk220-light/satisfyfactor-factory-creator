@@ -529,6 +529,13 @@ def main():
             for i in issues:
                 print(f"  - {i}")
 
+    # Global shard optimization
+    applied_opts, total_shards = optimize_shards(factories)
+    if applied_opts:
+        print(f"\nShard optimization: {len(applied_opts)} steps optimized, {total_shards}/{SHARD_BUDGET} shards used")
+        for opt in applied_opts:
+            print(f"  {opt['fid']}: {opt['item']} — {opt['building']} {opt['old_count']}→{opt['new_count']} @ {opt['new_clock']}% ({opt['shards_per_building']} shard × {opt['new_count']} bldgs × {opt['copies']} copies = {opt['total_shards']} shards)")
+
     output = {
         "meta": {
             "title": "HMF-95 Factory Crazy — 2-Stage Modules",
@@ -537,6 +544,8 @@ def main():
             "max_surplus_pct": MAX_SURPLUS_PCT,
             "description": "Stage 1: raw→intermediates, Stage 2: intermediates→mfr inputs (building-capped modules)",
             "source": "factory-subunits.json",
+            "shard_budget": SHARD_BUDGET,
+            "shards_used": total_shards,
         },
         "factories": factories,
     }
