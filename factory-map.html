@@ -101,9 +101,6 @@ canvas.grabbing{cursor:grabbing}
 .mini-module-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .mini-module-header h4{font-size:12px;color:#e0e0e0;margin:0}
 .mini-module-header .copies-badge{font-size:10px;padding:2px 8px;background:#f39c12;color:#111;border-radius:3px;font-weight:bold}
-.belt-bar{margin:0 14px 10px;height:14px;background:#1a1a2e;border-radius:3px;position:relative;overflow:hidden}
-.belt-bar-fill{height:100%;border-radius:3px}
-.belt-bar-label{position:absolute;top:0;left:0;right:0;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#ccc;font-weight:bold}
 .mini-module-body{padding:0 14px 10px;font-size:10px;color:#aaa}
 .mini-module-body .raw-list{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
 .mini-module-body .buildings-list{display:flex;gap:8px;flex-wrap:wrap}
@@ -113,10 +110,6 @@ canvas.grabbing{cursor:grabbing}
 .manufacturer-card .mfr-inputs{display:flex;gap:6px;flex-wrap:wrap}
 .manufacturer-card .mfr-pill{padding:3px 8px;background:#16213e;border:1px solid #333;border-radius:12px;font-size:10px;color:#ccc}
 .stage-header{padding:10px 20px;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#888;border-top:1px solid #333;background:#16213e}
-.surplus-badge{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:bold;margin-left:8px}
-.surplus-badge.ok{background:#2ecc71;color:#111}
-.surplus-badge.warn{background:#f39c12;color:#111}
-.surplus-badge.high{background:#e74c3c;color:#fff}
 .module-detail-table{width:100%;border-collapse:collapse;font-size:11px;font-family:'Courier New',monospace}
 .module-detail-table th{text-align:left;color:#666;font-weight:normal;padding:4px 10px;font-size:10px;text-transform:uppercase;border-bottom:1px solid #333}
 .module-detail-table td{padding:5px 10px;border-top:1px solid #222}
@@ -213,8 +206,6 @@ function renderCrazyTab(data) {
   html += '<div class="meta">' + data.meta.description + ' | Belt: ' + data.meta.belt_limit + '/min | Max ' + data.meta.max_buildings + ' bldgs/module</div>';
   html += '</div>';
 
-  var flowContainers = []; // track {id, mod} for rendering after DOM insert
-
   for (var fid in data.factories) {
     if (!data.factories.hasOwnProperty(fid)) continue;
     var fac = data.factories[fid];
@@ -287,11 +278,11 @@ function renderCrazyTab(data) {
       // 2. Separate output step from intermediate steps
       var outputStep = null;
       var intermediateSteps = [];
-      for (var s = 0; s < mm.steps.length; s++) {
-        if (mm.steps[s].item === mm.product) {
-          outputStep = mm.steps[s];
+      for (var si = 0; si < mm.steps.length; si++) {
+        if (mm.steps[si].item === mm.product) {
+          outputStep = mm.steps[si];
         } else {
-          intermediateSteps.push(mm.steps[s]);
+          intermediateSteps.push(mm.steps[si]);
         }
       }
 
@@ -371,136 +362,8 @@ function renderCrazyTab(data) {
   }
 
   el.innerHTML = html;
-
-  // Render flow diagrams for Stage 2 modules
-  requestAnimationFrame(function() {
-    for (var k = 0; k < flowContainers.length; k++) {
-      var fc = flowContainers[k];
-      renderCrazyFlow(fc.id, fc.mod);
-    }
-    requestAnimationFrame(function() {
-      for (var k = 0; k < flowContainers.length; k++) {
-        drawCrazyConnectors(flowContainers[k].id, flowContainers[k].mod);
-      }
-    });
-  });
 }
 
-function renderCrazyFlow(containerId, mod) {
-  var dag = buildDAG(mod.steps);
-  var el = document.getElementById(containerId);
-  if (!el) return;
-
-  var html = '<div class="flow-columns">';
-  for (var col = 0; col <= dag.maxLayer; col++) {
-    html += '<div class="flow-column">';
-    for (var n = 0; n < dag.columns[col].length; n++) {
-      var node = dag.columns[col][n];
-      if (node.type === 'raw') {
-        var rawInfo = mod.raw_inputs[node.item];
-        var rate = rawInfo ? rawInfo.per_min.toFixed(1) : '';
-        html += '<div class="flow-node raw-input" data-item="' + node.item + '">';
-        html += '<div class="item-name">' + node.item + '</div>';
-        html += '<div class="output-rate">' + rate + '/min</div>';
-        html += '</div>';
-      } else {
-        var step = node.step;
-        var isOC = step.shards_per_building > 0;
-        var cls = 'flow-node' + (isOC ? ' overclocked' : '');
-        html += '<div class="' + cls + '" data-item="' + step.item + '">';
-        html += '<div class="item-name">' + step.item + '</div>';
-        html += '<div class="building-info">' + step.buildings_ceil + '\u00d7 ' + step.building;
-        if (isOC) html += '<span class="shard-badge">\u26a1 ' + step.shards_per_building + '</span>';
-        html += '</div>';
-        var outRate = step.outputs[step.item] || Object.values(step.outputs)[0];
-        html += '<div class="output-rate">' + outRate.toFixed(1) + '/min</div>';
-        html += '</div>';
-      }
-    }
-    html += '</div>';
-  }
-  html += '</div>';
-  el.innerHTML = html;
-}
-
-function drawCrazyConnectors(containerId, mod) {
-  var dag = buildDAG(mod.steps);
-  var container = document.getElementById(containerId);
-  if (!container) return;
-  var containerRect = container.getBoundingClientRect();
-
-  var nodeEls = container.querySelectorAll('.flow-node');
-  var nodeRects = {};
-  for (var i = 0; i < nodeEls.length; i++) {
-    var nel = nodeEls[i];
-    var item = nel.getAttribute('data-item');
-    var rect = nel.getBoundingClientRect();
-    nodeRects[item] = {
-      left: rect.left - containerRect.left,
-      right: rect.right - containerRect.left,
-      top: rect.top - containerRect.top,
-      bottom: rect.bottom - containerRect.top,
-      cy: (rect.top + rect.bottom) / 2 - containerRect.top
-    };
-  }
-
-  var svgNS = 'http://www.w3.org/2000/svg';
-  var svg = document.createElementNS(svgNS, 'svg');
-  svg.classList.add('flow-svg');
-  svg.setAttribute('width', container.scrollWidth);
-  svg.setAttribute('height', container.scrollHeight);
-
-  var markerId = 'arrow-' + containerId.replace(/[^a-z0-9]/gi, '-');
-  var defs = document.createElementNS(svgNS, 'defs');
-  var marker = document.createElementNS(svgNS, 'marker');
-  marker.setAttribute('id', markerId);
-  marker.setAttribute('viewBox', '0 0 10 10');
-  marker.setAttribute('refX', '10');
-  marker.setAttribute('refY', '5');
-  marker.setAttribute('markerWidth', '6');
-  marker.setAttribute('markerHeight', '6');
-  marker.setAttribute('orient', 'auto');
-  var arrowPath = document.createElementNS(svgNS, 'path');
-  arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
-  arrowPath.setAttribute('fill', '#555');
-  marker.appendChild(arrowPath);
-  defs.appendChild(marker);
-  svg.appendChild(defs);
-
-  for (var i = 0; i < dag.edges.length; i++) {
-    var edge = dag.edges[i];
-    var fromRect = nodeRects[edge.from];
-    var toRect = nodeRects[edge.to];
-    if (!fromRect || !toRect) continue;
-
-    var x1 = fromRect.right, y1 = fromRect.cy;
-    var x2 = toRect.left, y2 = toRect.cy;
-
-    var line = document.createElementNS(svgNS, 'path');
-    if (Math.abs(y1 - y2) < 2) {
-      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2);
-    } else {
-      var midX = (x1 + x2) / 2;
-      line.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' L ' + midX + ' ' + y1 + ' L ' + midX + ' ' + y2 + ' L ' + x2 + ' ' + y2);
-    }
-    line.setAttribute('fill', 'none');
-    line.setAttribute('stroke', '#555');
-    line.setAttribute('stroke-width', '1.5');
-    line.setAttribute('marker-end', 'url(#' + markerId + ')');
-    svg.appendChild(line);
-
-    var labelX = (x1 + x2) / 2;
-    var labelY = Math.abs(y1 - y2) < 2 ? y1 - 8 : (y1 + y2) / 2 - 8;
-    var text = document.createElementNS(svgNS, 'text');
-    text.setAttribute('x', labelX);
-    text.setAttribute('y', labelY);
-    text.setAttribute('text-anchor', 'middle');
-    text.textContent = edge.rate.toFixed(0) + '/m';
-    svg.appendChild(text);
-  }
-
-  container.insertBefore(svg, container.firstChild);
-}
 let factoriesLoaded = false;
 async function loadFactories() {
   try {
