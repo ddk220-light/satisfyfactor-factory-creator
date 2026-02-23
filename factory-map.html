@@ -248,57 +248,86 @@ function renderCrazyTab(data) {
 
     for (var i = 0; i < fac.stage2_modules.length; i++) {
       var mm = fac.stage2_modules[i];
-      var beltPct = Math.min(mm.belt_load / 780 * 100, 100);
-      var barColor = beltPct > 90 ? '#e74c3c' : beltPct > 70 ? '#f39c12' : '#2ecc71';
-      var surplusCls = mm.surplus_pct <= 5 ? 'ok' : mm.surplus_pct <= 10 ? 'warn' : 'high';
 
       html += '<div class="mini-module">';
+
+      // Simplified header: name, copies, output rate
       html += '<div class="mini-module-header">';
-      html += '<h4>' + mm.name + ' \u2192 ' + mm.demand + '/min';
-      html += '<span class="surplus-badge ' + surplusCls + '">' + mm.surplus_pct.toFixed(1) + '% surplus</span>';
-      html += '</h4>';
+      html += '<h4>' + mm.name + '</h4>';
       html += '<div style="display:flex;align-items:center;gap:8px">';
       if (mm.copies > 1) {
         html += '<span class="copies-badge">\u00d7' + mm.copies + ' copies</span>';
       }
-      html += '<span style="font-size:10px;color:#888">' + mm.buildings_per_copy + ' bldgs/copy</span>';
+      html += '<span style="font-size:10px;color:#aaa">\u2192 ' + mm.output_per_copy.toFixed(1) + '/min each</span>';
       html += '</div>';
       html += '</div>';
 
-      // Belt bar
-      html += '<div class="belt-bar">';
-      html += '<div class="belt-bar-fill" style="width:' + beltPct + '%;background:' + barColor + '"></div>';
-      html += '<div class="belt-bar-label">' + mm.belt_load + ' / 780 items/min (' + beltPct.toFixed(1) + '%)</div>';
-      html += '</div>';
+      // Detail table
+      html += '<div style="padding:0 14px 10px">';
+      html += '<table class="module-detail-table">';
+      html += '<thead><tr><th>Item</th><th style="text-align:right">/mod</th><th style="text-align:right">Total</th><th>Recipe</th><th>Building</th><th style="text-align:right">Rate/bldg</th></tr></thead>';
+      html += '<tbody>';
 
-      // Inputs from Stage 1
-      html += '<div class="mini-module-body">';
-      html += '<div class="raw-list">';
-      for (var r in mm.inputs) {
-        var rc = S1_COLORS[r] || '#888';
-        html += '<span class="raw-pill"><span class="dot" style="background:' + rc + '"></span>' + r + ' ' + mm.inputs[r].toFixed(1) + '/min</span>';
+      // 1. Input rows (sorted alphabetically)
+      var inputKeys = Object.keys(mm.inputs).sort();
+      for (var j = 0; j < inputKeys.length; j++) {
+        var inp = inputKeys[j];
+        var perMod = mm.inputs[inp];
+        var total = perMod * mm.copies;
+        html += '<tr class="row-input">';
+        html += '<td class="item-col">' + inp + '</td>';
+        html += '<td class="rate-col">' + perMod.toFixed(1) + '/m</td>';
+        html += '<td class="rate-col">' + total.toFixed(1) + '/m</td>';
+        html += '<td class="dash">\u2014</td>';
+        html += '<td class="dash">\u2014</td>';
+        html += '<td class="dash">\u2014</td>';
+        html += '</tr>';
       }
-      html += '</div>';
 
-      // Building totals
-      html += '<div class="buildings-list">';
-      for (var b in mm.building_totals) {
-        html += '<span>' + b + ' \u00d7' + mm.building_totals[b] + '</span>';
+      // 2. Separate output step from intermediate steps
+      var outputStep = null;
+      var intermediateSteps = [];
+      for (var s = 0; s < mm.steps.length; s++) {
+        if (mm.steps[s].item === mm.product) {
+          outputStep = mm.steps[s];
+        } else {
+          intermediateSteps.push(mm.steps[s]);
+        }
       }
-      html += '</div>';
-      html += '</div>';
 
-      // Flow diagram container
-      var flowId = 'flow-s2-' + fid + '-' + i;
-      html += '<div class="flow-diagram" id="' + flowId + '"></div>';
-
-      // Build synthetic mod for flow diagram rendering
-      var synthRawInputs = {};
-      for (var ri in mm.inputs) {
-        synthRawInputs[ri] = { per_min: mm.inputs[ri], is_fluid: false };
+      // Intermediate step rows (dependency order from data)
+      for (var s = 0; s < intermediateSteps.length; s++) {
+        var step = intermediateSteps[s];
+        var outRate = step.outputs[step.item] || Object.values(step.outputs)[0];
+        var ratePerBldg = outRate / step.buildings_exact;
+        var shardHtml = step.shards_per_building > 0 ? '<span class="shard-indicator">\u26a1' + step.shards_per_building + '</span>' : '';
+        html += '<tr class="row-intermediate">';
+        html += '<td class="item-col">' + step.item + '</td>';
+        html += '<td class="rate-col">' + outRate.toFixed(1) + '/m</td>';
+        html += '<td class="rate-col">' + (outRate * mm.copies).toFixed(1) + '/m</td>';
+        html += '<td class="recipe-col">' + step.recipe + '</td>';
+        html += '<td class="building-col">' + step.building + ' \u00d7' + step.buildings_ceil + shardHtml + '</td>';
+        html += '<td class="rate-col">' + ratePerBldg.toFixed(1) + '/m</td>';
+        html += '</tr>';
       }
-      flowContainers.push({ id: flowId, mod: { raw_inputs: synthRawInputs, steps: mm.steps } });
 
+      // 3. Output row (always last)
+      if (outputStep) {
+        var outRate = outputStep.outputs[outputStep.item] || Object.values(outputStep.outputs)[0];
+        var ratePerBldg = outRate / outputStep.buildings_exact;
+        var shardHtml = outputStep.shards_per_building > 0 ? '<span class="shard-indicator">\u26a1' + outputStep.shards_per_building + '</span>' : '';
+        html += '<tr class="row-output">';
+        html += '<td class="item-col">' + outputStep.item + '</td>';
+        html += '<td class="rate-col">' + outRate.toFixed(1) + '/m</td>';
+        html += '<td class="rate-col">' + (outRate * mm.copies).toFixed(1) + '/m</td>';
+        html += '<td class="recipe-col">' + outputStep.recipe + '</td>';
+        html += '<td class="building-col">' + outputStep.building + ' \u00d7' + outputStep.buildings_ceil + shardHtml + '</td>';
+        html += '<td class="rate-col">' + ratePerBldg.toFixed(1) + '/m</td>';
+        html += '</tr>';
+      }
+
+      html += '</tbody></table>';
+      html += '</div>';
       html += '</div>'; // end mini-module
     }
 
