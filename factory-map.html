@@ -299,7 +299,7 @@ function renderCrazyTab(data) {
       for (var s = 0; s < intermediateSteps.length; s++) {
         var step = intermediateSteps[s];
         var outRate = step.outputs[step.item] || Object.values(step.outputs)[0];
-        var ratePerBldg = outRate / step.buildings_exact;
+        var ratePerBldg = step.buildings_exact > 0 ? outRate / step.buildings_exact : 0;
         var shardHtml = step.shards_per_building > 0 ? '<span class="shard-indicator">\u26a1' + step.shards_per_building + '</span>' : '';
         html += '<tr class="row-intermediate">';
         html += '<td class="item-col">' + step.item + '</td>';
@@ -314,7 +314,7 @@ function renderCrazyTab(data) {
       // 3. Output row (always last)
       if (outputStep) {
         var outRate = outputStep.outputs[outputStep.item] || Object.values(outputStep.outputs)[0];
-        var ratePerBldg = outRate / outputStep.buildings_exact;
+        var ratePerBldg = outputStep.buildings_exact > 0 ? outRate / outputStep.buildings_exact : 0;
         var shardHtml = outputStep.shards_per_building > 0 ? '<span class="shard-indicator">\u26a1' + outputStep.shards_per_building + '</span>' : '';
         html += '<tr class="row-output">';
         html += '<td class="item-col">' + outputStep.item + '</td>';
