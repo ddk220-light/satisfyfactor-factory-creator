@@ -23,12 +23,15 @@ Deployed on Railway — serves an interactive canvas-based map where you can:
 
 ## Pipeline Scripts
 
+Factory layouts use a single strategy: **Factory Crazy** (2-stage decomposition). The old stamp-copy "Factories" view has been removed.
+
 | Script | Purpose |
 |--------|---------|
-| `compute_modules.py` | Compute smallest repeatable HMF module per factory |
-| `build_factory_crazy.py` | 2-stage decomposition into building-capped mini-modules |
+| `compute_modules.py` | Per-factory HMF module basis (internal intermediate for the step below) |
+| `build_factory_crazy.py` | 2-stage decomposition into building-capped mini-modules — the canonical plan |
 | `find_factory_locations.py` | Score map locations by resource proximity |
-| `build_map.py` | Generate the interactive HTML map |
+
+`factory-map.html` is hand-maintained and served directly. `build_map.py` is a stale map-only generator — do not run it to regenerate the page (it would wipe the tabs).
 
 ## Running Locally
 

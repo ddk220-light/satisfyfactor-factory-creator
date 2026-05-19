@@ -1,0 +1,80 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What This Is
+
+A Satisfactory factory planner that computes optimal HMF (Heavy Modular Frame) production layouts across five themed factories (Ferrium, Naphtheon, Forgeholm, Luxara, Cathera), each using distinct alternate recipe chains. Serves an interactive canvas-based map for visualizing factory locations, resource nodes, and production breakdowns.
+
+These 5 HMF factories are the deepest layer of a larger goal: they feed the **Stator sub-factory** (95 HMF/min), which—together with Aluminum Casing, Magnetic Field Generator, Thermal Propulsion Rocket, and Nuclear Pasta sub-factories—feeds a **main "Special Factories" assembly plant** producing Phase 5 Space Elevator parts. See `planner-export/` for the Satisfactory Tools export (`.sft`) describing that wider plan and the live game state.
+
+## Running Locally
+
+```bash
+python server.py          # Serves on http://localhost:8080
+```
+
+No external Python dependencies — stdlib only (`sqlite3`, `json`, `math`, `http.server`).
+
+## Factory Generation: Factory Crazy ONLY
+
+**There is exactly one factory layout strategy: "Factory Crazy" (2-stage decomposition).** The older "Factories" stamp-copy/subunits view has been removed from the UI. Do not reintroduce a second approach or a "Factories" tab — Factory Crazy is the sole, default way to plan factories.
+
+- **Factory Crazy** = Stage 1 (raw → intermediates, centralized bulk smelting/refining) + Stage 2 (intermediates → manufacturer inputs, modules capped at ≤20 buildings) + the HMF Manufacturers on top. More building-efficient and better organized than the old stamp-copy approach.
+
+`factory-subunits.json` still exists, but ONLY as an **internal intermediate**: `build_factory_crazy.py` reads it for each factory's recipe basis (`hmf_recipe`, `target_hmf`, `steps`). It is not a user-facing deliverable and must not be surfaced in the UI.
+
+## Pipeline
+
+Run in order when regenerating data. Scripts hardcode an absolute path to `satisfactory.db` — update if your checkout differs.
+
+```
+compute_modules.py → factory-subunits.json   (INTERNAL intermediate only)
+    Per-factory HMF module basis: recipe choice, target rate, upstream steps.
+
+build_factory_crazy.py → factory-crazy.json   (the canonical factory plan)
+    2-stage decomposition. Constraints: max 20 buildings/module,
+    5% surplus tolerance, 780 items/min belt limit, 200 global shard budget.
+
+find_factory_locations.py → selected-factory-locations.json
+    Scores map locations by weighted proximity to critical resources.
+```
+
+## factory-map.html is hand-maintained — `build_map.py` is STALE
+
+`factory-map.html` (the file `server.py` serves) is the **source of truth** and is edited directly. It contains two tabs: **Map** and **Factories** (the Factory Crazy view; the tab is labeled "Factories" since it is now the only one).
+
+`build_map.py` contains an old inline `TEMPLATE` that only generates the legacy map-only page (no tabs, no Factory Crazy view). **Running `build_map.py` will REGRESS `factory-map.html`** by wiping the tabs. Do not run it to regenerate the page. If map node/location data must be refreshed, port the data injection into the current `factory-map.html` rather than running the stale generator, or first sync `TEMPLATE` to the current HTML.
+
+## Planning: use the canonical state file ONLY
+
+**`planner-export/PLANNING-STATE.md` is the single source of truth for all
+factory planning.** Going forward, plan only against it and the source files it
+references (`*.sft`, `current-production.txt`, `occupied-nodes.json`,
+`occupied-nodes-summary.json`, `gap-analysis.md`). Do not re-derive needs ad hoc.
+
+Key rule baked into that file: **only the production targets explicitly declared
+in the `.sft` factory-plan tabs are determined needs** ("set" formulas).
+Intermediate items the chain might consume (Copper Sheet, Circuit Board,
+Computer, Rotor, etc.) are **flexible** — their quantities depend on
+alternate-recipe choices that are not locked. Never present a default-recipe
+decomposition of intermediates as a fixed requirement. When any source file
+changes, regenerate `PLANNING-STATE.md` and keep it the sole reference.
+
+## Key Constraints in the Codebase
+
+- **Power exponent is 1.321929** (not 1.6 — changed in game Update 7)
+- **DB stores fluids in mL**, divide by 1000 for m³/min
+- **Recipes have at most 2 outputs** (primary + optional by-product); a backed-up by-product halts the building
+- **Building footprint constants** in `build_factory_crazy.py` drive shard allocation priority
+- Production-chain decomposition can hit **circular recipe references** (oil/packaging loops) — use cycle detection / topological aggregation, never naive recursion
+
+## planner-export/ — current game state inputs
+
+- `*.sft` — Satisfactory Tools export. Format: line 1 a version byte (`0`), then base64 of zlib-compressed JSON; strip the first char, base64-decode, `zlib.decompress`, `json.loads`. Top-level `{type:"tabs", tabs:[...]}`; each tab has `metadata` + `request` (production targets, inputs, blocked recipes/resources, allowed alternates).
+- `current-production.txt` — tab-separated `Item | produced/min | consumed/min` for the live factory. Net = produced − consumed reveals surpluses/deficits.
+- `*.sav` — Satisfactory save (v1.2, chunk-compressed: magic `C1832A9E` then zlib chunks). Parse with GreyHak's `sat_sav_parse` (clone from GitHub; supports v1.2.0.0). Miner→node occupancy = iterate miner buildings (`sav_data.data.MINERS`), read each object's `mExtractableResource`, map the node via `sav_data.resourcePurity.RESOURCE_PURITY` for type/purity. The 380MB-decompressed parse is slow — run it in the background.
+
+## Deployment
+
+Railway via `railway.toml`. Nixpacks builder, `python server.py` start command, health check on `/`. Push to `main` to deploy.

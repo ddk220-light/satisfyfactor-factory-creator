@@ -1,0 +1,1949 @@
+[
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2145430152",
+    "miner_pos": [
+      103845.6,
+      -94854.0,
+      12725.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode487_UAID_40B076DF2F7934DF01_1597642799",
+    "resource": "Caterium Ore",
+    "purity": "Normal",
+    "node_pos": [
+      103845.6,
+      -94854.0,
+      12651.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146795357",
+    "miner_pos": [
+      56109.2,
+      -85970.2,
+      9960.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode445",
+    "resource": "Copper Ore",
+    "purity": "Pure",
+    "node_pos": [
+      56109.2,
+      -85970.2,
+      9944.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2145891099",
+    "miner_pos": [
+      -99604.0,
+      -146823.2,
+      -1487.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode122",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      -99604.0,
+      -146823.2,
+      -1631.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146941243",
+    "miner_pos": [
+      -102630.0,
+      -140319.8,
+      -1478.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode7_380",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      -102630.0,
+      -140319.8,
+      -1581.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146485793",
+    "miner_pos": [
+      -110109.1,
+      -129160.0,
+      -1292.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode6_379",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      -110109.1,
+      -129160.0,
+      -1405.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146478963",
+    "miner_pos": [
+      -107739.1,
+      -130640.0,
+      -1343.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode5_381",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      -107739.1,
+      -130640.0,
+      -1525.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147457779",
+    "miner_pos": [
+      128296.1,
+      -75942.0,
+      3753.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode461",
+    "resource": "Sulfur",
+    "purity": "Impure",
+    "node_pos": [
+      128296.1,
+      -75942,
+      3668.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146769135",
+    "miner_pos": [
+      69552.1,
+      -100368.7,
+      9433.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode440",
+    "resource": "Limestone",
+    "purity": "Pure",
+    "node_pos": [
+      69552.1,
+      -100368.7,
+      9391.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146867894",
+    "miner_pos": [
+      92072.6,
+      3163.6,
+      16229.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode467",
+    "resource": "Sulfur",
+    "purity": "Normal",
+    "node_pos": [
+      92072.6,
+      3163.6,
+      16079.2
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2146381555",
+    "miner_pos": [
+      52471.0,
+      -201464.7,
+      -1658.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode29_102",
+    "resource": "Crude Oil",
+    "purity": "Normal",
+    "node_pos": [
+      52471.0,
+      -201464.7,
+      -1658.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147049596",
+    "miner_pos": [
+      -26897.7,
+      -145468.8,
+      8427.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode_C_UAID_A036BCACDEB0A6A601_2086848673",
+    "resource": "Copper Ore",
+    "purity": "Pure",
+    "node_pos": [
+      -26897.7,
+      -145468.8,
+      8397.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147099862",
+    "miner_pos": [
+      -21758.4,
+      -145311.8,
+      10046.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode53_510",
+    "resource": "Copper Ore",
+    "purity": "Pure",
+    "node_pos": [
+      -21758.4,
+      -145311.8,
+      10021.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147083217",
+    "miner_pos": [
+      -47085.4,
+      -141054.7,
+      8086.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode55_1215",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      -47085.4,
+      -141054.7,
+      8074.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147071841",
+    "miner_pos": [
+      -37614.5,
+      -142250.5,
+      7977.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode462",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      -37614.5,
+      -142250.5,
+      7971.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147005162",
+    "miner_pos": [
+      -12814.5,
+      -104642.1,
+      10945.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode487",
+    "resource": "Caterium Ore",
+    "purity": "Normal",
+    "node_pos": [
+      -12814.5,
+      -104642.1,
+      10908.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147103660",
+    "miner_pos": [
+      114180.0,
+      -17000.0,
+      14052.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode169_UAID_40B076DF2F7939DE01_2083925623",
+    "resource": "Caterium Ore",
+    "purity": "Normal",
+    "node_pos": [
+      114180.0,
+      -17000.0,
+      14021.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147229396",
+    "miner_pos": [
+      66756.9,
+      -150677.0,
+      -990.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F790FE201_1577140465",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      66756.9,
+      -150677.0,
+      -1181.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147214725",
+    "miner_pos": [
+      50259.7,
+      -157152.8,
+      -70.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode464",
+    "resource": "Limestone",
+    "purity": "Pure",
+    "node_pos": [
+      50259.7,
+      -157152.8,
+      -144.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146631823",
+    "miner_pos": [
+      60592.7,
+      -77890.8,
+      9600.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode442",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      60592.7,
+      -77890.8,
+      9437.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146613491",
+    "miner_pos": [
+      79670.5,
+      -75852.1,
+      12168.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode439_1",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      79670.5,
+      -75852.1,
+      12028.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146500908",
+    "miner_pos": [
+      67878.4,
+      -95777.4,
+      9447.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode441",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      67878.4,
+      -95777.4,
+      9362.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2145830145",
+    "miner_pos": [
+      75114.8,
+      -123003.5,
+      13783.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode60_984",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      75114.8,
+      -123003.5,
+      13630.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2145724597",
+    "miner_pos": [
+      40251.4,
+      -144690.5,
+      552.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F7915E201_1334543513",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      40251.4,
+      -144690.5,
+      369.1
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2147007550",
+    "miner_pos": [
+      12163.0,
+      -225348.3,
+      -1744.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode27_100",
+    "resource": "Crude Oil",
+    "purity": "Pure",
+    "node_pos": [
+      12163.0,
+      -225348.3,
+      -1744.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147352332",
+    "miner_pos": [
+      37926.1,
+      120939.2,
+      13448.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode136",
+    "resource": "Raw Quartz",
+    "purity": "Pure",
+    "node_pos": [
+      37926.1,
+      120939.2,
+      13370.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147232382",
+    "miner_pos": [
+      146861.0,
+      115062.8,
+      12428.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode589_UAID_40B076DF2F79B2E101_1298360096",
+    "resource": "Limestone",
+    "purity": "Pure",
+    "node_pos": [
+      146861,
+      115062.8,
+      12296.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147226546",
+    "miner_pos": [
+      135005.2,
+      123175.5,
+      12459.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode589_UAID_40B076DF2F79B1E101_1767545917",
+    "resource": "Limestone",
+    "purity": "Impure",
+    "node_pos": [
+      135005.2,
+      123175.5,
+      12311.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146883051",
+    "miner_pos": [
+      225503.8,
+      55772.5,
+      -1261.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode179",
+    "resource": "Copper Ore",
+    "purity": "Pure",
+    "node_pos": [
+      225503.8,
+      55772.5,
+      -1304.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2146834947",
+    "miner_pos": [
+      219394.8,
+      37188.8,
+      -1240.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode65_1865",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      219394.8,
+      37188.8,
+      -1292.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147113368",
+    "miner_pos": [
+      263148.1,
+      53611.2,
+      -1303.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode476",
+    "resource": "Bauxite",
+    "purity": "Normal",
+    "node_pos": [
+      263148.1,
+      53611.2,
+      -1325.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147111337",
+    "miner_pos": [
+      260298.5,
+      56227.5,
+      -810.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode479",
+    "resource": "Bauxite",
+    "purity": "Pure",
+    "node_pos": [
+      260298.5,
+      56227.5,
+      -866.6
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2147396239",
+    "miner_pos": [
+      94642.0,
+      218487.0,
+      -99.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser_C_UAID_40B076DF2F79ADDD01_1602669012",
+    "resource": "Geyser",
+    "purity": "Pure",
+    "node_pos": [
+      94642,
+      218487,
+      -154
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2147388738",
+    "miner_pos": [
+      89458.0,
+      223800.0,
+      220.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser_C_UAID_40B076DF2F79ADDD01_1447318011",
+    "resource": "Geyser",
+    "purity": "Pure",
+    "node_pos": [
+      89458,
+      223800,
+      21
+    ]
+  },
+  {
+    "miner_type": "Resource Well Pressurizer",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingSmasher_C_2147237620",
+    "miner_pos": [
+      215923.6,
+      135917.9,
+      -179.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingCore2",
+    "resource": null,
+    "purity": null,
+    "node_pos": null
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146973429",
+    "miner_pos": [
+      218169.4,
+      137548.9,
+      -209.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite12",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      218169.4,
+      137548.9,
+      -209.0
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146973140",
+    "miner_pos": [
+      218040.9,
+      134223.3,
+      -187.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite9",
+    "resource": "Nitrogen Gas",
+    "purity": "Normal",
+    "node_pos": [
+      218040.9,
+      134223.3,
+      -187.5
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146972883",
+    "miner_pos": [
+      215726.0,
+      132791.0,
+      -285.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite8",
+    "resource": "Nitrogen Gas",
+    "purity": "Normal",
+    "node_pos": [
+      215726,
+      132791,
+      -285
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146972616",
+    "miner_pos": [
+      213448.9,
+      132706.9,
+      -317.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite7",
+    "resource": "Nitrogen Gas",
+    "purity": "Impure",
+    "node_pos": [
+      213448.9,
+      132706.9,
+      -317.4
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146972338",
+    "miner_pos": [
+      211685.9,
+      133160.9,
+      -247.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite13",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      211685.9,
+      133160.9,
+      -247.4
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146972048",
+    "miner_pos": [
+      214659.7,
+      137993.5,
+      -225.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite6",
+    "resource": "Nitrogen Gas",
+    "purity": "Impure",
+    "node_pos": [
+      214659.7,
+      137993.5,
+      -225.1
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146971765",
+    "miner_pos": [
+      212492.4,
+      138086.9,
+      -126.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite10",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      212492.4,
+      138086.9,
+      -126.0
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2146971425",
+    "miner_pos": [
+      216407.4,
+      139499.9,
+      -212.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite11",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      216407.4,
+      139499.9,
+      -212.0
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2146660854",
+    "miner_pos": [
+      202233.0,
+      45027.0,
+      -1274.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser14",
+    "resource": "Geyser",
+    "purity": "Pure",
+    "node_pos": [
+      202233,
+      45027.0,
+      -1317
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2146660191",
+    "miner_pos": [
+      206903.0,
+      45592.0,
+      -1271.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser19",
+    "resource": "Geyser",
+    "purity": "Normal",
+    "node_pos": [
+      206903,
+      45592.0,
+      -1367
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.2",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk2_C_2147299956",
+    "miner_pos": [
+      261128.0,
+      48274.6,
+      -785.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode477",
+    "resource": "Bauxite",
+    "purity": "Impure",
+    "node_pos": [
+      261128.0,
+      48274.6,
+      -816.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146800857",
+    "miner_pos": [
+      155600.5,
+      113111.6,
+      6148.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7980E001_1705275252",
+    "resource": "Coal",
+    "purity": "Impure",
+    "node_pos": [
+      155600.5,
+      113111.6,
+      6026.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146796947",
+    "miner_pos": [
+      177478.0,
+      129905.3,
+      10475.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7981E001_1464253430",
+    "resource": "Coal",
+    "purity": "Impure",
+    "node_pos": [
+      177478.0,
+      129905.3,
+      10377.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146794231",
+    "miner_pos": [
+      180820.0,
+      141195.3,
+      9472.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7984E001_1664435967",
+    "resource": "Coal",
+    "purity": "Impure",
+    "node_pos": [
+      180820.0,
+      141195.3,
+      9394.5
+    ]
+  },
+  {
+    "miner_type": "Resource Well Pressurizer",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingSmasher_C_2147414741",
+    "miner_pos": [
+      128310.0,
+      256759.0,
+      583.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingCore_8",
+    "resource": null,
+    "purity": null,
+    "node_pos": null
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147406831",
+    "miner_pos": [
+      131025.0,
+      257428.0,
+      238.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite5",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      131025,
+      257428,
+      238
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147406595",
+    "miner_pos": [
+      130516.0,
+      255126.0,
+      -294.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite4",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      130516,
+      255126,
+      -294
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147406236",
+    "miner_pos": [
+      126644.0,
+      253042.0,
+      -372.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite18_3",
+    "resource": "Nitrogen Gas",
+    "purity": "Normal",
+    "node_pos": [
+      126644,
+      253042,
+      -372
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147405990",
+    "miner_pos": [
+      125098.9,
+      254321.4,
+      159.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite3",
+    "resource": "Nitrogen Gas",
+    "purity": "Normal",
+    "node_pos": [
+      125098.9,
+      254321.4,
+      159.7
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147405783",
+    "miner_pos": [
+      125104.0,
+      256475.0,
+      734.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite2",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      125104,
+      256475,
+      734
+    ]
+  },
+  {
+    "miner_type": "Resource Well Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_FrackingExtractor_C_2147405421",
+    "miner_pos": [
+      128216.0,
+      258878.0,
+      890.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_FrackingSatellite_2",
+    "resource": "Nitrogen Gas",
+    "purity": "Pure",
+    "node_pos": [
+      128216,
+      258878,
+      890
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146364429",
+    "miner_pos": [
+      164518.3,
+      238318.0,
+      -8509.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode95_579",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      164518.3,
+      238318.0,
+      -8588.6
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2145946358",
+    "miner_pos": [
+      184782.7,
+      191090.1,
+      -5723.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode155",
+    "resource": "Crude Oil",
+    "purity": "Pure",
+    "node_pos": [
+      184782.7,
+      191090.1,
+      -5732.2
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2145940993",
+    "miner_pos": [
+      182115.7,
+      188396.7,
+      -5632.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode154",
+    "resource": "Crude Oil",
+    "purity": "Pure",
+    "node_pos": [
+      182115.7,
+      188396.7,
+      -5640.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147044447",
+    "miner_pos": [
+      130551.0,
+      179528.5,
+      -5488.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode75_6425",
+    "resource": "Copper Ore",
+    "purity": "Impure",
+    "node_pos": [
+      130551,
+      179528.5,
+      -5545.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146703655",
+    "miner_pos": [
+      94847.2,
+      224537.2,
+      48.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode71_UAID_40B076DF2F7924DB01_1576108771",
+    "resource": "Sulfur",
+    "purity": "Pure",
+    "node_pos": [
+      94847.2,
+      224537.2,
+      -85.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146701551",
+    "miner_pos": [
+      96368.0,
+      220401.5,
+      58.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode71_UAID_40B076DF2F7929DB01_1177072656",
+    "resource": "Sulfur",
+    "purity": "Normal",
+    "node_pos": [
+      96368.0,
+      220401.5,
+      -83.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146700926",
+    "miner_pos": [
+      91305.3,
+      220216.8,
+      -13.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode71_UAID_40B076DF2F7925DB01_1453678949",
+    "resource": "Sulfur",
+    "purity": "Impure",
+    "node_pos": [
+      91305.3,
+      220216.8,
+      -78.6
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2145905665",
+    "miner_pos": [
+      152735.0,
+      211451.0,
+      -8565.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser_C_UAID_40B076DF2F7975E001_2124245305",
+    "resource": "Geyser",
+    "purity": "Pure",
+    "node_pos": [
+      152735,
+      211451,
+      -8796
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2145793385",
+    "miner_pos": [
+      157195.5,
+      241871.5,
+      -6107.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode500",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      157195.5,
+      241871.5,
+      -6201.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147281604",
+    "miner_pos": [
+      297710.4,
+      -107995.8,
+      5565.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode141",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      297710.4,
+      -107995.8,
+      5475.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147270057",
+    "miner_pos": [
+      297397.5,
+      -96437.5,
+      6031.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode194",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      297397.5,
+      -96437.5,
+      6021.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147250367",
+    "miner_pos": [
+      268524.3,
+      -116944.1,
+      4273.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode198",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      268524.3,
+      -116944.1,
+      4206.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147244100",
+    "miner_pos": [
+      266880.7,
+      -120714.6,
+      4099.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode199",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      266880.7,
+      -120714.6,
+      4084.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146941433",
+    "miner_pos": [
+      285860.8,
+      -127665.1,
+      3905.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode180",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      285860.8,
+      -127665.1,
+      3875.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146861892",
+    "miner_pos": [
+      277591.1,
+      -94119.4,
+      5584.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode195",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      277591.1,
+      -94119.4,
+      5535.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147118680",
+    "miner_pos": [
+      406563.9,
+      -206810.0,
+      -1505.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode240",
+    "resource": "Caterium Ore",
+    "purity": "Pure",
+    "node_pos": [
+      406563.9,
+      -206810.0,
+      -1539.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147012551",
+    "miner_pos": [
+      236608.7,
+      -260095.6,
+      11810.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode140",
+    "resource": "Caterium Ore",
+    "purity": "Pure",
+    "node_pos": [
+      236608.7,
+      -260095.6,
+      11784.4
+    ]
+  },
+  {
+    "miner_type": "Geothermal Generator",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_GeneratorGeoThermal_C_2146953942",
+    "miner_pos": [
+      191906.0,
+      -242852.0,
+      23010.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser_C_UAID_40B076DF2F79C7DB01_1750096454",
+    "resource": "Geyser",
+    "purity": "Impure",
+    "node_pos": [
+      191906,
+      -242852,
+      22813
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146947507",
+    "miner_pos": [
+      188183.3,
+      -247467.9,
+      23396.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode71_UAID_40B076DF2F7912DC01_2042985647",
+    "resource": "Sulfur",
+    "purity": "Pure",
+    "node_pos": [
+      188183.3,
+      -247467.9,
+      23307.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147392560",
+    "miner_pos": [
+      246502.2,
+      -276999.9,
+      1620.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode624",
+    "resource": "Sulfur",
+    "purity": "Pure",
+    "node_pos": [
+      246502.2,
+      -276999.9,
+      1498.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147357972",
+    "miner_pos": [
+      233446.6,
+      -247935.0,
+      1149.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode202",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      233446.6,
+      -247935.0,
+      1057.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147365901",
+    "miner_pos": [
+      270316.8,
+      -211596.9,
+      3101.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode192_0",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      270316.8,
+      -211596.9,
+      3051.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147289864",
+    "miner_pos": [
+      241090.7,
+      -239788.0,
+      1116.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode36",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      241090.7,
+      -239788.0,
+      1048.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147213946",
+    "miner_pos": [
+      377738.1,
+      -254225.6,
+      3387.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode236",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      377738.1,
+      -254225.6,
+      3347.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147209941",
+    "miner_pos": [
+      374874.7,
+      -259903.1,
+      3251.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode233",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      374874.7,
+      -259903.1,
+      3231.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147206919",
+    "miner_pos": [
+      381666.3,
+      -268289.9,
+      3505.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode237",
+    "resource": "Copper Ore",
+    "purity": "Impure",
+    "node_pos": [
+      381666.3,
+      -268289.9,
+      3486.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147107686",
+    "miner_pos": [
+      326947.1,
+      -209586.4,
+      3739.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode214",
+    "resource": "Copper Ore",
+    "purity": "Impure",
+    "node_pos": [
+      326947.1,
+      -209586.4,
+      3687.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147018198",
+    "miner_pos": [
+      256611.7,
+      -197978.6,
+      3669.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode35",
+    "resource": "Iron Ore",
+    "purity": "Normal",
+    "node_pos": [
+      256611.7,
+      -197978.6,
+      3561.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147013759",
+    "miner_pos": [
+      256401.9,
+      -184355.4,
+      3523.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode188",
+    "resource": "Copper Ore",
+    "purity": "Impure",
+    "node_pos": [
+      256401.9,
+      -184355.4,
+      3519.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147008365",
+    "miner_pos": [
+      265501.2,
+      -178205.9,
+      3456.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode49",
+    "resource": "Iron Ore",
+    "purity": "Impure",
+    "node_pos": [
+      265501.2,
+      -178205.9,
+      3456.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146987047",
+    "miner_pos": [
+      252874.5,
+      -161693.5,
+      3554.2
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode185",
+    "resource": "Copper Ore",
+    "purity": "Normal",
+    "node_pos": [
+      252874.5,
+      -161693.5,
+      3452.7
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2146489123",
+    "miner_pos": [
+      44495.8,
+      -228950.0,
+      -1743.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode26_99",
+    "resource": "Crude Oil",
+    "purity": "Pure",
+    "node_pos": [
+      44495.8,
+      -228950.0,
+      -1743.5
+    ]
+  },
+  {
+    "miner_type": "Oil Extractor",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_OilPump_C_2145421696",
+    "miner_pos": [
+      26597.5,
+      -193984.0,
+      -1683.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode14_609",
+    "resource": "Crude Oil",
+    "purity": "Normal",
+    "node_pos": [
+      26597.5,
+      -193984.0,
+      -1683.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147253295",
+    "miner_pos": [
+      193979.6,
+      -5467.7,
+      10275.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode474_UAID_40B076DF2F798DDF01_1645035472",
+    "resource": "Raw Quartz",
+    "purity": "Pure",
+    "node_pos": [
+      193979.6,
+      -5467.7,
+      10260.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147249293",
+    "miner_pos": [
+      196667.8,
+      -13955.9,
+      9446.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode474_UAID_40B076DF2F7983DF01_2128950703",
+    "resource": "Raw Quartz",
+    "purity": "Normal",
+    "node_pos": [
+      196667.8,
+      -13955.9,
+      9398.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147184970",
+    "miner_pos": [
+      190097.8,
+      -17280.9,
+      9496.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode474_UAID_40B076DF2F798EDF01_2134364650",
+    "resource": "Raw Quartz",
+    "purity": "Normal",
+    "node_pos": [
+      190097.8,
+      -17280.9,
+      9456.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146867466",
+    "miner_pos": [
+      15240.3,
+      -158578.6,
+      -1275.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F790EE201_1850696287",
+    "resource": "Limestone",
+    "purity": "Impure",
+    "node_pos": [
+      15240.3,
+      -158578.6,
+      -1397.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146750217",
+    "miner_pos": [
+      152961.9,
+      -24054.3,
+      4326.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode43_UAID_40B076DF2F793ED901_1532454233",
+    "resource": "SAM Ore",
+    "purity": "Impure",
+    "node_pos": [
+      152961.9,
+      -24054.3,
+      4287.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146953946",
+    "miner_pos": [
+      55041.6,
+      -130641.3,
+      7192.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode57_UAID_40B076DF2F7935DF01_1413169977",
+    "resource": "Raw Quartz",
+    "purity": "Impure",
+    "node_pos": [
+      55041.6,
+      -130641.3,
+      7156.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146953380",
+    "miner_pos": [
+      62290.0,
+      -137424.1,
+      8346.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode57_UAID_40B076DF2F7991DF01_1459615180",
+    "resource": "Raw Quartz",
+    "purity": "Impure",
+    "node_pos": [
+      62290.0,
+      -137424.1,
+      8325.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147045021",
+    "miner_pos": [
+      304839.7,
+      -172907.9,
+      3821.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode238",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      304839.7,
+      -172907.9,
+      3801.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147040714",
+    "miner_pos": [
+      297575.8,
+      -150186.4,
+      3994.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode239",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      297575.8,
+      -150186.4,
+      3973.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147030175",
+    "miner_pos": [
+      319464.1,
+      -158098.3,
+      3864.6
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode203",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      319464.1,
+      -158098.3,
+      3864.6
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146659216",
+    "miner_pos": [
+      273729.5,
+      -148172.9,
+      4096.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode207",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      273729.5,
+      -148172.9,
+      4082.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146591693",
+    "miner_pos": [
+      282689.3,
+      -179305.0,
+      4327.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode219",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      282689.3,
+      -179305.0,
+      4212.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147355132",
+    "miner_pos": [
+      68075.3,
+      -81001.1,
+      9966.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode426",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      68075.3,
+      -81001.1,
+      9944.2
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147338333",
+    "miner_pos": [
+      70865.3,
+      -78125.8,
+      10472.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode427",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      70865.3,
+      -78125.8,
+      10451.6
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147327918",
+    "miner_pos": [
+      64576.3,
+      -71386.9,
+      10679.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode431",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      64576.3,
+      -71386.9,
+      10641.1
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147323498",
+    "miner_pos": [
+      59113.4,
+      -71501.6,
+      10595.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode430",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      59113.4,
+      -71501.6,
+      10568.0
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147259519",
+    "miner_pos": [
+      84199.1,
+      -86393.5,
+      9821.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode435_26",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      84199.1,
+      -86393.5,
+      9766.5
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147258599",
+    "miner_pos": [
+      83508.5,
+      -90506.8,
+      9606.4
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode437_30",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      83508.5,
+      -90506.8,
+      9590.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147157464",
+    "miner_pos": [
+      124933.2,
+      5226.2,
+      15615.5
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode517",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      124933.2,
+      5226.2,
+      15573.6
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147156882",
+    "miner_pos": [
+      128572.9,
+      1795.3,
+      15577.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode518",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      128572.9,
+      1795.3,
+      15542.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146986173",
+    "miner_pos": [
+      116236.0,
+      -15552.2,
+      14027.7
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode457",
+    "resource": "Iron Ore",
+    "purity": "Pure",
+    "node_pos": [
+      116236.0,
+      -15552.2,
+      14026.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146919625",
+    "miner_pos": [
+      128059.3,
+      -24824.6,
+      8345.3
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode451",
+    "resource": "Coal",
+    "purity": "Normal",
+    "node_pos": [
+      128059.3,
+      -24824.6,
+      8263.7
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146788427",
+    "miner_pos": [
+      138805.4,
+      -23952.7,
+      9597.0
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode469",
+    "resource": "Coal",
+    "purity": "Pure",
+    "node_pos": [
+      138805.4,
+      -23952.7,
+      9410.8
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146776097",
+    "miner_pos": [
+      136290.2,
+      -20923.6,
+      9579.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode449",
+    "resource": "Coal",
+    "purity": "Pure",
+    "node_pos": [
+      136290.2,
+      -20923.6,
+      9425.3
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2146582414",
+    "miner_pos": [
+      122698.0,
+      -26966.3,
+      8185.9
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode452",
+    "resource": "Coal",
+    "purity": "Pure",
+    "node_pos": [
+      122698.0,
+      -26966.3,
+      7998.9
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147256552",
+    "miner_pos": [
+      107368.2,
+      -43239.5,
+      14879.8
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode41_1099",
+    "resource": "Limestone",
+    "purity": "Normal",
+    "node_pos": [
+      107368.2,
+      -43239.5,
+      14774.4
+    ]
+  },
+  {
+    "miner_type": "Miner Mk.3",
+    "miner_instance": "Persistent_Level:PersistentLevel.Build_MinerMk3_C_2147134460",
+    "miner_pos": [
+      120084.6,
+      -9957.3,
+      10557.1
+    ],
+    "node": "Persistent_Level:PersistentLevel.BP_ResourceNode508",
+    "resource": "Limestone",
+    "purity": "Pure",
+    "node_pos": [
+      120084.6,
+      -9957.3,
+      10448.2
+    ]
+  }
+]

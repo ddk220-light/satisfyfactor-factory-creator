@@ -1,0 +1,98 @@
+{
+  "total_miners": 115,
+  "unattached": 2,
+  "by_resource": {
+    "Bauxite": {
+      "total": 3,
+      "by_purity": {
+        "Impure": 1,
+        "Normal": 1,
+        "Pure": 1
+      }
+    },
+    "Caterium Ore": {
+      "total": 5,
+      "by_purity": {
+        "Normal": 3,
+        "Pure": 2
+      }
+    },
+    "Coal": {
+      "total": 12,
+      "by_purity": {
+        "Impure": 3,
+        "Normal": 6,
+        "Pure": 3
+      }
+    },
+    "Copper Ore": {
+      "total": 14,
+      "by_purity": {
+        "Impure": 4,
+        "Normal": 6,
+        "Pure": 4
+      }
+    },
+    "Crude Oil": {
+      "total": 6,
+      "by_purity": {
+        "Normal": 2,
+        "Pure": 4
+      }
+    },
+    "Geyser": {
+      "total": 6,
+      "by_purity": {
+        "Impure": 1,
+        "Normal": 1,
+        "Pure": 4
+      }
+    },
+    "Iron Ore": {
+      "total": 26,
+      "by_purity": {
+        "Impure": 1,
+        "Normal": 6,
+        "Pure": 19
+      }
+    },
+    "Limestone": {
+      "total": 13,
+      "by_purity": {
+        "Impure": 2,
+        "Normal": 7,
+        "Pure": 4
+      }
+    },
+    "Nitrogen Gas": {
+      "total": 14,
+      "by_purity": {
+        "Impure": 2,
+        "Normal": 4,
+        "Pure": 8
+      }
+    },
+    "Raw Quartz": {
+      "total": 6,
+      "by_purity": {
+        "Impure": 2,
+        "Normal": 2,
+        "Pure": 2
+      }
+    },
+    "SAM Ore": {
+      "total": 1,
+      "by_purity": {
+        "Impure": 1
+      }
+    },
+    "Sulfur": {
+      "total": 7,
+      "by_purity": {
+        "Impure": 2,
+        "Normal": 2,
+        "Pure": 3
+      }
+    }
+  }
+}
