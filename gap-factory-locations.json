@@ -78,14 +78,14 @@
       "copper": {
         "total": 55,
         "occupied": 14,
-        "reserved_new": 20,
-        "remaining": 21
+        "reserved_new": 22,
+        "remaining": 19
       },
       "iron": {
         "total": 127,
         "occupied": 26,
-        "reserved_new": 32,
-        "remaining": 69
+        "reserved_new": 26,
+        "remaining": 75
       },
       "limestone": {
         "total": 94,
@@ -137,6 +137,30 @@
       }
     },
     "erosion_report": {
+      "Crystal Oscillator": {
+        "existing_net": 56.2,
+        "new_consumption": 18.3,
+        "residual_net": 37.9,
+        "decision": "in_house",
+        "consumers": [
+          [
+            "voltreach",
+            18.3
+          ]
+        ]
+      },
+      "Circuit Board": {
+        "existing_net": 998.2,
+        "new_consumption": 115.0,
+        "residual_net": 883.2,
+        "decision": "import_from_existing",
+        "consumers": [
+          [
+            "cathera+",
+            115.0
+          ]
+        ]
+      },
       "Wire": {
         "existing_net": 5481.2,
         "new_consumption": 5845.3,
@@ -161,25 +185,6 @@
           ]
         ]
       },
-      "Computer": {
-        "existing_net": 120.0,
-        "new_consumption": 0.0,
-        "residual_net": 120.0,
-        "decision": "in_house",
-        "consumers": []
-      },
-      "Crystal Oscillator": {
-        "existing_net": 56.2,
-        "new_consumption": 18.3,
-        "residual_net": 37.9,
-        "decision": "in_house",
-        "consumers": [
-          [
-            "voltreach",
-            18.3
-          ]
-        ]
-      },
       "Copper Sheet": {
         "existing_net": -133.1,
         "new_consumption": 340.0,
@@ -196,20 +201,15 @@
           ]
         ]
       },
-      "Circuit Board": {
-        "existing_net": 998.2,
-        "new_consumption": 115.0,
-        "residual_net": 883.2,
-        "decision": "import_from_existing",
-        "consumers": [
-          [
-            "cathera+",
-            115.0
-          ]
-        ]
+      "Computer": {
+        "existing_net": 120.0,
+        "new_consumption": 0.0,
+        "residual_net": 120.0,
+        "decision": "in_house",
+        "consumers": []
       }
     },
-    "total_shards_global": 283
+    "total_shards_global": 285
   },
   "factory_locations": {
     "aldercast": {
@@ -3300,69 +3300,8 @@
       "resource": "coal",
       "name": "Coal Town 1",
       "center": {
-        "x": 218568.3,
-        "y": 164172.4
-      },
-      "nodes": [
-        {
-          "x": 209926.734375,
-          "y": 162974.75,
-          "t": "coal",
-          "p": "n",
-          "k": "node",
-          "oc": 100,
-          "sh": 0
-        },
-        {
-          "x": 206003.171875,
-          "y": 181237.3125,
-          "t": "coal",
-          "p": "p",
-          "k": "node",
-          "oc": 150,
-          "sh": 1
-        },
-        {
-          "x": 239775.03125,
-          "y": 148305.28125,
-          "t": "coal",
-          "p": "p",
-          "k": "node",
-          "oc": 150,
-          "sh": 1
-        }
-      ],
-      "supplies": [
-        {
-          "factory": "classic_iron_motor",
-          "amount_per_min": 733.7
-        },
-        {
-          "factory": "voltreach",
-          "amount_per_min": 555.0
-        },
-        {
-          "factory": "bauxhold",
-          "amount_per_min": 200.0
-        },
-        {
-          "factory": "silvashade",
-          "amount_per_min": 175.0
-        }
-      ],
-      "capacity_max": 2160,
-      "demand_share": 1663.7,
-      "capacity": 1680.0,
-      "shards": 2
-    },
-    {
-      "id": "town_coal_2",
-      "idx": 2,
-      "resource": "coal",
-      "name": "Coal Town 2",
-      "center": {
-        "x": -80394.8,
-        "y": 132650.7
+        "x": -78304.9,
+        "y": 126182.2
       },
       "nodes": [
         {
@@ -3391,63 +3330,91 @@
           "k": "node",
           "oc": 250,
           "sh": 3
-        }
-      ],
-      "supplies": [
-        {
-          "factory": "moldmarsh",
-          "amount_per_min": 1543.7
         },
         {
-          "factory": "classic_iron_motor",
-          "amount_per_min": 256.3
-        }
-      ],
-      "capacity_max": 1800,
-      "demand_share": 1800.0,
-      "capacity": 1800.0,
-      "shards": 9
-    },
-    {
-      "id": "town_copper_1",
-      "idx": 1,
-      "resource": "copper",
-      "name": "Copper Town 1",
-      "center": {
-        "x": 342806.3,
-        "y": -114728.1
-      },
-      "nodes": [
+          "x": -89379.3515625,
+          "y": 136763.078125,
+          "t": "coal",
+          "p": "n",
+          "k": "node",
+          "oc": 150,
+          "sh": 1
+        },
         {
-          "x": 342806.28125,
-          "y": -114728.1015625,
-          "t": "copper",
+          "x": -60960.88671875,
+          "y": 96196.0859375,
+          "t": "coal",
           "p": "p",
           "k": "node",
           "oc": 150,
           "sh": 1
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "moldmarsh",
-          "amount_per_min": 69.3
+          "amount_per_min": 943.7
+        },
+        {
+          "factory": "classic_iron_motor",
+          "amount_per_min": 990.0
         },
         {
           "factory": "voltreach",
-          "amount_per_min": 476.7
+          "amount_per_min": 555.0
+        },
+        {
+          "factory": "bauxhold",
+          "amount_per_min": 200.0
+        },
+        {
+          "factory": "silvashade",
+          "amount_per_min": 175.0
         }
       ],
-      "capacity_max": 780,
-      "demand_share": 546.0,
-      "capacity": 720.0,
-      "shards": 1
+      "capacity_max": 3180,
+      "demand_share": 2863.7,
+      "capacity": 2880.0,
+      "shards": 11
     },
     {
-      "id": "town_copper_2",
+      "id": "town_coal_2",
       "idx": 2,
+      "resource": "coal",
+      "name": "Coal Town 2",
+      "center": {
+        "x": -141071.5,
+        "y": 39662.0
+      },
+      "nodes": [
+        {
+          "x": -141071.515625,
+          "y": 39662.02734375,
+          "t": "coal",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 600
+        }
+      ],
+      "capacity_max": 600,
+      "demand_share": 600,
+      "capacity": 600.0,
+      "shards": 3
+    },
+    {
+      "id": "town_copper_1",
+      "idx": 1,
       "resource": "copper",
-      "name": "Copper Town 2",
+      "name": "Copper Town 1",
       "center": {
         "x": -31015.7,
         "y": 214918.3
@@ -3472,6 +3439,7 @@
           "sh": 3
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "aldercast",
@@ -3484,10 +3452,10 @@
       "shards": 6
     },
     {
-      "id": "town_copper_3",
-      "idx": 3,
+      "id": "town_copper_2",
+      "idx": 2,
       "resource": "copper",
-      "name": "Copper Town 3",
+      "name": "Copper Town 2",
       "center": {
         "x": -29018.2,
         "y": 289963.4
@@ -3512,19 +3480,61 @@
           "sh": 3
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "aldercast",
-          "amount_per_min": 1133.3
-        },
-        {
-          "factory": "moldmarsh",
-          "amount_per_min": 66.7
+          "amount_per_min": 1200
         }
       ],
       "capacity_max": 1200,
-      "demand_share": 1200.0,
+      "demand_share": 1200,
       "capacity": 1200.0,
+      "shards": 6
+    },
+    {
+      "id": "town_copper_3",
+      "idx": 3,
+      "resource": "copper",
+      "name": "Copper Town 3",
+      "center": {
+        "x": -83547.9,
+        "y": 274669.4
+      },
+      "nodes": [
+        {
+          "x": -83962.1484375,
+          "y": 273576.625,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -83133.6328125,
+          "y": 275762.21875,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "classic_iron_motor",
+          "amount_per_min": 33.3
+        },
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 566.7
+        }
+      ],
+      "capacity_max": 600,
+      "demand_share": 600.0,
+      "capacity": 600.0,
       "shards": 6
     },
     {
@@ -3532,6 +3542,87 @@
       "idx": 4,
       "resource": "copper",
       "name": "Copper Town 4",
+      "center": {
+        "x": -158169.9,
+        "y": 111011.6
+      },
+      "nodes": [
+        {
+          "x": -156723.46875,
+          "y": 109165.40625,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -159616.375,
+          "y": 112857.8828125,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "aldercast",
+          "amount_per_min": 533.3
+        },
+        {
+          "factory": "classic_iron_motor",
+          "amount_per_min": 66.7
+        }
+      ],
+      "capacity_max": 600,
+      "demand_share": 600.0,
+      "capacity": 600.0,
+      "shards": 6
+    },
+    {
+      "id": "town_copper_5",
+      "idx": 5,
+      "resource": "copper",
+      "name": "Copper Town 5",
+      "center": {
+        "x": 342806.3,
+        "y": -114728.1
+      },
+      "nodes": [
+        {
+          "x": 342806.28125,
+          "y": -114728.1015625,
+          "t": "copper",
+          "p": "p",
+          "k": "node",
+          "oc": 150,
+          "sh": 1
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 69.3
+        },
+        {
+          "factory": "voltreach",
+          "amount_per_min": 476.7
+        }
+      ],
+      "capacity_max": 780,
+      "demand_share": 546.0,
+      "capacity": 720.0,
+      "shards": 1
+    },
+    {
+      "id": "town_copper_6",
+      "idx": 6,
+      "resource": "copper",
+      "name": "Copper Town 6",
       "center": {
         "x": -171878.6,
         "y": 185789.2
@@ -3547,82 +3638,48 @@
           "sh": 2
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "classic_iron_motor",
-          "amount_per_min": 280.0
-        },
-        {
-          "factory": "moldmarsh",
-          "amount_per_min": 500.0
+          "amount_per_min": 780
         }
       ],
       "capacity_max": 780,
-      "demand_share": 780.0,
+      "demand_share": 780,
       "capacity": 780.0,
       "shards": 2
     },
     {
-      "id": "town_copper_5",
-      "idx": 5,
-      "resource": "copper",
-      "name": "Copper Town 5",
+      "id": "siderith",
+      "name": "Siderith",
+      "resource": "iron",
       "center": {
-        "x": -96801.0,
-        "y": -135276.0
+        "x": 241941,
+        "y": 3242
       },
-      "nodes": [
-        {
-          "x": -96801,
-          "y": -135276,
-          "t": "copper",
-          "p": "n",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        }
-      ],
+      "capacity_max": 5340,
+      "used_existing": 2047.0,
+      "spare": 3293.0,
+      "nodes": [],
+      "existing": true,
+      "shards": 0,
       "supplies": [
         {
-          "factory": "classic_iron_motor",
-          "amount_per_min": 600
-        }
-      ],
-      "capacity_max": 600,
-      "demand_share": 600,
-      "capacity": 600.0,
-      "shards": 3
-    },
-    {
-      "id": "town_copper_6",
-      "idx": 6,
-      "resource": "copper",
-      "name": "Copper Town 6",
-      "center": {
-        "x": 108117.3,
-        "y": 152283.9
-      },
-      "nodes": [
+          "factory": "moldmarsh",
+          "amount_per_min": 436.7
+        },
         {
-          "x": 108117.2578125,
-          "y": 152283.921875,
-          "t": "copper",
-          "p": "n",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        }
-      ],
-      "supplies": [
+          "factory": "cathera_hmf",
+          "amount_per_min": 1092.7
+        },
         {
-          "factory": "aldercast",
-          "amount_per_min": 600
+          "factory": "voltreach",
+          "amount_per_min": 1343.3
         }
       ],
-      "capacity_max": 600,
-      "demand_share": 600,
-      "capacity": 600.0,
-      "shards": 3
+      "demand_share": 4919.7,
+      "capacity": 0.0
     },
     {
       "id": "town_iron_1",
@@ -3630,89 +3687,68 @@
       "resource": "iron",
       "name": "Iron Town 1",
       "center": {
-        "x": -44125.7,
-        "y": -138149.9
+        "x": 94935.1,
+        "y": 160123.8
       },
       "nodes": [
         {
-          "x": -44869.3828125,
-          "y": -139479.6875,
+          "x": 93730.2578125,
+          "y": 160263.921875,
           "t": "iron",
-          "p": "p",
+          "p": "n",
           "k": "node",
-          "oc": 200,
-          "sh": 2
+          "oc": 250,
+          "sh": 3
         },
         {
-          "x": -43381.92578125,
-          "y": -136820.03125,
+          "x": 96326,
+          "y": 159762.453125,
           "t": "iron",
-          "p": "p",
+          "p": "n",
           "k": "node",
-          "oc": 200,
-          "sh": 2
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": 96959.1171875,
+          "y": 157163.203125,
+          "t": "iron",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": 92724.9453125,
+          "y": 163305.546875,
+          "t": "iron",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "forgeholm_hmf",
-          "amount_per_min": 1560
+          "amount_per_min": 2073.1
+        },
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 326.9
         }
       ],
-      "capacity_max": 1560,
-      "demand_share": 1560,
-      "capacity": 1560.0,
-      "shards": 4
+      "capacity_max": 2400,
+      "demand_share": 2400.0,
+      "capacity": 2400.0,
+      "shards": 12
     },
     {
       "id": "town_iron_2",
       "idx": 2,
       "resource": "iron",
       "name": "Iron Town 2",
-      "center": {
-        "x": 257263.7,
-        "y": 94182.8
-      },
-      "nodes": [
-        {
-          "x": 271770.6875,
-          "y": 100432.4765625,
-          "t": "iron",
-          "p": "p",
-          "k": "node",
-          "oc": 150,
-          "sh": 1
-        },
-        {
-          "x": 242756.75,
-          "y": 87933.09375,
-          "t": "iron",
-          "p": "p",
-          "k": "node",
-          "oc": 150,
-          "sh": 1
-        }
-      ],
-      "supplies": [
-        {
-          "factory": "cathera_hmf",
-          "amount_per_min": 89.4
-        },
-        {
-          "factory": "voltreach",
-          "amount_per_min": 1343.3
-        }
-      ],
-      "capacity_max": 1560,
-      "demand_share": 1432.7,
-      "capacity": 1440.0,
-      "shards": 2
-    },
-    {
-      "id": "town_iron_3",
-      "idx": 3,
-      "resource": "iron",
-      "name": "Iron Town 3",
       "center": {
         "x": 132960.3,
         "y": 199459.2
@@ -3746,6 +3782,7 @@
           "sh": 2
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "naphtheon_hmf",
@@ -3762,13 +3799,13 @@
       "shards": 8
     },
     {
-      "id": "town_iron_4",
-      "idx": 4,
+      "id": "town_iron_3",
+      "idx": 3,
       "resource": "iron",
-      "name": "Iron Town 4",
+      "name": "Iron Town 3",
       "center": {
-        "x": 179892.8,
-        "y": -118392.0
+        "x": 178061.9,
+        "y": -120503.6
       },
       "nodes": [
         {
@@ -3779,102 +3816,42 @@
           "k": "node",
           "oc": 200,
           "sh": 2
-        },
-        {
-          "x": 181723.703125,
-          "y": -116280.3046875,
-          "t": "iron",
-          "p": "p",
-          "k": "node",
-          "oc": 200,
-          "sh": 2
         }
       ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 780
+        }
+      ],
+      "capacity_max": 780,
+      "demand_share": 780,
+      "capacity": 780.0,
+      "shards": 2
+    },
+    {
+      "id": "calcara",
+      "name": "Calcara",
+      "resource": "limestone",
+      "center": {
+        "x": 169486,
+        "y": -45968
+      },
+      "capacity_max": 1800,
+      "used_existing": 921.0,
+      "spare": 879.0,
+      "nodes": [],
+      "existing": true,
+      "shards": 0,
       "supplies": [
         {
           "factory": "forgeholm_hmf",
-          "amount_per_min": 513.1
-        },
-        {
-          "factory": "moldmarsh",
-          "amount_per_min": 1046.9
+          "amount_per_min": 879.0
         }
       ],
-      "capacity_max": 1560,
-      "demand_share": 1560.0,
-      "capacity": 1560.0,
-      "shards": 4
-    },
-    {
-      "id": "town_iron_5",
-      "idx": 5,
-      "resource": "iron",
-      "name": "Iron Town 5",
-      "center": {
-        "x": -95408.3,
-        "y": 265381.8
-      },
-      "nodes": [
-        {
-          "x": -94905.46875,
-          "y": 262677.5,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -97178.421875,
-          "y": 264232.125,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -92372.078125,
-          "y": 266081.84375,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -98579.15625,
-          "y": 265801.0625,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -94006.5703125,
-          "y": 268116.21875,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        }
-      ],
-      "supplies": [
-        {
-          "factory": "moldmarsh",
-          "amount_per_min": 496.7
-        },
-        {
-          "factory": "cathera_hmf",
-          "amount_per_min": 1003.3
-        }
-      ],
-      "capacity_max": 1500,
-      "demand_share": 1500.0,
-      "capacity": 1500.0,
-      "shards": 15
+      "demand_share": 1800.0,
+      "capacity": 0.0
     },
     {
       "id": "town_limestone_1",
@@ -3882,66 +3859,31 @@
       "resource": "limestone",
       "name": "Limestone Town 1",
       "center": {
-        "x": -279662.9,
-        "y": -183828.6
+        "x": -61692.4,
+        "y": 227795.1
       },
       "nodes": [
         {
-          "x": -280305.96875,
-          "y": -181362.96875,
+          "x": -62536.7734375,
+          "y": 228042.59375,
           "t": "limestone",
-          "p": "p",
-          "k": "node",
-          "oc": 150,
-          "sh": 1
-        },
-        {
-          "x": -279019.75,
-          "y": -186294.296875,
-          "t": "limestone",
-          "p": "p",
-          "k": "node",
-          "oc": 100,
-          "sh": 0
-        }
-      ],
-      "supplies": [
-        {
-          "factory": "cathera_hmf",
-          "amount_per_min": 733.5
-        },
-        {
-          "factory": "naphtheon_hmf",
-          "amount_per_min": 330.0
-        }
-      ],
-      "capacity_max": 1560,
-      "demand_share": 1063.5,
-      "capacity": 1200.0,
-      "shards": 1
-    },
-    {
-      "id": "town_limestone_2",
-      "idx": 2,
-      "resource": "limestone",
-      "name": "Limestone Town 2",
-      "center": {
-        "x": -240624.9,
-        "y": -91120.3
-      },
-      "nodes": [
-        {
-          "x": -231390.296875,
-          "y": -89529.7265625,
-          "t": "limestone",
-          "p": "n",
+          "p": "i",
           "k": "node",
           "oc": 250,
           "sh": 3
         },
         {
-          "x": -221696.6875,
-          "y": -104736.0078125,
+          "x": -43321.69140625,
+          "y": 239553.46875,
+          "t": "limestone",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -80089.1875,
+          "y": 204746.5,
           "t": "limestone",
           "p": "p",
           "k": "node",
@@ -3949,8 +3891,26 @@
           "sh": 2
         },
         {
-          "x": -268787.8125,
-          "y": -79095.1796875,
+          "x": -94477.421875,
+          "y": 228243.265625,
+          "t": "limestone",
+          "p": "i",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": -37142.07421875,
+          "y": 201538.15625,
+          "t": "limestone",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -52587.4375,
+          "y": 264646.90625,
           "t": "limestone",
           "p": "n",
           "k": "node",
@@ -3958,33 +3918,38 @@
           "sh": 3
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "forgeholm_hmf",
-          "amount_per_min": 1237.5
+          "amount_per_min": 358.5
         },
         {
           "factory": "ferrium_hmf",
-          "amount_per_min": 288.0
+          "amount_per_min": 888.0
         },
         {
           "factory": "cathera_hmf",
-          "amount_per_min": 454.5
+          "amount_per_min": 1188.0
+        },
+        {
+          "factory": "naphtheon_hmf",
+          "amount_per_min": 330.0
         }
       ],
-      "capacity_max": 1980,
-      "demand_share": 1980.0,
-      "capacity": 1980.0,
-      "shards": 8
+      "capacity_max": 2880,
+      "demand_share": 2764.5,
+      "capacity": 2820.0,
+      "shards": 16
     },
     {
-      "id": "town_limestone_3",
-      "idx": 3,
+      "id": "town_limestone_2",
+      "idx": 2,
       "resource": "limestone",
-      "name": "Limestone Town 3",
+      "name": "Limestone Town 2",
       "center": {
-        "x": 365299.0,
-        "y": -211220.0
+        "x": 359885.0,
+        "y": -200469.0
       },
       "nodes": [
         {
@@ -3995,27 +3960,19 @@
           "k": "node",
           "oc": 250,
           "sh": 3
-        },
-        {
-          "x": 370713,
-          "y": -221971,
-          "t": "limestone",
-          "p": "n",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
         }
       ],
+      "existing": false,
       "supplies": [
         {
           "factory": "ferrium_hmf",
-          "amount_per_min": 900
+          "amount_per_min": 300
         }
       ],
-      "capacity_max": 900,
-      "demand_share": 900,
-      "capacity": 900.0,
-      "shards": 6
+      "capacity_max": 300,
+      "demand_share": 300,
+      "capacity": 300.0,
+      "shards": 3
     }
   ]
 }

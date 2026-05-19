@@ -42,6 +42,13 @@ EROSION_MARGIN     = 100      # leave this much surplus buffer
 # resources and ship to factories over longer distances; you don't need a
 # new factory for everything"). Matches the existing Siderith/Calcara pattern.
 SHARED_MINING_RESOURCES = {'iron', 'copper', 'limestone', 'coal'}
+MAX_NEW_TOWNS_PER_RESOURCE = 6   # cap on new gap towns per resource —
+                                  # geography forces a minimum, this stops
+                                  # fragmenting tail demand into single-node
+                                  # "towns" (per user "as few as possible")
+MIN_TOWN_NODES             = 2   # a town claims ≥2 nodes; isolated single
+                                  # nodes spill to a private outpost on the
+                                  # largest-demand consumer instead
 
 BUILDING_FOOTPRINT = {        # reused from build_factory_crazy.py
     'Manufacturer': 440, 'Blender': 304, 'Refinery': 200, 'Assembler': 150,
@@ -731,12 +738,43 @@ def alloc_trained(pool, job):
     job['outposts'] = outposts
 
 
+def load_existing_mining_towns():
+    """Parse selected-factory-locations.json mining_town entries — these are
+    real in-game outposts (Siderith, Calcara) we can route gap demand
+    through up to their spare capacity, *before* building any new towns."""
+    sel = json.load(open(EXISTING_LOCATIONS))['selections']
+    existing = []
+    for fid, e in sel.items():
+        if e.get('type') != 'mining_town':
+            continue
+        used = 0
+        for s in e.get('supplies', []):
+            # supplies look like "Naphtheon (2,007/min)"
+            m = re.search(r'\(([\d,\.]+)/min\)', s)
+            if m:
+                used += float(m.group(1).replace(',', ''))
+        existing.append({
+            'id': fid, 'name': e['factory_name'],
+            'resource': e['required_resources'][0].lower().split()[0],
+            'center': e['center'],
+            'capacity_max': e.get('capacity_per_min', 0),
+            'used_existing': round(used, 1),
+            'spare': round(e.get('capacity_per_min', 0) - used, 1),
+            'nodes': e.get('nodes', []),
+            'existing': True,
+        })
+    return existing
+
+
 def consolidate_mining_towns(pool, jobs, placed_centers):
-    """For each SHARED_MINING_RESOURCES type, sum trained-resource demand
-    across all jobs (excluding jobs where it's the signature) and build one
-    or more shared mining towns to supply them. Each town claims an
-    unoccupied cluster (NW/SE-biased, MIN_SEPARATION from prior centers),
-    reserves nodes under a `town_<r>_<i>` id, and lists pro-rata supplies."""
+    """For each SHARED_MINING_RESOURCES type:
+    1) Route demand through existing mining towns (Siderith, Calcara) up
+       to their spare capacity FIRST — they're already built in-game.
+    2) Build new gap towns for the remainder, capped at
+       MAX_NEW_TOWNS_PER_RESOURCE. Order by raw cluster capacity descending
+       (no NW/SE bonus for towns: they go where the resource physically is).
+    3) Nearest-only consumer→town supply assignment (sparse graph)."""
+    existing_towns = load_existing_mining_towns()
     towns = []
     for r in sorted(SHARED_MINING_RESOURCES):
         consumers = []
@@ -747,35 +785,49 @@ def consolidate_mining_towns(pool, jobs, placed_centers):
         total_demand = sum(c['demand'] for c in consumers)
         if total_demand <= 0:
             continue
-        remaining = total_demand
-        town_idx = 0
+        # Step 1: existing in-game mining towns of resource r supply first
+        # (Siderith=iron 3293 spare; Calcara=limestone 879 spare).
         town_capacities = []
-        while remaining > 1.0 and town_idx < MAX_SITES:
+        for et in existing_towns:
+            if et['resource'] != r:
+                continue
+            et_copy = dict(et)
+            et_copy['nodes'] = []          # nodes already occupied in pool
+            et_copy['shards'] = 0           # existing build; no new shards
+            town_capacities.append(et_copy)
+        remaining = total_demand - sum(et['spare'] for et in town_capacities)
+        # Step 2: build new gap towns for the remainder, ranked by RAW
+        # cluster capacity (largest first; no NW/SE bias for towns), capped.
+        # Phase A: multi-node towns (MIN_TOWN_NODES≥2). Phase B: if demand
+        # remains, single-node spillover so demand is fully met (still
+        # respecting MAX_NEW_TOWNS_PER_RESOURCE).
+        new_built = 0
+        min_nodes = MIN_TOWN_NODES
+        while remaining > 1.0 and new_built < MAX_NEW_TOWNS_PER_RESOURCE:
             avail_r = avail(pool, r)
             if not avail_r:
                 break
-            # candidate-score: cluster density × NW/SE bonus, A4 separation
-            best, best_score, best_ctr, best_cluster = None, -1, None, None
+            best, best_cap, best_ctr = None, -1, None
             for c in avail_r:
                 near = [n for n in avail_r
                         if dist((c['x'], c['y']),
                                 (n['x'], n['y'])) <= SEARCH_RADIUS]
-                if not near:
+                if len(near) < min_nodes:
                     continue
                 ctr = centroid(near)
                 if any(dist(ctr, pc) < MIN_SEPARATION * 1.25
                        for pc in placed_centers):
                     continue
-                sc = sum(PURITY_WEIGHT[n['purity']] for n in near)
-                if quadrant(*ctr) in ('NW', 'SE'):
-                    sc *= QUADRANT_BONUS
-                sc = round(sc, 3)
-                if sc > best_score or (sc == best_score and best
-                                        and c['path'] < best['path']):
-                    best_score, best, best_ctr, best_cluster = sc, c, ctr, near
+                cap = sum(rate_of(n) for n in near)
+                if cap > best_cap or (cap == best_cap and best
+                                       and c['path'] < best['path']):
+                    best_cap, best, best_ctr = cap, c, ctr
             if not best:
+                if min_nodes > 1:        # exhausted multi-node clusters
+                    min_nodes = 1        # spillover phase: single-node OK
+                    continue
                 break
-            town_id = f'town_{r}_{town_idx + 1}'
+            town_id = f'town_{r}_{new_built + 1}'
             claimed, _ = claim_nearest(pool, r, best_ctr, remaining, town_id,
                                         radius=SEARCH_RADIUS)
             if not claimed:
@@ -783,15 +835,16 @@ def consolidate_mining_towns(pool, jobs, placed_centers):
             tc = centroid(claimed)
             placed_centers.append(tc)
             town_capacities.append({
-                'id': town_id, 'idx': town_idx + 1, 'resource': r,
-                'name': f'{r.title()} Town {town_idx + 1}',
+                'id': town_id, 'idx': new_built + 1, 'resource': r,
+                'name': f'{r.title()} Town {new_built + 1}',
                 'center': {'x': tc[0], 'y': tc[1]},
                 'nodes': [{'x': n['x'], 'y': n['y'], 't': n['type'],
                            'p': n['purity'][0], 'k': n['kind']}
                           for n in claimed],
+                'existing': False,
             })
             remaining -= sum(rate_of(n) for n in claimed)
-            town_idx += 1
+            new_built += 1
         if not town_capacities:
             continue
         # Nearest-only assignment: each consumer pulls from the closest
@@ -799,8 +852,12 @@ def consolidate_mining_towns(pool, jobs, placed_centers):
         # fills). Sparse supply graph instead of pro-rata everywhere.
         for t in town_capacities:
             t['supplies'] = []
-            t['capacity_max'] = sum(rate_of(_full_node(n)) for n in t['nodes'])
-            t['_remaining_cap'] = t['capacity_max']
+            if t.get('existing'):
+                t['_remaining_cap'] = t.get('spare', 0)   # in-game spare
+            else:
+                t['capacity_max'] = sum(rate_of(_full_node(n))
+                                        for n in t['nodes'])
+                t['_remaining_cap'] = t['capacity_max']
         def consumer_center(fid):
             for j in jobs:
                 if j['id'] != fid: continue
@@ -1242,6 +1299,8 @@ def inject_map(out):
     for t in out.get('gap_mining_towns', []):
         if 'nodes' not in t:
             continue           # skip shortfall sentinels
+        if t.get('existing'):
+            continue           # already drawn via MINING_TOWNS const
         towns.append({
             'id': t['id'], 'name': t['name'],
             'r': t['resource'],
