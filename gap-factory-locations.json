@@ -1,0 +1,2077 @@
+{
+  "meta": {
+    "description": "Auto-placed gap supply-chain factory locations (rough estimate; amounts phase deferred)",
+    "estimate": true,
+    "coordinate_system": {
+      "x": "+east/right",
+      "y": "+south/bottom",
+      "units": "cm (100=1m)",
+      "quadrants": "NW=top-left SE=bottom-right"
+    },
+    "assumptions": {
+      "miner": "Mk.3 120/240/480 items/min",
+      "well_rate_m3min": {
+        "impure": 75.0,
+        "normal": 150.0,
+        "pure": 300.0
+      },
+      "oil_rate_m3min": {
+        "impure": 150.0,
+        "normal": 300.0,
+        "pure": 600.0
+      },
+      "search_radius_m": 400.0,
+      "min_separation_m": 250.0,
+      "quadrant_bonus": 1.5
+    },
+    "flavor_splits": {
+      "Aluminum Casing": {
+        "aldercast": 3500,
+        "bauxhold": 200,
+        "silvashade": 200
+      },
+      "Steel Beam": {
+        "moldmarsh": 400,
+        "silvashade": 50
+      },
+      "Motor": {
+        "voltreach": 110,
+        "classic_iron_motor": 110
+      },
+      "Stator": {
+        "moldmarsh": 159,
+        "voltreach": 130
+      }
+    },
+    "or_in_house_rule": "A6: Moldmarsh Wire defaulted in-house",
+    "caveat_centroid": "A14: a node-centroid can land on water/cliff; not a buildability guarantee",
+    "occupancy_match": "107/115",
+    "pool_balance": {
+      "bauxite": {
+        "total": 17,
+        "occupied": 3,
+        "reserved_new": 9,
+        "remaining": 5
+      },
+      "caterium": {
+        "total": 17,
+        "occupied": 5,
+        "reserved_new": 8,
+        "remaining": 4
+      },
+      "coal": {
+        "total": 62,
+        "occupied": 12,
+        "reserved_new": 11,
+        "remaining": 39
+      },
+      "copper": {
+        "total": 55,
+        "occupied": 14,
+        "reserved_new": 19,
+        "remaining": 22
+      },
+      "iron": {
+        "total": 127,
+        "occupied": 26,
+        "reserved_new": 29,
+        "remaining": 72
+      },
+      "limestone": {
+        "total": 94,
+        "occupied": 13,
+        "reserved_new": 10,
+        "remaining": 71
+      },
+      "nitrogenGas": {
+        "total": 45,
+        "occupied": 14,
+        "reserved_new": 17,
+        "remaining": 14
+      },
+      "oil": {
+        "total": 48,
+        "occupied": 6,
+        "reserved_new": 22,
+        "remaining": 20
+      },
+      "quartz": {
+        "total": 17,
+        "occupied": 6,
+        "reserved_new": 2,
+        "remaining": 9
+      },
+      "sam": {
+        "total": 19,
+        "occupied": 1,
+        "reserved_new": 0,
+        "remaining": 18
+      },
+      "sulfur": {
+        "total": 16,
+        "occupied": 7,
+        "reserved_new": 1,
+        "remaining": 8
+      },
+      "uranium": {
+        "total": 5,
+        "occupied": 0,
+        "reserved_new": 0,
+        "remaining": 5
+      },
+      "water": {
+        "total": 55,
+        "occupied": 0,
+        "reserved_new": 0,
+        "remaining": 55
+      }
+    }
+  },
+  "factory_locations": {
+    "aldercast": {
+      "factory_name": "aldercast",
+      "theme": "Alclad / Copper-fused",
+      "kind": "new",
+      "signature_resource": "bauxite",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Aluminum Casing": 3500,
+        "Cooling System": 150
+      },
+      "center": {
+        "x": 103958.9,
+        "y": 58031.8
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 103958.9,
+            "y": 58031.8
+          },
+          "signature_capacity": 2400.0,
+          "nodes": [
+            {
+              "x": 106047.6484375,
+              "y": 50478.78515625,
+              "t": "bauxite",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 103317.6484375,
+              "y": 67498.78125,
+              "t": "bauxite",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": 116877.5390625,
+              "y": 51510.90625,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 89592.6484375,
+              "y": 62638.78125,
+              "t": "bauxite",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -5292.7,
+            "y": 92075.2
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": -5292.68359375,
+              "y": 92075.1953125,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -217052.2,
+            "y": 11242.1
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": -217052.25,
+              "y": 11242.14453125,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -177367.2,
+            "y": 44998.9
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": -177367.203125,
+              "y": 44998.91796875,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "copper",
+          "center": {
+            "x": 58030.6,
+            "y": 82304.9
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 58030.6171875,
+              "y": 82304.8828125,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": 108117.3,
+            "y": 152283.9
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 108117.2578125,
+              "y": 152283.921875,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": 6097.6,
+            "y": 157591.6
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 7171.5297851562,
+              "y": 155231.703125,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 5023.7036132812,
+              "y": 159951.484375,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": 282284.2,
+            "y": 63326.8
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 282284.1875,
+              "y": 63326.75390625,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "nitrogenGas",
+          "center": {
+            "x": 85241.3,
+            "y": 104278.5
+          },
+          "capacity": 3000.0,
+          "nodes": [
+            {
+              "x": 84661.390625,
+              "y": 99202.7734375,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 86696.75,
+              "y": 99524.2890625,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 86027.5625,
+              "y": 109451.109375,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 87916.734375,
+              "y": 102044.8671875,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 88734.25,
+              "y": 107722.671875,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 83988.21875,
+              "y": 107803.265625,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 81638.90625,
+              "y": 103495.171875,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 83093.96875,
+              "y": 101821.15625,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 81664.46875,
+              "y": 106667.90625,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": 87990.5,
+              "y": 105052.1171875,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            }
+          ]
+        },
+        {
+          "resource": "nitrogenGas",
+          "center": {
+            "x": -144384.6,
+            "y": 122349.5
+          },
+          "capacity": 2100.0,
+          "nodes": [
+            {
+              "x": -142911.4375,
+              "y": 118402.375,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -141750.375,
+              "y": 121997.734375,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -142779.1875,
+              "y": 120243.1875,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -145565.4375,
+              "y": 126028.375,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -147628.71875,
+              "y": 125722.8125,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -145715.25,
+              "y": 119442.078125,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -144341.71875,
+              "y": 124609.8125,
+              "t": "nitrogenGas",
+              "p": "p",
+              "k": "well"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "bauxite": {
+          "demand": 5866.7,
+          "reserved_capacity": 6000.0
+        },
+        "copper": {
+          "demand": 2933.3,
+          "reserved_capacity": 3000.0
+        },
+        "nitrogenGas": {
+          "demand": 3750.0,
+          "reserved_capacity": 5100.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=bauxite; 4 site(s); 6 outpost(s)"
+    },
+    "bauxhold": {
+      "factory_name": "bauxhold",
+      "theme": "Chemical / Sulfuric",
+      "kind": "new",
+      "signature_resource": "bauxite",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Aluminum Casing": 200
+      },
+      "center": {
+        "x": -59322.1,
+        "y": 14594.8
+      },
+      "sites": [
+        {
+          "center": {
+            "x": -59322.1,
+            "y": 14594.8
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": -59322.1328125,
+              "y": 14594.763671875,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "coal",
+          "center": {
+            "x": -53781.9,
+            "y": 33003.3
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": -53781.875,
+              "y": 33003.2734375,
+              "t": "coal",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "sulfur",
+          "center": {
+            "x": -101381.7,
+            "y": 91578.5
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": -101381.7265625,
+              "y": 91578.5234375,
+              "t": "sulfur",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "bauxite": {
+          "demand": 300.0,
+          "reserved_capacity": 1200.0
+        },
+        "coal": {
+          "demand": 200.0,
+          "reserved_capacity": 600.0
+        },
+        "sulfur": {
+          "demand": 100.0,
+          "reserved_capacity": 600.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=bauxite; 1 site(s); 2 outpost(s)"
+    },
+    "silvashade": {
+      "factory_name": "silvashade",
+      "theme": "Classic Silica Foundry",
+      "kind": "new",
+      "signature_resource": "bauxite",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Aluminum Casing": 200,
+        "Steel Beam": 50
+      },
+      "center": {
+        "x": 199007.2,
+        "y": 89173.2
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 199007.2,
+            "y": 89173.2
+          },
+          "signature_capacity": 600.0,
+          "nodes": [
+            {
+              "x": 199007.171875,
+              "y": 89173.1875,
+              "t": "bauxite",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "coal",
+          "center": {
+            "x": 193869.0,
+            "y": 116585.3
+          },
+          "capacity": 300,
+          "nodes": [
+            {
+              "x": 193869.03125,
+              "y": 116585.2734375,
+              "t": "coal",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "quartz",
+          "center": {
+            "x": 34968.1,
+            "y": 118464.2
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 34968.0703125,
+              "y": 118464.15625,
+              "t": "quartz",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "bauxite": {
+          "demand": 350.0,
+          "reserved_capacity": 600.0
+        },
+        "coal": {
+          "demand": 175.0,
+          "reserved_capacity": 300.0
+        },
+        "quartz": {
+          "demand": 262.5,
+          "reserved_capacity": 600.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=bauxite; 1 site(s); 2 outpost(s)"
+    },
+    "voltreach": {
+      "factory_name": "voltreach",
+      "theme": "Electric Motion",
+      "kind": "new",
+      "signature_resource": "caterium",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Motor": 110,
+        "Stator": 130
+      },
+      "center": {
+        "x": 209924.9,
+        "y": -17601.1
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 209924.9,
+            "y": -17601.1
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": 211843.21875,
+              "y": -18819.654296875,
+              "t": "caterium",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 208006.5,
+              "y": -16382.58984375,
+              "t": "caterium",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "coal",
+          "center": {
+            "x": 152492.5,
+            "y": 79736.8
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 151131.296875,
+              "y": 75310.9140625,
+              "t": "coal",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": 153853.6875,
+              "y": 84162.78125,
+              "t": "coal",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": 297499.1,
+            "y": -7312.4
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 297499.0625,
+              "y": -7312.4370117188,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": 235433.1,
+            "y": -24723.0
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 233141.59375,
+              "y": -26440.263671875,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 237724.65625,
+              "y": -23005.71875,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": 245700.4,
+            "y": 30065.4
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 245700.4375,
+              "y": 30065.3984375,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "quartz",
+          "center": {
+            "x": 61653.5,
+            "y": 196432.2
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 61653.5234375,
+              "y": 196432.234375,
+              "t": "quartz",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "caterium": {
+          "demand": 832.5,
+          "reserved_capacity": 1200.0
+        },
+        "coal": {
+          "demand": 555.0,
+          "reserved_capacity": 600.0
+        },
+        "copper": {
+          "demand": 476.7,
+          "reserved_capacity": 600.0
+        },
+        "iron": {
+          "demand": 1343.3,
+          "reserved_capacity": 1800.0
+        },
+        "quartz": {
+          "demand": 550.0,
+          "reserved_capacity": 1200.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=caterium; 1 site(s); 5 outpost(s)"
+    },
+    "moldmarsh": {
+      "factory_name": "moldmarsh",
+      "theme": "Cast Steel",
+      "kind": "new",
+      "signature_resource": "limestone",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Steel Beam": 400,
+        "Stator": 159
+      },
+      "center": {
+        "x": -183091.2,
+        "y": -146736.1
+      },
+      "sites": [
+        {
+          "center": {
+            "x": -183091.2,
+            "y": -146736.1
+          },
+          "signature_capacity": 3600.0,
+          "nodes": [
+            {
+              "x": -178099.0625,
+              "y": -165241.5625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -165001.9375,
+              "y": -133278.09375,
+              "t": "limestone",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -206172.671875,
+              "y": -141688.640625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "coal",
+          "center": {
+            "x": -273494.7,
+            "y": -154341.3
+          },
+          "capacity": 1800,
+          "nodes": [
+            {
+              "x": -265694.5,
+              "y": -162571.109375,
+              "t": "coal",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -271793.5,
+              "y": -146229.109375,
+              "t": "coal",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": -275456.5,
+              "y": -165870.109375,
+              "t": "coal",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -281034.40625,
+              "y": -142694.96875,
+              "t": "coal",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": -166357.2,
+            "y": -129627.6
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": -166357.25,
+              "y": -129627.5625,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": -163354.1,
+            "y": -192096.7
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": -163354.125,
+              "y": -192096.65625,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": -188540.7,
+            "y": -116884.7
+          },
+          "capacity": 1800,
+          "nodes": [
+            {
+              "x": -186902.296875,
+              "y": -118339.828125,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -190787,
+              "y": -117690,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -187932.65625,
+              "y": -114624.1875,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "coal": {
+          "demand": 1543.7,
+          "reserved_capacity": 1800.0
+        },
+        "copper": {
+          "demand": 636.0,
+          "reserved_capacity": 1200.0
+        },
+        "iron": {
+          "demand": 1543.7,
+          "reserved_capacity": 1800.0
+        },
+        "limestone": {
+          "demand": 2991.9,
+          "reserved_capacity": 3600.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=limestone; 1 site(s); 4 outpost(s)"
+    },
+    "classic_iron_motor": {
+      "factory_name": "classic_iron_motor",
+      "theme": "Classic Iron Motor",
+      "kind": "new",
+      "signature_resource": "iron",
+      "disposition": "new",
+      "estimate": true,
+      "targets": {
+        "Motor": 110
+      },
+      "center": {
+        "x": -236114.6,
+        "y": -120116.5
+      },
+      "sites": [
+        {
+          "center": {
+            "x": -236114.6,
+            "y": -120116.5
+          },
+          "signature_capacity": 3600.0,
+          "nodes": [
+            {
+              "x": -227410.78125,
+              "y": -118862.2109375,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -230852.828125,
+              "y": -115124.4921875,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -250080.3125,
+              "y": -126362.703125,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "coal",
+          "center": {
+            "x": -113215.8,
+            "y": -44145.0
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": -113215.828125,
+              "y": -44145,
+              "t": "coal",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": -266903.9,
+            "y": -133355.4
+          },
+          "capacity": 300,
+          "nodes": [
+            {
+              "x": -266903.9375,
+              "y": -133355.4375,
+              "t": "copper",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "copper",
+          "center": {
+            "x": -281345.6,
+            "y": -71999.7
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": -281345.625,
+              "y": -71999.671875,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "coal": {
+          "demand": 990.0,
+          "reserved_capacity": 1200.0
+        },
+        "copper": {
+          "demand": 880.0,
+          "reserved_capacity": 900.0
+        },
+        "iron": {
+          "demand": 3465.0,
+          "reserved_capacity": 3600.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "reason": "new; signature=iron; 1 site(s); 3 outpost(s)"
+    },
+    "naphtheon+": {
+      "factory_name": "naphtheon+",
+      "theme": "extension",
+      "kind": "ext",
+      "signature_resource": "oil",
+      "disposition": "satellite",
+      "estimate": true,
+      "targets": {
+        "Rubber": 917,
+        "Petroleum Coke (export)": 2346.7,
+        "Rubber (export)": 1200.0
+      },
+      "center": {
+        "x": 50543.6,
+        "y": -4315.8
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 50543.6,
+            "y": -4315.8
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": 49638.54296875,
+              "y": 655.75756835938,
+              "t": "oil",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 49403.65234375,
+              "y": -4743.8920898438,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 52588.734375,
+              "y": -8859.302734375,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -40815.0,
+            "y": -7882.9
+          },
+          "signature_capacity": 1350.0,
+          "nodes": [
+            {
+              "x": -40199.91015625,
+              "y": -4304.33203125,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -41776.44921875,
+              "y": -9868.3759765625,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -43758.80078125,
+              "y": -8409.396484375,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -38956.8359375,
+              "y": -10362.68359375,
+              "t": "oil",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -36959.1328125,
+              "y": -7833.7783203125,
+              "t": "oil",
+              "p": "p",
+              "k": "well"
+            },
+            {
+              "x": -43238.79296875,
+              "y": -6518.9111328125,
+              "t": "oil",
+              "p": "p",
+              "k": "well"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -262055.5,
+            "y": 72714.4
+          },
+          "signature_capacity": 1500.0,
+          "nodes": [
+            {
+              "x": -252533.734375,
+              "y": 69813.3203125,
+              "t": "oil",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -261941.46875,
+              "y": 70474.5078125,
+              "t": "oil",
+              "p": "i",
+              "k": "well"
+            },
+            {
+              "x": -263341.78125,
+              "y": 72359.8046875,
+              "t": "oil",
+              "p": "i",
+              "k": "well"
+            },
+            {
+              "x": -260625.765625,
+              "y": 72573.2265625,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -264372.75,
+              "y": 76059.46875,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -265378.25,
+              "y": 72493.3671875,
+              "t": "oil",
+              "p": "n",
+              "k": "well"
+            },
+            {
+              "x": -266194.75,
+              "y": 75227.3671875,
+              "t": "oil",
+              "p": "p",
+              "k": "well"
+            }
+          ]
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "oil": {
+          "demand": 3762.2,
+          "reserved_capacity": 4050.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "satellite; signature=oil; 3 site(s); 0 outpost(s)"
+    },
+    "cathera+": {
+      "factory_name": "cathera+",
+      "theme": "extension",
+      "kind": "ext",
+      "signature_resource": "copper",
+      "disposition": "relocated",
+      "estimate": true,
+      "targets": {
+        "High-Speed Connector": 115,
+        "Copper Powder": 1000
+      },
+      "center": {
+        "x": 153441.0,
+        "y": 8263.8
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 153441.0,
+            "y": 8263.8
+          },
+          "signature_capacity": 3600.0,
+          "nodes": [
+            {
+              "x": 152648.421875,
+              "y": 5227.0913085938,
+              "t": "copper",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 149936.703125,
+              "y": 4686.4711914062,
+              "t": "copper",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 157737.734375,
+              "y": 14877.821289062,
+              "t": "copper",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": 361738.3,
+            "y": -168420.1
+          },
+          "signature_capacity": 3000.0,
+          "nodes": [
+            {
+              "x": 355461.71875,
+              "y": -149808.078125,
+              "t": "copper",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 380813.625,
+              "y": -169867.75,
+              "t": "copper",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 348939.46875,
+              "y": -185584.4375,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -267488.1,
+            "y": -53154.5
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": -268264.40625,
+              "y": -54991.4375,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -266711.875,
+              "y": -51317.58203125,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 208139.6,
+            "y": -23983.1
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 208139.609375,
+              "y": -23983.0859375,
+              "t": "caterium",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 90375.8,
+            "y": 80713.8
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 90375.7890625,
+              "y": 80713.84375,
+              "t": "caterium",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 109619.4,
+            "y": 155798.3
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 109619.4296875,
+              "y": 155798.28125,
+              "t": "caterium",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 224307.8,
+            "y": -128741.7
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 224307.765625,
+              "y": -128741.7421875,
+              "t": "caterium",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 270786.1,
+            "y": 120111.0
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 270786.0625,
+              "y": 120111.015625,
+              "t": "caterium",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "oil",
+          "center": {
+            "x": 171302.7,
+            "y": -91779.4
+          },
+          "capacity": 750.0,
+          "nodes": [
+            {
+              "x": 167391.5,
+              "y": -88953.6015625,
+              "t": "oil",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": 173702.453125,
+              "y": -91776.40625,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 172814.171875,
+              "y": -94608.1953125,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "caterium": {
+          "demand": 3864.0,
+          "reserved_capacity": 4200.0
+        },
+        "copper": {
+          "demand": 7610.0,
+          "reserved_capacity": 7800.0
+        },
+        "oil": {
+          "demand": 690.0,
+          "reserved_capacity": 750.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "relocated; signature=copper; 3 site(s); 6 outpost(s)"
+    },
+    "ferrium+": {
+      "factory_name": "ferrium+",
+      "theme": "extension",
+      "kind": "ext",
+      "signature_resource": "iron",
+      "disposition": "satellite",
+      "estimate": true,
+      "targets": {
+        "Smart Plating": 150,
+        "Modular Frame": 38
+      },
+      "center": {
+        "x": 286502.4,
+        "y": -192967.4
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 286502.4,
+            "y": -192967.4
+          },
+          "signature_capacity": 3000.0,
+          "nodes": [
+            {
+              "x": 276673.5625,
+              "y": -195099.8125,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 264240.25,
+              "y": -162899.203125,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": 298733.9375,
+              "y": -199292.71875,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 278266.3125,
+              "y": -210771.859375,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 314598.09375,
+              "y": -196773.4375,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "center": {
+            "x": -168589.3,
+            "y": -27443.8
+          },
+          "signature_capacity": 2400.0,
+          "nodes": [
+            {
+              "x": -166731.046875,
+              "y": -26566.138671875,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -170447.578125,
+              "y": -28321.373046875,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "iron": {
+          "demand": 4399.5,
+          "reserved_capacity": 5400.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "satellite; signature=iron; 2 site(s); 0 outpost(s)"
+    },
+    "ferrium_hmf": {
+      "factory_name": "ferrium (+HMF)",
+      "theme": "HMF +13.2",
+      "kind": "hmf",
+      "signature_resource": "iron",
+      "disposition": "relocated",
+      "estimate": true,
+      "targets": {
+        "Heavy Modular Frame": 16.5
+      },
+      "center": {
+        "x": 248937.7,
+        "y": -7003.4
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 248937.7,
+            "y": -7003.4
+          },
+          "signature_capacity": 3000.0,
+          "nodes": [
+            {
+              "x": 245861.546875,
+              "y": 4378.9428710938,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 255908.453125,
+              "y": -3071.1896972656,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 245043.1875,
+              "y": -22318.056640625,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "limestone",
+          "center": {
+            "x": 225430.5,
+            "y": -6949.2
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": 225430.5,
+              "y": -6949.228515625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "iron": {
+          "demand": 2954.0,
+          "reserved_capacity": 3000.0
+        },
+        "limestone": {
+          "demand": 1188.0,
+          "reserved_capacity": 1200.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "relocated; signature=iron; 1 site(s); 1 outpost(s)"
+    },
+    "naphtheon_hmf": {
+      "factory_name": "naphtheon (+HMF)",
+      "theme": "HMF +13.2",
+      "kind": "hmf",
+      "signature_resource": "oil",
+      "disposition": "relocated",
+      "estimate": true,
+      "targets": {
+        "Heavy Modular Frame": 16.5
+      },
+      "center": {
+        "x": 182538.9,
+        "y": 212546.4
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 182538.9,
+            "y": 212546.4
+          },
+          "signature_capacity": 1200.0,
+          "nodes": [
+            {
+              "x": 178265.375,
+              "y": 206095.640625,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 185124.390625,
+              "y": 214441.703125,
+              "t": "oil",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": 184226.859375,
+              "y": 217101.75,
+              "t": "oil",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "iron",
+          "center": {
+            "x": 133456.8,
+            "y": 201824.3
+          },
+          "capacity": 1800,
+          "nodes": [
+            {
+              "x": 133637.484375,
+              "y": 205791.546875,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": 133276.125,
+              "y": 197857,
+              "t": "iron",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "limestone",
+          "center": {
+            "x": 141567.9,
+            "y": 230906.8
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 141567.921875,
+              "y": 230906.75,
+              "t": "limestone",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "iron": {
+          "demand": 1555.1,
+          "reserved_capacity": 1800.0
+        },
+        "limestone": {
+          "demand": 330.0,
+          "reserved_capacity": 600.0
+        },
+        "oil": {
+          "demand": 835.3,
+          "reserved_capacity": 1200.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "relocated; signature=oil; 1 site(s); 2 outpost(s)"
+    },
+    "forgeholm_hmf": {
+      "factory_name": "forgeholm (+HMF)",
+      "theme": "HMF +13.2",
+      "kind": "hmf",
+      "signature_resource": "coal",
+      "disposition": "relocated",
+      "estimate": true,
+      "targets": {
+        "Heavy Modular Frame": 16.5
+      },
+      "center": {
+        "x": -110628.1,
+        "y": -51412.8
+      },
+      "sites": [
+        {
+          "center": {
+            "x": -110628.1,
+            "y": -51412.8
+          },
+          "signature_capacity": 2400.0,
+          "nodes": [
+            {
+              "x": -113615.8828125,
+              "y": -50450,
+              "t": "coal",
+              "p": "p",
+              "k": "node"
+            },
+            {
+              "x": -107640.28125,
+              "y": -52375.515625,
+              "t": "coal",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "iron",
+          "center": {
+            "x": -152490.3,
+            "y": -45786.5
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": -152490.28125,
+              "y": -45786.5078125,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": -110588.0,
+            "y": -135153.0
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": -110588,
+              "y": -135153,
+              "t": "iron",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "limestone",
+          "center": {
+            "x": -136080.4,
+            "y": -35583.4
+          },
+          "capacity": 1800,
+          "nodes": [
+            {
+              "x": -129015.4375,
+              "y": -39541.03515625,
+              "t": "limestone",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -133444.859375,
+              "y": -35240.24609375,
+              "t": "limestone",
+              "p": "n",
+              "k": "node"
+            },
+            {
+              "x": -145781,
+              "y": -31969,
+              "t": "limestone",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "coal": {
+          "demand": 1963.1,
+          "reserved_capacity": 2400.0
+        },
+        "iron": {
+          "demand": 2073.1,
+          "reserved_capacity": 2400.0
+        },
+        "limestone": {
+          "demand": 1237.5,
+          "reserved_capacity": 1800.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "relocated; signature=coal; 1 site(s); 3 outpost(s)"
+    },
+    "cathera_hmf": {
+      "factory_name": "cathera (+HMF)",
+      "theme": "HMF +13.2",
+      "kind": "hmf",
+      "signature_resource": "copper",
+      "disposition": "relocated",
+      "estimate": true,
+      "targets": {
+        "Heavy Modular Frame": 16.5
+      },
+      "center": {
+        "x": 5251.4,
+        "y": 157169.2
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 5251.4,
+            "y": 157169.2
+          },
+          "signature_capacity": 600.0,
+          "nodes": [
+            {
+              "x": 5251.412109375,
+              "y": 157169.1875,
+              "t": "copper",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "caterium",
+          "center": {
+            "x": -131573.7,
+            "y": 227253.1
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": -131573.671875,
+              "y": 227253.09375,
+              "t": "caterium",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": -45157.5,
+            "y": 131574.0
+          },
+          "capacity": 1500,
+          "nodes": [
+            {
+              "x": -38249.46484375,
+              "y": 127975.2109375,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": -42273.09765625,
+              "y": 132150.96875,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": -43326.96875,
+              "y": 130254.3828125,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": -41484.48828125,
+              "y": 125793.5859375,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            },
+            {
+              "x": -60453.41796875,
+              "y": 141695.671875,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "iron",
+          "center": {
+            "x": -41928.3,
+            "y": 206907.6
+          },
+          "capacity": 300,
+          "nodes": [
+            {
+              "x": -41928.3203125,
+              "y": 206907.640625,
+              "t": "iron",
+              "p": "i",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "limestone",
+          "center": {
+            "x": 8341.5,
+            "y": 147571.7
+          },
+          "capacity": 600,
+          "nodes": [
+            {
+              "x": 8341.529296875,
+              "y": 147571.703125,
+              "t": "limestone",
+              "p": "n",
+              "k": "node"
+            }
+          ]
+        },
+        {
+          "resource": "limestone",
+          "center": {
+            "x": -53615.4,
+            "y": 160375.6
+          },
+          "capacity": 1200,
+          "nodes": [
+            {
+              "x": -53615.42578125,
+              "y": 160375.5625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node"
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "caterium": {
+          "demand": 19.5,
+          "reserved_capacity": 1200.0
+        },
+        "copper": {
+          "demand": 405.4,
+          "reserved_capacity": 600.0
+        },
+        "iron": {
+          "demand": 1517.5,
+          "reserved_capacity": 1800.0
+        },
+        "limestone": {
+          "demand": 1188.0,
+          "reserved_capacity": 1800.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "reason": "relocated; signature=copper; 1 site(s); 5 outpost(s)"
+    }
+  }
+}
