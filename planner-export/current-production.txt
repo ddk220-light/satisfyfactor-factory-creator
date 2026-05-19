@@ -1,0 +1,167 @@
+ Iron Ore	16,860 units per minute 	18,335 units per minute 
+	
+ Quickwire	13,643.334 units per minute 	10,552.5 units per minute 
+	
+ Iron Ingot	12,765 units per minute 	6,301.25 units per minute 
+	
+ Copper Ingot	12,100 units per minute 	10,919.722 units per minute 
+	
+ Wire	11,066.25 units per minute 	5,585 units per minute 
+	
+ Iron Rod	8,367 units per minute 	1,491 units per minute 
+	
+ Copper Ore	6,420 units per minute 	6,530 units per minute 
+	
+ Screws	6,180 units per minute 	7,923.75 units per minute 
+	
+ Nitrogen Gas	5,550m³ per minute 	5,670m³ per minute 
+	
+ Rubber	5,440 units per minute 	3,632.25 units per minute 
+	
+ Fuel	5,400m³ per minute 	5,340m³ per minute 
+	
+ Coal	5,100 units per minute 	5,190 units per minute 
+	
+ Limestone	5,070 units per minute 	6,060.509 units per minute 
+	
+ Plastic	4,880 units per minute 	4,747.5 units per minute 
+	
+ Steel Ingot	4,710 units per minute 	6,958 units per minute 
+	
+ Heavy Oil Residue	4,170m³ per minute 	4,170m³ per minute 
+	
+ Sulfur	3,510 units per minute 	2,450 units per minute 
+	
+ Concrete	3,080 units per minute 	2,123.75 units per minute 
+	
+ Raw Quartz	3,060 units per minute 	2,669.464 units per minute 
+	
+ Silica	3,053.75 units per minute 	2,550 units per minute 
+	
+ Crude Oil	3,000m³ per minute 	3,120m³ per minute 
+	
+ Rocket Fuel	3,000m³ per minute 	2,983.333m³ per minute 
+	
+ Iron Plate	2,797.5 units per minute 	1,435 units per minute 
+	
+ Empty Canister	2,770 units per minute 	3,790 units per minute 
+	
+ Alumina Solution	2,640m³ per minute 	2,640m³ per minute 
+	
+ Steel Pipe	2,625 units per minute 	2,482.5 units per minute 
+	
+ Caterium Ore	2,460 units per minute 	3,276 units per minute 
+	
+ Packaged Water	2,160 units per minute 	1,260 units per minute 
+	
+ Aluminum Scrap	2,160 units per minute 	1,440 units per minute 
+	
+ Polymer Resin	2,080 units per minute 	1,640 units per minute 
+	
+ Caterium Ingot	1,884 units per minute 	1,136.944 units per minute 
+	
+ Turbofuel	1,620m³ per minute 	1,800m³ per minute 
+	
+ Sulfuric Acid	1,600m³ per minute 	1,720m³ per minute 
+	
+ Aluminum Casing	1,350 units per minute 	300 units per minute 
+	
+ Quartz Crystal	1,305 units per minute 	1,237.5 units per minute 
+	
+ Circuit Board	1,286.25 units per minute 	288 units per minute 
+	
+ Packaged Alumina Solution	1,200 units per minute 	1,200 units per minute 
+	
+ Bauxite	1,050 units per minute 	1,200 units per minute 
+	
+ Aluminum Ingot	960 units per minute 	2,410 units per minute 
+	
+ Petroleum Coke	960 units per minute 	810 units per minute 
+	
+ Empty Fluid Tank	950 units per minute 	1,500 units per minute 
+	
+ Cable	750 units per minute 	0 units per minute 
+	
+ Dissolved Silica	720m³ per minute 	622.222m³ per minute 
+	
+ Packaged Nitrogen Gas	600 units per minute 	600 units per minute 
+	
+ Packaged Rocket Fuel	600 units per minute 	0 units per minute 
+	
+ Nitric Acid	580m³ per minute 	720m³ per minute 
+	
+ Packaged Sulfuric Acid	400 units per minute 	0 units per minute 
+	
+ Alclad Aluminum Sheet	360 units per minute 	450 units per minute 
+	
+ Compacted Coal	325 units per minute 	0 units per minute 
+	
+ Automated Wiring	312 units per minute 	0 units per minute 
+	
+ Steel Beam	302.5 units per minute 	58.846 units per minute 
+	
+ SAM	300 units per minute 	300 units per minute 
+	
+ Copper Sheet	300 units per minute 	433.125 units per minute 
+	
+ Packaged Nitric Acid	300 units per minute 	100 units per minute 
+	
+ Reinforced Iron Plate	195 units per minute 	129 units per minute 
+	
+ Encased Industrial Beam	192 units per minute 	146.25 units per minute 
+	
+ Rotor	155.063 units per minute 	22.5 units per minute 
+	
+ Modular Frame	148.5 units per minute 	135 units per minute 
+	
+ Crystal Oscillator	123.75 units per minute 	67.5 units per minute 
+	
+ Stator	120 units per minute 	178.5 units per minute 
+	
+ Fabric	120 units per minute 	15 units per minute 
+	
+ AI Limiter	120 units per minute 	123.75 units per minute 
+	
+ Computer	120 units per minute 	0 units per minute 
+	
+ High-Speed Connector	108 units per minute 	78 units per minute 
+	
+ Heat Sink	90 units per minute 	96 units per minute 
+	
+ Reanimated SAM	75 units per minute 	6 units per minute 
+	
+ Power Shard	62.5 units per minute 	0 units per minute 
+	
+ Packaged Fuel	60 units per minute 	0 units per minute 
+	
+ Cooling System	48 units per minute 	45 units per minute 
+	
+ Motor	45 units per minute 	45 units per minute 
+	
+ Heavy Modular Frame	34.875 units per minute 	6 units per minute 
+	
+ Packaged Heavy Oil Residue	30 units per minute 	10 units per minute 
+	
+ Black Powder	30 units per minute 	40 units per minute 
+	
+ Smokeless Powder	20 units per minute 	20 units per minute 
+	
+ Iron Rebar	15 units per minute 	10 units per minute 
+	
+ Turbo Motor	11.25 units per minute 	0 units per minute 
+	
+ Nobelisk	10 units per minute 	7.5 units per minute 
+	
+ Gas Filter	7.5 units per minute 	0 units per minute 
+	
+ Fused Modular Frame	6 units per minute 	0 units per minute 
+	
+ Explosive Rebar	5 units per minute 	0 units per minute 
+	
+ Cluster Nobelisk	2.5 units per minute 	0 units per minute 
+	
+ SAM Fluctuator	1 units per minute 	0 units per minute 
+	
+ Radio Control Unit	0 units per minute 	22.5 units per minute 
+	
+ Purple Power Slug	0 units per minute 	6.25 units per minute 
