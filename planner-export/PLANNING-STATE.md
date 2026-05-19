@@ -134,7 +134,19 @@ nitrogen wells modeled by Pressurizer per-satellite, reserved by `core`.
 | Naphtheon (+HMF) | relocated | 3 | 4 | 288 | 3,250 MW | 8 | — |
 | Forgeholm (+HMF) | relocated | 3 | 7 | 224 | 2,555 MW | 18 | — |
 | Cathera (+HMF) | relocated | 1 | 6 | 143 | 1,705 MW | 13 | — |
-| **TOTAL** | | | | **3,846** | **37,195 MW** | **303** | |
+| **TOTAL** | | | | **3,846** | **37,195 MW** | **285** | |
+
+**Gap mining towns** (shared outposts for the high-volume trained resources
+— matches the existing Siderith / Calcara pattern; each town supplies 3–5
+factories over rail/truck rather than each factory mining its own):
+
+| Resource | Towns | Total nodes | Total cap/min | Shards | Supplies |
+|---|--:|--:|--:|--:|---|
+| Coal | 2 | 6 | 3,600 | 12 | silvashade, bauxhold, voltreach, moldmarsh, classic_iron_motor |
+| Copper | 6 | 8 | 5,160 | 22 | aldercast, voltreach, moldmarsh, classic_iron_motor |
+| Iron | 5 | 14 | 8,160 | 35 | voltreach, moldmarsh, forgeholm_hmf, naphtheon_hmf, cathera_hmf |
+| Limestone | 3 | 7 | 4,080 | 13 | forgeholm_hmf, naphtheon_hmf, ferrium_hmf, cathera_hmf |
+| **Total** | **16** | **35** | **21,000/min** | **82** | |
 
 **Projected resource pool after gap factory build:**
 

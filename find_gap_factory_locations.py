@@ -37,6 +37,12 @@ EROSION_CANDIDATES = {'Wire', 'Circuit Board', 'Crystal Oscillator',
                        'Copper Sheet', 'Computer'}
 EROSION_MARGIN     = 100      # leave this much surplus buffer
 
+# Trained resources of these types are NOT reserved per-factory; instead
+# they're consolidated into shared mining towns (per user: "mining towns mine
+# resources and ship to factories over longer distances; you don't need a
+# new factory for everything"). Matches the existing Siderith/Calcara pattern.
+SHARED_MINING_RESOURCES = {'iron', 'copper', 'limestone', 'coal'}
+
 BUILDING_FOOTPRINT = {        # reused from build_factory_crazy.py
     'Manufacturer': 440, 'Blender': 304, 'Refinery': 200, 'Assembler': 150,
     'Constructor': 80, 'Foundry': 72, 'Smelter': 54,
@@ -706,6 +712,8 @@ def alloc_trained(pool, job):
     for nt, dmd in sorted(job['raw_demand'].items()):
         if nt == sig or dmd <= 0:
             continue
+        if nt in SHARED_MINING_RESOURCES:
+            continue                              # handled by mining towns
         claimed, cap = claim_nearest(pool, nt, base, dmd, job['id'])
         if not claimed:
             job.setdefault('trained_shortfall', {})[nt] = round(dmd, 1)
@@ -721,6 +729,92 @@ def alloc_trained(pool, job):
         if cap + 1e-6 < dmd:
             job.setdefault('trained_shortfall', {})[nt] = round(dmd - cap, 1)
     job['outposts'] = outposts
+
+
+def consolidate_mining_towns(pool, jobs, placed_centers):
+    """For each SHARED_MINING_RESOURCES type, sum trained-resource demand
+    across all jobs (excluding jobs where it's the signature) and build one
+    or more shared mining towns to supply them. Each town claims an
+    unoccupied cluster (NW/SE-biased, MIN_SEPARATION from prior centers),
+    reserves nodes under a `town_<r>_<i>` id, and lists pro-rata supplies."""
+    towns = []
+    for r in sorted(SHARED_MINING_RESOURCES):
+        consumers = []
+        for j in jobs:
+            d = j['raw_demand'].get(r, 0)
+            if r != j['signature'] and d > 0:
+                consumers.append({'factory': j['id'], 'demand': d})
+        total_demand = sum(c['demand'] for c in consumers)
+        if total_demand <= 0:
+            continue
+        remaining = total_demand
+        town_idx = 0
+        town_capacities = []
+        while remaining > 1.0 and town_idx < MAX_SITES:
+            avail_r = avail(pool, r)
+            if not avail_r:
+                break
+            # candidate-score: cluster density × NW/SE bonus, A4 separation
+            best, best_score, best_ctr, best_cluster = None, -1, None, None
+            for c in avail_r:
+                near = [n for n in avail_r
+                        if dist((c['x'], c['y']),
+                                (n['x'], n['y'])) <= SEARCH_RADIUS]
+                if not near:
+                    continue
+                ctr = centroid(near)
+                if any(dist(ctr, pc) < MIN_SEPARATION * 1.25
+                       for pc in placed_centers):
+                    continue
+                sc = sum(PURITY_WEIGHT[n['purity']] for n in near)
+                if quadrant(*ctr) in ('NW', 'SE'):
+                    sc *= QUADRANT_BONUS
+                sc = round(sc, 3)
+                if sc > best_score or (sc == best_score and best
+                                        and c['path'] < best['path']):
+                    best_score, best, best_ctr, best_cluster = sc, c, ctr, near
+            if not best:
+                break
+            town_id = f'town_{r}_{town_idx + 1}'
+            claimed, _ = claim_nearest(pool, r, best_ctr, remaining, town_id,
+                                        radius=SEARCH_RADIUS)
+            if not claimed:
+                break
+            tc = centroid(claimed)
+            placed_centers.append(tc)
+            town_capacities.append({
+                'id': town_id, 'idx': town_idx + 1, 'resource': r,
+                'name': f'{r.title()} Town {town_idx + 1}',
+                'center': {'x': tc[0], 'y': tc[1]},
+                'nodes': [{'x': n['x'], 'y': n['y'], 't': n['type'],
+                           'p': n['purity'][0], 'k': n['kind']}
+                          for n in claimed],
+            })
+            remaining -= sum(rate_of(n) for n in claimed)
+            town_idx += 1
+        if not town_capacities:
+            continue
+        # Distribute town capacities pro-rata across consumers
+        total_cap = total_demand - max(remaining, 0)
+        for t in town_capacities:
+            t['supplies'] = []
+            t_cap_max = sum(rate_of(_full_node(n)) for n in t['nodes'])
+            t_share = t_cap_max / sum(sum(rate_of(_full_node(n))
+                                          for n in u['nodes'])
+                                      for u in town_capacities)
+            for c in consumers:
+                amt = round(t_share * c['demand'], 1)
+                if amt > 0:
+                    t['supplies'].append({'factory': c['factory'],
+                                          'amount_per_min': amt})
+            t['capacity_max'] = round(t_cap_max, 1)
+            t['demand_share'] = round(min(t_cap_max, total_cap * t_share), 1)
+        towns.extend(town_capacities)
+        if remaining > 1.0:
+            towns.append({'id': f'town_{r}_SHORTFALL', 'resource': r,
+                          'name': f'{r.title()} shortfall',
+                          'shortfall_per_min': round(remaining, 1)})
+    return towns
 
 
 def alloc_anchored(pool, job, placed_centers):
@@ -929,8 +1023,11 @@ def allocate(pool, jobs):
     # PHASE 2 — now reserve trained-in resources for every job (B1).
     for j in order:
         alloc_trained(pool, j)
+    # PHASE 2.5 — shared mining towns for SHARED_MINING_RESOURCES (consolidate
+    # what would otherwise be many private iron/copper/limestone/coal outposts).
+    mining_towns = consolidate_mining_towns(pool, order, placed_centers)
     # PHASE 3 — per-node min overclock (Task 10): replace blanket 250% with
-    # the smallest clock per node that meets each site/outpost's demand.
+    # the smallest clock per node that meets each site/outpost/town's demand.
     for j in order:
         total_shards = 0
         sig_demand_remaining = j['raw_demand'].get(j['signature'], 0.0)
@@ -959,7 +1056,19 @@ def allocate(pool, jobs):
             out['shards'] = shards
             total_shards += shards
         j['total_shards'] = total_shards
-    return order, placed_centers
+    # Towns also get min-overclock applied.
+    for t in mining_towns:
+        if 'nodes' not in t:
+            continue
+        cap_max = sum(rate_of(_full_node(n)) for n in t['nodes'])
+        this_demand = min(t.get('demand_share', cap_max), cap_max)
+        oc, shards, cap = site_min_overclock(t['nodes'], this_demand)
+        for n in t['nodes']:
+            n['oc'] = oc[id(n)]['clock']
+            n['sh'] = oc[id(n)]['shards']
+        t['capacity'] = cap
+        t['shards'] = shards
+    return order, placed_centers, mining_towns
 
 
 def _full_node(compact):
@@ -971,7 +1080,7 @@ def _full_node(compact):
 
 # ---------------------------------------------------------------- output
 def build_output(db, pool, jobs, occ_stat, placed_centers,
-                 out_erosion_report=None):
+                 out_erosion_report=None, mining_towns=None):
     matched, total_occ, unmatched = occ_stat
     by_type_total = defaultdict(int)
     by_type_occ = defaultdict(int)
@@ -1037,8 +1146,11 @@ def build_output(db, pool, jobs, occ_stat, placed_centers,
         'occupancy_match': f'{matched}/{total_occ}',
         'pool_balance': pool_balance,
         'erosion_report': out_erosion_report,
-        'total_shards_global': sum(f['total_shards'] for f in facs.values())},
-        'factory_locations': facs}
+        'total_shards_global': (sum(f['total_shards'] for f in facs.values())
+                                 + sum(t.get('shards', 0)
+                                       for t in (mining_towns or [])))},
+        'factory_locations': facs,
+        'gap_mining_towns': mining_towns or []}
     return out, unmatched
 
 
@@ -1108,20 +1220,37 @@ def inject_map(out):
                           'sh': o.get('shards', 0)}
                          for o in f.get('outposts', [])],
         })
+    towns = []
+    for t in out.get('gap_mining_towns', []):
+        if 'nodes' not in t:
+            continue           # skip shortfall sentinels
+        towns.append({
+            'id': t['id'], 'name': t['name'],
+            'r': t['resource'],
+            'cap': t.get('capacity', 0),
+            'sh': t.get('shards', 0),
+            'cx': t['center']['x'], 'cy': t['center']['y'],
+            'nodes': t['nodes'],
+            'supplies': t.get('supplies', []),
+        })
     js = ('// <GAP_DATA> — rewritten by find_gap_factory_locations.py; '
           'do not hand-edit\nconst GAP_FACTORIES = '
-          + json.dumps(arr, separators=(',', ':')) + ';\n// </GAP_DATA>')
+          + json.dumps(arr, separators=(',', ':')) + ';\n'
+          + 'const GAP_TOWNS = '
+          + json.dumps(towns, separators=(',', ':')) + ';\n'
+          + '// </GAP_DATA>')
     html = open(MAP_HTML).read()
     new = re.sub(r'// <GAP_DATA>.*?// </GAP_DATA>', lambda _: js, html,
                  count=1, flags=re.DOTALL)
     if new == html and '// <GAP_DATA>' not in html:
         raise RuntimeError("GAP_DATA markers not found in factory-map.html")
     open(MAP_HTML, 'w').write(new)
-    # parse-check the injected literal (A10/Task7 Step7)
-    m = re.search(r'const GAP_FACTORIES = (\[.*?\]);\n// </GAP_DATA>',
-                  new, re.DOTALL)
-    json.loads(m.group(1))
-    return len(arr)
+    # parse-check both injected literals (A10/Task7 Step7)
+    m1 = re.search(r'const GAP_FACTORIES = (\[.*?\]);', new, re.DOTALL)
+    m2 = re.search(r'const GAP_TOWNS = (\[.*?\]);', new, re.DOTALL)
+    json.loads(m1.group(1))
+    json.loads(m2.group(1))
+    return len(arr), len(towns)
 
 
 def main():
@@ -1166,9 +1295,9 @@ def main():
         print(f"  {j['name']:22} sig={j['signature']:9} "
               f"pk={pk[0]:.3f} raw={ {k: round(v) for k, v in j['raw_demand'].items()} }")
 
-    order, placed = allocate(pool, jobs)
+    order, placed, mining_towns = allocate(pool, jobs)
     out, unmatched = build_output(db, pool, jobs, occ_stat, placed,
-                                   erosion_report)
+                                   erosion_report, mining_towns)
     issues, (total, occ, res, free) = validate(out, pool, order, unmatched)
 
     print(f"\n=== allocation result ===")
@@ -1204,8 +1333,8 @@ def main():
 
     json.dump(out, open(OUTPUT_PATH, 'w'), indent=2)
     print(f"\nWritten {OUTPUT_PATH}")
-    n = inject_map(out)
-    print(f"Injected {n} gap factories into {MAP_HTML} "
+    n_f, n_t = inject_map(out)
+    print(f"Injected {n_f} gap factories + {n_t} mining towns into {MAP_HTML} "
           f"(GAP_DATA block, parse-checked OK)")
 
 
