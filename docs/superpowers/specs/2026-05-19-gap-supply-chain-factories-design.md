@@ -62,9 +62,18 @@ Per user override, Steel Beam / High-Speed Connector / Modular Frame / Cooling
 System are built as full new dedicated production (existing output not counted
 toward them). The rest are built to the computed gap.
 
-**No new build (already over-covered):** Wire, Circuit Board, Computer, Rotor,
+**No new build (already over-covered):** Wire, Circuit Board, Computer,
 Crystal Oscillator. **Not needed:** Plastic (0 — forced OC Supercomputer path
 uses none).
+
+**Rotor** is now an explicitly planned intermediate (not drawn from existing
+surplus) — produced in-house by its consuming factories in two flavors (§3.1a).
+
+**Electromagnetic Control Rod** is intentionally *not* a planned product: it is
+not one of the 17 inputs, and Voltreach uses **Rigor Motor** (not the Electric
+Motor recipe), so no EM Control Rod demand is created here. The Special factory
+builds its own EM Control Rod internally (Stator + High-Speed Connector via the
+EM Connection Rod alternate) — out of scope for these sub-factories.
 
 ### 2.4 Input coverage check (all 17 simple.sft inputs)
 
@@ -73,8 +82,9 @@ Cooling System → Aldercast · Motor → Voltreach + Classic Iron · Rubber →
 Naphtheon+ · Smart Plating → Ferrium+ · Aluminum Casing → Aldercast / Bauxhold
 / Silvashade · Stator → Moldmarsh + Voltreach · Copper Powder → Cathera+ ·
 Steel Beam → Silvashade (Aluminum Beam) + Moldmarsh (cast) · Modular Frame →
-Ferrium+ · Wire / Circuit Board / Computer / Rotor / Crystal Oscillator → no
-new build · Plastic → not needed.
+Ferrium+ · Rotor → produced in-house: Iron Rotor (Classic Iron Motor; Ferrium+
+Smart Plating feed) / Copper Rotor (Voltreach) · Wire / Circuit Board /
+Computer / Crystal Oscillator → no new build · Plastic → not needed.
 
 ## 3. Factory-flavor design
 
@@ -116,9 +126,10 @@ pressure (the split fraction is decided in the amounts phase):
   "pure aluminium" foundry, the Ferrium of aluminium.
 
 **④ Voltreach — Electric Motion**
-- Chain: **Copper Rotor** (Copper Sheet) + **Quickwire Stator** (Caterium
-  high-speed wire) → **Rigor Motor** (+ Crystal Oscillator).
-- Outputs: a share of Motor (electric) · Quickwire Stator.
+- Chain: **Copper Rotor** (Copper Sheet + Iron Screw, in-house) + **Quickwire
+  Stator** (Caterium high-speed wire) → **Rigor Motor** (+ Crystal Oscillator).
+- Outputs: a share of Motor (electric) · Quickwire Stator · Copper Rotor
+  (in-house).
 - Identity: caterium/copper electrical motor, no iron rods/screws.
 
 **⑤ Moldmarsh — Cast Steel**
@@ -129,9 +140,22 @@ pressure (the split fraction is decided in the amounts phase):
   Forgeholm's plain steel.
 
 **⑥ Classic Iron Motor**
-- Chain: standard **Rotor** (Iron Rod + Iron Screw) + standard **Stator** +
-  standard **Motor**. May lean on Ferrium's iron for the Rotor leg.
-- Outputs: a share of Motor (iron).
+- Chain: **Iron Rotor** in-house (Iron Rod + Iron Screw) + standard **Stator**
+  + standard **Motor**. May lean on Ferrium's iron for the Rotor leg.
+- Outputs: a share of Motor (iron) · Iron Rotor (in-house).
+
+### 3.1a Rotor (planned intermediate, two flavors)
+
+Rotor is produced in-house by the factories that consume it, not pulled from
+existing surplus:
+
+- **Iron Rotor** (Iron Rod + Iron Screw) → Classic Iron Motor (its Motor) and a
+  feed line in **Ferrium+** for Smart Plating.
+- **Copper Rotor** (6 Copper Sheet + 52 Iron Screw → 3/cyc) → Voltreach (feeds
+  its Rigor Motor). Copper-flavored, on Voltreach's electrical identity.
+
+Per-flavor Rotor volume is sized in the amounts phase from the Motor/Smart
+Plating splits.
 
 ### 3.2 Targeted extensions of existing factories
 
@@ -140,7 +164,7 @@ pressure (the split fraction is decided in the amounts phase):
 - **Cathera+** (caterium/copper identity) → High-Speed Connector 115 · Copper
   Powder 1,000.
 - **Ferrium+** (pure iron plate/rod identity) → Smart Plating 150 · Modular
-  Frame 38.
+  Frame 38, plus an **Iron Rotor** feed line for the Smart Plating.
 
 ### 3.3 Heavy Modular Frame
 
@@ -154,12 +178,12 @@ Scaled +66/min across the existing 5 themed factories
 | **Aldercast** (new) | Sloppy Alumina · Electrode Scrap · Pure Al Ingot · Alclad Casing · Heat Exchanger | Aluminum Casing (share) · Cooling System 150 |
 | **Bauxhold** (new) | Instant Scrap (Blender) · Pure Al Ingot · std Casing | Aluminum Casing (share) |
 | **Silvashade** (new) | std Alumina · Scrap · Foundry Al Ingot (+Silica) · std Casing · Aluminum Beam | Aluminum Casing (share) · Steel Beam (Al) share |
-| **Voltreach** (new) | Copper Rotor · Quickwire Stator · Rigor Motor (+Crystal Osc.) | Motor (electric) share · Stator (quickwire) |
+| **Voltreach** (new) | Copper Rotor · Quickwire Stator · Rigor Motor (+Crystal Osc.) | Motor (electric) share · Stator (quickwire) · Copper Rotor |
 | **Moldmarsh** (new) | Molded Beam · Molded Steel Pipe (Foundry cast) | Steel Beam (cast) share · Stator share |
-| **Classic Iron Motor** (new) | Std Rotor (Iron Rod+Screw) · Std Stator · std Motor | Motor (iron) share |
+| **Classic Iron Motor** (new) | Iron Rotor (Iron Rod+Screw) · Std Stator · std Motor | Motor (iron) share · Iron Rotor |
 | **Naphtheon+** (extend) | existing oil/polymer | Rubber +917 |
 | **Cathera+** (extend) | existing caterium/copper | High-Speed Connector 115 · Copper Powder 1,000 |
-| **Ferrium+** (extend) | existing pure-iron plate/rod | Smart Plating 150 · Modular Frame 38 |
+| **Ferrium+** (extend) | existing pure-iron plate/rod | Smart Plating 150 · Modular Frame 38 · Iron Rotor (for Smart Plating) |
 | **Ferrium/Naphtheon/Forgeholm/Luxara/Cathera** | existing HMF chains | Heavy Modular Frame — scale +66 |
 
 ### 3.5 Bauxite constraint (primary feasibility risk)
@@ -182,7 +206,9 @@ the design:
   Exchanger / Cooling System).
 - Copper feed → Aldercast (Alclad) and Voltreach (Copper Rotor / Copper
   Sheet); Caterium feed → Voltreach (Quickwire Stator).
-- Wire feed → Stator lines; Rotor feed → Ferrium+ Smart Plating.
+- Wire feed → Stator lines. Rotor is made in-house per consuming factory
+  (Iron Rotor in Classic Iron Motor & Ferrium+; Copper Rotor in Voltreach) —
+  no cross-factory Rotor haul.
 
 ## 4. Scope boundaries
 
@@ -190,17 +216,19 @@ the design:
   chains, which gap products each produces, and the locked target basis.
 - **Deferred to next phase:** the Aluminum Casing 3,900 split across
   Aldercast / Bauxhold / Silvashade; the Motor and Steel Beam splits between
-  their flavors; per-factory building counts / module sizing; locations and
-  node assignments; Bauxite feasibility resolution; re-checking internal
-  consumption (§2.2) against the net-positive items.
+  their flavors; the Iron/Copper Rotor volumes (derived from the Motor &
+  Smart Plating splits); per-factory building counts / module sizing;
+  locations and node assignments; Bauxite feasibility resolution; re-checking
+  internal consumption (§2.2) against the net-positive items.
 - **Unchanged:** the existing 5 themed HMF factories' recipe chains; the
   Factory Crazy 2-stage build methodology; `PLANNING-STATE.md` as the
   canonical planning reference.
 
 ## 5. Next steps
 
-1. Decide the Aluminum Casing split across the 3 aluminium flavors, and the
-   Motor / Steel Beam splits between their flavors.
+1. Decide the Aluminum Casing split across the 3 aluminium flavors, the
+   Motor / Steel Beam splits between their flavors, and the resulting
+   Iron/Copper Rotor volumes.
 2. Size each factory (modules / building counts) under the Factory Crazy
    constraints.
 3. Resolve Bauxite siting/feasibility for the multi-site aluminium factories.
