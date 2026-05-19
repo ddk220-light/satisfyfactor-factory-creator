@@ -794,21 +794,39 @@ def consolidate_mining_towns(pool, jobs, placed_centers):
             town_idx += 1
         if not town_capacities:
             continue
-        # Distribute town capacities pro-rata across consumers
-        total_cap = total_demand - max(remaining, 0)
+        # Nearest-only assignment: each consumer pulls from the closest
+        # town with remaining capacity (then spills to next-nearest if it
+        # fills). Sparse supply graph instead of pro-rata everywhere.
         for t in town_capacities:
             t['supplies'] = []
-            t_cap_max = sum(rate_of(_full_node(n)) for n in t['nodes'])
-            t_share = t_cap_max / sum(sum(rate_of(_full_node(n))
-                                          for n in u['nodes'])
-                                      for u in town_capacities)
-            for c in consumers:
-                amt = round(t_share * c['demand'], 1)
-                if amt > 0:
-                    t['supplies'].append({'factory': c['factory'],
-                                          'amount_per_min': amt})
-            t['capacity_max'] = round(t_cap_max, 1)
-            t['demand_share'] = round(min(t_cap_max, total_cap * t_share), 1)
+            t['capacity_max'] = sum(rate_of(_full_node(n)) for n in t['nodes'])
+            t['_remaining_cap'] = t['capacity_max']
+        def consumer_center(fid):
+            for j in jobs:
+                if j['id'] != fid: continue
+                if j.get('sites'): return (j['sites'][0]['center']['x'],
+                                            j['sites'][0]['center']['y'])
+                if j.get('anchor'): return (j['anchor']['x'], j['anchor']['y'])
+            return (0, 0)
+        # Allocate biggest consumers first so they get nearest pick
+        consumers_sorted = sorted(consumers, key=lambda c: -c['demand'])
+        for c in consumers_sorted:
+            cctr = consumer_center(c['factory'])
+            remaining_c = c['demand']
+            ranked = sorted(town_capacities,
+                             key=lambda t: dist(cctr, (t['center']['x'],
+                                                       t['center']['y'])))
+            for t in ranked:
+                if remaining_c <= 0: break
+                if t['_remaining_cap'] <= 0: continue
+                amt = min(remaining_c, t['_remaining_cap'])
+                t['supplies'].append({'factory': c['factory'],
+                                       'amount_per_min': round(amt, 1)})
+                t['_remaining_cap'] -= amt
+                remaining_c -= amt
+        for t in town_capacities:
+            t['demand_share'] = round(t['capacity_max'] - t['_remaining_cap'], 1)
+            del t['_remaining_cap']
         towns.extend(town_capacities)
         if remaining > 1.0:
             towns.append({'id': f'town_{r}_SHORTFALL', 'resource': r,
