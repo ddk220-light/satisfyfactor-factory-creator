@@ -210,6 +210,31 @@ the design:
   (Iron Rotor in Classic Iron Motor & Ferrium+; Copper Rotor in Voltreach) —
   no cross-factory Rotor haul.
 
+### 3.7 Consolidated factory / output / raw-input table
+
+Raw footprint derived from the assigned recipes (quantities deferred — flavor
+splits not yet decided).
+
+| Factory | Flavor / key recipes | Outputs | Raw inputs (mined) | Imported intermediates |
+|---|---|---|---|---|
+| **Aldercast** | Sloppy Alumina · Electrode Scrap · Pure Al Ingot · Alclad Casing · Heat Exchanger | Aluminum Casing (share) · Cooling System 150 | Bauxite, Copper Ore, Nitrogen, Water | Petroleum Coke + Rubber (from Naphtheon) |
+| **Bauxhold** | Instant Scrap (Blender) · Pure Al Ingot · std Casing | Aluminum Casing (share) | Bauxite, Coal, Sulfur, Water | — |
+| **Silvashade** | std Alumina · Scrap · Foundry Al Ingot (+Silica) · std Casing · Aluminum Beam | Aluminum Casing (share) · Steel Beam (Al) share | Bauxite, Coal, Raw Quartz, Water | — |
+| **Voltreach** | Copper Rotor · Quickwire Stator · Rigor Motor | Motor (electric) share · Quickwire Stator · Copper Rotor | Copper Ore, Caterium, Iron Ore, Coal, Raw Quartz | — |
+| **Moldmarsh** | Molded Beam · Molded Steel Pipe · std Stator | Steel Beam (cast) share · Stator share | Iron Ore, Coal, Limestone, Copper Ore | Wire (or in-house from copper) |
+| **Classic Iron Motor** | Iron Rotor · std Stator · std Motor | Motor (iron) share · Iron Rotor | Iron Ore, Coal, Copper Ore | — |
+| **Naphtheon+** | existing oil/polymer | Rubber +917 · Petroleum Coke → Aldercast | Crude Oil, Water | — |
+| **Cathera+** | existing caterium/copper | High-Speed Connector 115 · Copper Powder 1,000 | Copper Ore, Caterium, Crude Oil | — |
+| **Ferrium+** | existing pure-iron plate/rod + Iron Rotor | Smart Plating 150 · Modular Frame 38 · Iron Rotor | Iron Ore | — |
+| **Existing 5** (Ferrium/Naphtheon/Forgeholm/Luxara/Cathera) | existing HMF chains, scaled | Heavy Modular Frame +66 | Iron, Limestone, Coal, Crude Oil, Bauxite, Copper, Caterium (existing mix) | — |
+
+**Raw-pressure rollup:** Bauxite → Aldercast + Bauxhold + Silvashade (the
+bottleneck, spread 3 ways). Copper Ore → Aldercast, Voltreach, Moldmarsh,
+Cathera+, Classic Iron. Iron Ore → Voltreach, Moldmarsh, Classic Iron,
+Ferrium+. Caterium → Voltreach, Cathera+. Crude Oil → Naphtheon+ (feeds
+Aldercast), Cathera+. Sulfur → Bauxhold only (uses surplus). Raw Quartz →
+Silvashade, Voltreach (uses surplus).
+
 ## 4. Scope boundaries
 
 - **In scope (this spec):** the set of factory flavors, their signature recipe
