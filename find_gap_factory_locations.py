@@ -27,10 +27,28 @@ RESOURCE_NODES     = 'resource_nodes.json'
 OCCUPIED_NODES     = 'planner-export/occupied-nodes.json'
 EXISTING_LOCATIONS = 'selected-factory-locations.json'
 SUBUNITS           = 'factory-subunits.json'
+CURRENT_PRODUCTION = 'planner-export/current-production.txt'
 OUTPUT_PATH        = 'gap-factory-locations.json'
+
+# Design §2.2 candidate intermediates: existing net-positive items the new
+# factories may consume rather than make in-house. We decide per-item by
+# checking existing surplus vs total new consumption (erosion check).
+EROSION_CANDIDATES = {'Wire', 'Circuit Board', 'Crystal Oscillator',
+                       'Copper Sheet', 'Computer'}
+EROSION_MARGIN     = 100      # leave this much surplus buffer
+
+BUILDING_FOOTPRINT = {        # reused from build_factory_crazy.py
+    'Manufacturer': 440, 'Blender': 304, 'Refinery': 200, 'Assembler': 150,
+    'Constructor': 80, 'Foundry': 72, 'Smelter': 54,
+    'Packager': 24, 'Particle Accelerator': 912, 'Quantum Encoder': 912,
+    'Converter': 240,
+}
 
 SEARCH_RADIUS  = 40_000          # 400 m cluster radius (HMF method, tunable)
 MIN_SEPARATION = 25_000          # 250 m between distinct sites/centers
+BELT_LIMIT     = 780             # items/min per node; user's belt cap
+                                 # (pure Mk.3 @ 250% = 1200 but belt clamps to
+                                 # 780, so shard 3 on pure is wasted)
 PURITY_WEIGHT  = {'impure': 1, 'normal': 2, 'pure': 4}
 # All extractors assumed at max overclock (3 power shards = 250%) per user.
 # Base Mk.3: 120/240/480; OIL: 60/120/240; WELL satellite: 30/60/120.
@@ -40,8 +58,9 @@ OIL_RATE       = {'impure':  60 * _OC,      'normal': 120 * _OC,      'pure': 24
 WELL_RATE      = {'impure':  30 * _OC,      'normal':  60 * _OC,      'pure': 120 * _OC}
 QUADRANT_BONUS = 1.5             # soft NW/SE multiplier (A-design)
 OCC_MATCH_TOL  = 5_000           # 50 m nearest-node occupancy match (A1/Task2)
-MAX_SITES      = 5               # satellite cap per factory (design §3.5
-                                 # explicitly multi-sites Aluminium factories)
+MAX_SITES      = 8               # satellite cap per factory (design §3.5
+                                 # multi-sites Aluminium factories; belt cap
+                                 # 780/node forces more sites for big demands)
 
 # explicit RAW set — DB is_raw heuristic is unreliable here (a "Bauxite"
 # Converter recipe makes ores look non-raw), so terminate decomposition here.
@@ -190,6 +209,14 @@ class DB:
         self._cache[recipe_name] = (out, inp)
         return out, inp
 
+    def recipe_building(self, recipe_name):
+        row = self.c.execute(
+            "SELECT b.name, b.power_used FROM recipes r "
+            "JOIN recipe_buildings rb ON rb.recipe_id=r.id "
+            "JOIN buildings b ON b.id=rb.building_id "
+            "WHERE r.name=?", (recipe_name,)).fetchone()
+        return row if row else (None, 0)
+
     def default_recipe(self, item):
         """Non-alternate, building-based recipe where `item` is the primary
         product; prefer r.name==item; fall back to any alternate. (A8)"""
@@ -316,11 +343,27 @@ def avail(pool, ntype):
 
 
 def rate_of(node):
+    """Max effective rate at full overclock, after belt cap."""
     if node['kind'] == 'well':
         return WELL_RATE[node['purity']]
     if node['type'] == 'oil':
-        return OIL_RATE[node['purity']]
-    return MINER_RATE[node['purity']]
+        return OIL_RATE[node['purity']]    # fluids: pipes 600 m3/min, OK
+    return min(MINER_RATE[node['purity']], BELT_LIMIT)
+
+
+def effective_at_shards(node, shards):
+    """Effective rate for a node at `shards` (0..3) clock = 100+50*shards %.
+    Solid mining capped at BELT_LIMIT. Fluids use pipe capacity (already
+    well below BELT-style limits in our config)."""
+    pur = _PUR_FULL.get(node.get('purity') or node.get('p'), 'normal')
+    kind = node.get('kind') or node.get('k')
+    t = node.get('type') or node.get('t')
+    clock = 1.0 + 0.5 * shards
+    if kind == 'well':
+        return WELL_RATE[pur] / 2.5 * clock
+    if t == 'oil':
+        return OIL_RATE[pur] / 2.5 * clock
+    return min(MINER_RATE[pur] / 2.5 * clock, BELT_LIMIT)
 
 
 def claim_nearest(pool, ntype, center, demand, job_id, radius=None):
@@ -371,6 +414,12 @@ def centroid(nodes):
 
 
 # ---------------------------------------------------------------- demand
+def _resolved_products(products, fid):
+    """{item: per_min} from a factory.products dict (mode='split' or 'target')."""
+    return {p: (split_rate(p, fid) if m[0] == 'split' else GAP_TARGETS[p])
+            for p, m in products.items()}
+
+
 def split_rate(item, fid):
     if item in FLAVOR_SPLITS and fid in FLAVOR_SPLITS[item]:
         return FLAVOR_SPLITS[item][fid]
@@ -408,6 +457,177 @@ def aldercast_imports(db):
     return dict(need)
 
 
+def load_current_production():
+    """Parse planner-export/current-production.txt -> {item_name: net_per_min}
+    (make - consume; positive = surplus, negative = deficit)."""
+    net = {}
+    with open(CURRENT_PRODUCTION) as f:
+        for line in f:
+            parts = [p.strip() for p in line.split('\t') if p.strip()]
+            if len(parts) < 3:
+                continue
+            name = parts[0]
+            def numify(s):
+                tok = s.split(' ')[0].replace(',', '').replace('m³', '')
+                try: return float(tok)
+                except ValueError: return 0.0
+            net[name] = numify(parts[1]) - numify(parts[2])
+    return net
+
+
+def factory_consumption_of(db, fid, products, pinned, target_item):
+    """How much of target_item factory fid consumes (per min), assuming
+    in-house all the way down except target_item which is treated as a
+    boundary (its consumption is the value we want)."""
+    total = 0.0
+    for item, mode in products.items():
+        rate = split_rate(item, fid) if mode[0] == 'split' else GAP_TARGETS[item]
+        for raw, pm in decompose(db, item, rate, pinned, {target_item}).items():
+            if raw == target_item:
+                total += pm
+    return total
+
+
+def resolve_imports(db, current_net):
+    """Design §2.2 erosion check. For each EROSION_CANDIDATES intermediate,
+    sum potential new consumption across all factories+extensions. If
+    current_net[item] - new_consumption >= EROSION_MARGIN -> import from
+    existing surplus (add to consuming factories' imports). Else: keep
+    in-house. Returns (per_factory_extra_imports, report)."""
+    extras = defaultdict(set)
+    report = {}
+    for it in EROSION_CANDIDATES:
+        total_new = 0.0
+        consumers = []
+        for fid, f in NEW_FACTORIES.items():
+            v = factory_consumption_of(db, fid, f['products'], f['recipes'], it)
+            if v > 1e-3:
+                consumers.append((fid, v)); total_new += v
+        for fid, e in EXTENSIONS.items():
+            v = factory_consumption_of(db, fid, e['added'],
+                                        e.get('recipes', {}), it)
+            if v > 1e-3:
+                consumers.append((fid + '+', v)); total_new += v
+        surplus = current_net.get(it, 0.0)
+        residual = surplus - total_new
+        is_import = (residual >= EROSION_MARGIN and total_new > 0)
+        report[it] = {'existing_net': round(surplus, 1),
+                       'new_consumption': round(total_new, 1),
+                       'residual_net': round(residual, 1),
+                       'decision': 'import_from_existing' if is_import else 'in_house',
+                       'consumers': [(c, round(v, 1)) for c, v in consumers]}
+        if is_import:
+            for c, _ in consumers:
+                extras[c].add(it)
+    return dict(extras), report
+
+
+def building_chain(db, products, pinned, imports):
+    """Compute building counts for the full chain producing `products`. Stops
+    at RAW or `imports`. Returns ordered list of entries:
+    {recipe, item, building, rate_per_min, recipe_output_per_min,
+     buildings_exact, buildings_ceil, power_mw}."""
+    # phase 1: aggregate per-item rates via BFS
+    rate = defaultdict(float)
+    for p, r in products.items():
+        rate[p] += r
+    todo = list(products.keys())
+    visited = set()
+    order = []
+    while todo:
+        item = todo.pop(0)
+        if item in visited or israw(item) or item in imports:
+            continue
+        visited.add(item); order.append(item)
+        recipe = pinned.get(item) or db.default_recipe(item)
+        out, inp = db.recipe_io(recipe)
+        made = out.get(item, 0)
+        if not made: continue
+        scale = rate[item] / made
+        for ing, pm in inp.items():
+            rate[ing] += pm * scale
+            todo.append(ing)
+    # phase 2: build entries
+    entries = []
+    for item in order:
+        recipe = pinned.get(item) or db.default_recipe(item)
+        out, inp = db.recipe_io(recipe)
+        made = out.get(item, 0)
+        if not made: continue
+        bld, power = db.recipe_building(recipe)
+        be = rate[item] / made
+        entries.append({
+            'recipe': recipe, 'item': item, 'building': bld or '?',
+            'rate_per_min': round(rate[item], 2),
+            'recipe_output_per_min': round(made, 2),
+            'buildings_exact': round(be, 2),
+            'buildings_ceil': math.ceil(be),
+            'power_mw': round(power * be, 1),
+        })
+    return entries
+
+
+def factory_building_totals(entries):
+    """{building_type: total_count}, plus total power and total footprint."""
+    by_b = defaultdict(int)
+    power = 0.0
+    foot = 0
+    for e in entries:
+        by_b[e['building']] += e['buildings_ceil']
+        power += e['power_mw']
+        foot += e['buildings_ceil'] * BUILDING_FOOTPRINT.get(e['building'], 0)
+    return {'by_building': dict(by_b),
+            'total_buildings': sum(by_b.values()),
+            'total_power_mw': round(power, 1),
+            'footprint_m2': foot}
+
+
+_PUR_FULL = {'i': 'impure', 'n': 'normal', 'p': 'pure',
+             'impure': 'impure', 'normal': 'normal', 'pure': 'pure'}
+
+
+def base_rate(node):
+    """Per-node base extraction rate (100% clock = no shards). Accepts both
+    full ({type,purity,kind}) and compact ({t,p,k}) node dicts."""
+    pur = _PUR_FULL[node.get('purity') or node.get('p')]
+    kind = node.get('kind') or node.get('k')
+    t = node.get('type') or node.get('t')
+    if kind == 'well':
+        return WELL_RATE[pur] / 2.5            # un-overclock to base
+    if t == 'oil':
+        return OIL_RATE[pur] / 2.5
+    return MINER_RATE[pur] / 2.5
+
+
+def site_min_overclock(nodes, demand):
+    """Pick the minimum overclock per node such that Σ effective_rate >=
+    demand, respecting belt cap (no shard wasted past 780/min). Greedy:
+    each round pick the node where the NEXT shard adds the most effective
+    rate. Returns ({nid: {'clock', 'shards'}}, total_shards, cap_now)."""
+    if not nodes:
+        return {}, 0, 0.0
+    state = {id(n): {'clock': 100, 'shards': 0} for n in nodes}
+    total = sum(effective_at_shards(n, 0) for n in nodes)
+    total_shards = 0
+    while total + 1e-6 < demand:
+        # rank by marginal gain of one more shard
+        best, best_gain = None, 0
+        for n in nodes:
+            s = state[id(n)]['shards']
+            if s >= 3:
+                continue
+            gain = effective_at_shards(n, s + 1) - effective_at_shards(n, s)
+            if gain > best_gain:
+                best, best_gain = n, gain
+        if best is None or best_gain <= 1e-6:
+            break        # no more useful shards (belt-capped) or all maxed
+        state[id(best)]['shards'] += 1
+        state[id(best)]['clock'] = 100 + 50 * state[id(best)]['shards']
+        total += best_gain
+        total_shards += 1
+    return state, total_shards, round(total, 1)
+
+
 # ---------------------------------------------------------------- allocation
 def score_centers(pool, sig, sig_demand, placed_centers):
     """Candidate centers = available signature nodes; HMF-style score with
@@ -428,7 +648,10 @@ def score_centers(pool, sig, sig_demand, placed_centers):
         if not near:
             continue
         ctr = centroid(near)
-        if any(dist(ctr, pc) < MIN_SEPARATION for pc in placed_centers):
+        # 1.25× filter margin so post-claim centroid drift (only the chosen
+        # subset of nodes within radius is actually claimed) stays within the
+        # strict MIN_SEPARATION bound that validation asserts.
+        if any(dist(ctr, pc) < MIN_SEPARATION * 1.25 for pc in placed_centers):
             continue
         sc = sum(PURITY_WEIGHT[n['purity']] for n in near) * sig_demand * rarity
         if quadrant(*ctr) in ('NW', 'SE'):
@@ -548,20 +771,27 @@ def alloc_anchored(pool, job, placed_centers):
     job['raw_demand'][sig] = demand            # restore for reporting
 
 
-def build_jobs(db):
+def build_jobs(db, extras=None):
+    extras = extras or {}
     jobs = []
     for fid, f in NEW_FACTORIES.items():
-        rd, tgt = job_raw_demand(db, fid, f['products'], f['recipes'],
-                                 f['imports'])
+        imports = set(f['imports']) | extras.get(fid, set())
+        rd, tgt = job_raw_demand(db, fid, f['products'], f['recipes'], imports)
+        chain = building_chain(db, _resolved_products(f['products'], fid),
+                                f['recipes'], imports)
         jobs.append({'id': fid, 'name': fid, 'kind': 'new',
                      'theme': f['theme'], 'signature': f['signature'],
-                     'raw_demand': rd, 'targets': tgt, 'anchor': None})
+                     'raw_demand': rd, 'targets': tgt, 'anchor': None,
+                     'imports_resolved': sorted(imports),
+                     'building_chain': chain,
+                     'building_totals': factory_building_totals(chain)})
     ald_imp = aldercast_imports(db)
     exist = json.load(open(EXISTING_LOCATIONS))['selections']
     for fid, e in EXTENSIONS.items():
         added = dict(e['added'])
         prods, recipes = added, e.get('recipes', {})
-        rd, tgt = job_raw_demand(db, fid, prods, recipes, set())
+        imports = extras.get(fid + '+', set())
+        rd, tgt = job_raw_demand(db, fid, prods, recipes, imports)
         if e.get('exports') and fid == 'naphtheon':       # Naphtheon+ exports
             for raw, pm in ald_imp.items():
                 for r2, p2 in decompose(db, raw, pm, {}, set()).items():
@@ -572,12 +802,21 @@ def build_jobs(db):
                         rd[nt] = rd.get(nt, 0) + p2
             tgt = dict(tgt); tgt.update({k + ' (export)': round(v, 1)
                                          for k, v in ald_imp.items()})
+        ext_products = {p: (split_rate(p, fid) if m[0] == 'split'
+                            else GAP_TARGETS[p]) for p, m in prods.items()}
+        if e.get('exports') and fid == 'naphtheon':
+            for raw, pm in ald_imp.items():
+                ext_products[raw] = ext_products.get(raw, 0) + pm
+        chain = building_chain(db, ext_products, recipes, imports)
         assert fid in exist, f"A13: no existing center for {fid}"
         ctr = exist[fid]['center']
         jobs.append({'id': fid + '+', 'name': fid + '+', 'kind': 'ext',
                      'theme': 'extension', 'signature': e['signature'],
                      'raw_demand': rd, 'targets': tgt,
-                     'anchor': {'x': ctr['x'], 'y': ctr['y']}})
+                     'anchor': {'x': ctr['x'], 'y': ctr['y']},
+                     'imports_resolved': sorted(imports),
+                     'building_chain': chain,
+                     'building_totals': factory_building_totals(chain)})
     sub = json.load(open(SUBUNITS))['modules']
     for fid, crit in HMF_CRITICAL.items():
         m = sub[fid]
@@ -586,6 +825,21 @@ def build_jobs(db):
         inc = HMF_SPLIT.get(fid, 66.0 / 5.0)
         if inc <= 0:                             # skip jobs with 0 increment
             continue
+        # Building totals for the increment: scale subunits steps by
+        # inc / hmf_per_min (steps are per module copy at hmf_per_min HMF/min).
+        scale = inc / m['hmf_per_min']
+        hmf_chain = []
+        for step in m['steps']:
+            be = step['buildings_exact'] * scale
+            hmf_chain.append({
+                'recipe': step['recipe'], 'item': step['item'],
+                'building': step['building'],
+                'rate_per_min': round(step['outputs'].get(step['item'], 0) * scale, 2),
+                'recipe_output_per_min': step['outputs'].get(step['item'], 0),
+                'buildings_exact': round(be, 2),
+                'buildings_ceil': math.ceil(be),
+                'power_mw': round(step['power_mw'] * be, 1),
+            })
         rd = {}
         for item, ph in per_hmf.items():
             nt = ITEM_TO_NODETYPE.get(item)
@@ -594,9 +848,12 @@ def build_jobs(db):
         assert fid in exist, f"A13: no existing center for HMF {fid}"
         ctr = exist[fid]['center']
         jobs.append({'id': fid + '_hmf', 'name': fid + ' (+HMF)',
-                     'kind': 'hmf', 'theme': 'HMF +13.2', 'signature': crit,
+                     'kind': 'hmf', 'theme': f'HMF +{inc:.1f}', 'signature': crit,
                      'raw_demand': rd, 'targets': {'Heavy Modular Frame': round(inc, 1)},
-                     'anchor': {'x': ctr['x'], 'y': ctr['y']}})
+                     'anchor': {'x': ctr['x'], 'y': ctr['y']},
+                     'imports_resolved': [],
+                     'building_chain': hmf_chain,
+                     'building_totals': factory_building_totals(hmf_chain)})
     return jobs
 
 
@@ -672,11 +929,49 @@ def allocate(pool, jobs):
     # PHASE 2 — now reserve trained-in resources for every job (B1).
     for j in order:
         alloc_trained(pool, j)
+    # PHASE 3 — per-node min overclock (Task 10): replace blanket 250% with
+    # the smallest clock per node that meets each site/outpost's demand.
+    for j in order:
+        total_shards = 0
+        sig_demand_remaining = j['raw_demand'].get(j['signature'], 0.0)
+        for site in j.get('sites', []):
+            cap_max = sum(rate_of(_full_node(n)) for n in site['nodes'])
+            this_demand = min(sig_demand_remaining, cap_max)
+            sig_demand_remaining -= this_demand
+            oc, shards, cap = site_min_overclock(site['nodes'], this_demand)
+            for n in site['nodes']:
+                n['oc'] = oc[id(n)]['clock']
+                n['sh'] = oc[id(n)]['shards']
+            site['demand_met'] = round(this_demand, 1)
+            site['signature_capacity'] = cap
+            site['shards'] = shards
+            total_shards += shards
+        for out in j.get('outposts', []):
+            cap_max = sum(rate_of(_full_node(n)) for n in out['nodes'])
+            r_demand = j['raw_demand'].get(out['resource'], 0)
+            this_demand = min(r_demand, cap_max)
+            oc, shards, cap = site_min_overclock(out['nodes'], this_demand)
+            for n in out['nodes']:
+                n['oc'] = oc[id(n)]['clock']
+                n['sh'] = oc[id(n)]['shards']
+            out['demand_met'] = round(this_demand, 1)
+            out['capacity'] = cap
+            out['shards'] = shards
+            total_shards += shards
+        j['total_shards'] = total_shards
     return order, placed_centers
 
 
+def _full_node(compact):
+    """Shim: build a minimal full-shape node dict from compact (for rate_of)."""
+    return {'kind': compact.get('k') or compact.get('kind'),
+            'type': compact.get('t') or compact.get('type'),
+            'purity': _PUR_FULL[compact.get('p') or compact.get('purity')]}
+
+
 # ---------------------------------------------------------------- output
-def build_output(db, pool, jobs, occ_stat, placed_centers):
+def build_output(db, pool, jobs, occ_stat, placed_centers,
+                 out_erosion_report=None):
     matched, total_occ, unmatched = occ_stat
     by_type_total = defaultdict(int)
     by_type_occ = defaultdict(int)
@@ -710,33 +1005,39 @@ def build_output(db, pool, jobs, occ_stat, placed_centers):
         facs[j['id']] = {
             'factory_name': j['name'], 'theme': j['theme'], 'kind': j['kind'],
             'signature_resource': j['signature'], 'disposition': disp,
-            'estimate': True, 'targets': j.get('targets', {}),
+            'targets': j.get('targets', {}),
             'center': prim, 'sites': j.get('sites', []),
             'outposts': j.get('outposts', []),
             'resources': demand_vs,
             'sig_shortfall': j.get('sig_shortfall', 0.0),
             'trained_shortfall': j.get('trained_shortfall', {}),
+            'imports_resolved': j.get('imports_resolved', []),
+            'building_totals': j.get('building_totals'),
+            'building_chain': j.get('building_chain', []),
+            'total_shards': j.get('total_shards', 0),
             'reason': _reason(j, disp)}
 
     out = {'meta': {
         'description': 'Auto-placed gap supply-chain factory locations '
-                       '(rough estimate; amounts phase deferred)',
-        'estimate': True,
+                       '(amounts phase resolved)',
         'coordinate_system': {'x': '+east/right', 'y': '+south/bottom',
                               'units': 'cm (100=1m)',
                               'quadrants': 'NW=top-left SE=bottom-right'},
-        'assumptions': {'miner': 'Mk.3 120/240/480 items/min',
-                        'well_rate_m3min': WELL_RATE,
-                        'oil_rate_m3min': OIL_RATE,
+        'assumptions': {'miner_base_items_min': {'impure': 120, 'normal': 240, 'pure': 480},
+                        'miner_max_clock_pct': 250,
+                        'well_rate_m3min_max': WELL_RATE,
+                        'oil_rate_m3min_max': OIL_RATE,
                         'search_radius_m': SEARCH_RADIUS / 100,
                         'min_separation_m': MIN_SEPARATION / 100,
                         'quadrant_bonus': QUADRANT_BONUS},
         'flavor_splits': FLAVOR_SPLITS,
-        'or_in_house_rule': 'A6: Moldmarsh Wire defaulted in-house',
+        'hmf_split': HMF_SPLIT,
         'caveat_centroid': 'A14: a node-centroid can land on water/cliff; '
                            'not a buildability guarantee',
         'occupancy_match': f'{matched}/{total_occ}',
-        'pool_balance': pool_balance},
+        'pool_balance': pool_balance,
+        'erosion_report': out_erosion_report,
+        'total_shards_global': sum(f['total_shards'] for f in facs.values())},
         'factory_locations': facs}
     return out, unmatched
 
@@ -786,16 +1087,25 @@ def inject_map(out):
     with a compact GAP_FACTORIES array (Task 7; idempotent)."""
     arr = []
     for fid, f in out['factory_locations'].items():
+        bt = f.get('building_totals') or {}
         arr.append({
             'id': fid, 'name': f['factory_name'], 'theme': f['theme'],
             'sig': f['signature_resource'], 'disp': f['disposition'],
             'infeasible': f['disposition'] == 'infeasible'
                           or f.get('sig_shortfall', 0) > 1e-6,
             'shortfall': f.get('sig_shortfall', 0),
+            'buildings': bt.get('total_buildings', 0),
+            'power_mw': bt.get('total_power_mw', 0),
+            'shards': f.get('total_shards', 0),
+            'imports': f.get('imports_resolved', []),
             'sites': [{'x': s['center']['x'], 'y': s['center']['y'],
-                       'nodes': s['nodes']} for s in f.get('sites', [])],
+                       'nodes': s['nodes'],
+                       'cap': s.get('signature_capacity', 0),
+                       'sh': s.get('shards', 0)} for s in f.get('sites', [])],
             'outposts': [{'r': o['resource'], 'x': o['center']['x'],
-                          'y': o['center']['y'], 'nodes': o['nodes']}
+                          'y': o['center']['y'], 'nodes': o['nodes'],
+                          'cap': o.get('capacity', 0),
+                          'sh': o.get('shards', 0)}
                          for o in f.get('outposts', [])],
         })
     js = ('// <GAP_DATA> — rewritten by find_gap_factory_locations.py; '
@@ -822,7 +1132,22 @@ def main():
     print(f"Occupancy match: {matched}/{total_occ} "
           f"({len(unmatched)} unmatched)")
 
-    jobs = build_jobs(db)
+    # Task 9 — design §2.2 erosion check; resolves which design-§2.2
+    # intermediates (Wire/CB/CO/Cu Sheet/Computer) are imported from existing
+    # surplus vs in-house per factory.
+    current_net = load_current_production()
+    extras, erosion_report = resolve_imports(db, current_net)
+    print("\n=== Design §2.2 erosion check ===")
+    for item, r in erosion_report.items():
+        print(f"  {item:20} net_now={r['existing_net']:+7.1f}  "
+              f"new={r['new_consumption']:+7.1f}  "
+              f"residual={r['residual_net']:+7.1f}  -> {r['decision']}")
+    if extras:
+        print("  imports resolved per factory:")
+        for fid, items in sorted(extras.items()):
+            print(f"    {fid}: {sorted(items)}")
+
+    jobs = build_jobs(db, extras)
 
     # A12 sanity anchor (before allocation)
     print("\n=== A12 demand sanity (bottlenecks) ===")
@@ -842,14 +1167,19 @@ def main():
               f"pk={pk[0]:.3f} raw={ {k: round(v) for k, v in j['raw_demand'].items()} }")
 
     order, placed = allocate(pool, jobs)
-    out, unmatched = build_output(db, pool, jobs, occ_stat, placed)
+    out, unmatched = build_output(db, pool, jobs, occ_stat, placed,
+                                   erosion_report)
     issues, (total, occ, res, free) = validate(out, pool, order, unmatched)
 
     print(f"\n=== allocation result ===")
     for j in order:
+        bt = j.get('building_totals') or {}
         print(f"  {j['name']:22} {j.get('disposition', '?'):14} "
-              f"sites={len(j.get('sites', []))} "
-              f"outposts={len(j.get('outposts', []))}"
+              f"sites={len(j.get('sites', [])):>2} "
+              f"out={len(j.get('outposts', [])):>2} "
+              f"bldgs={bt.get('total_buildings', 0):>4} "
+              f"pwr={bt.get('total_power_mw', 0):>5.0f}MW "
+              f"shards={j.get('total_shards', 0):>3}"
               + ("  *** INFEASIBLE ***" if j.get('infeasible') else ""))
 
     print(f"\n=== pool balance ===")
