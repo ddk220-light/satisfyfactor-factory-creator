@@ -647,10 +647,11 @@ function drawFactoryCenter(fid, f) {
   ctx.stroke();
 
   // Label
-  ctx.font = 'bold 12px Courier New';
+  const fs = Math.max(12, Math.min(22, Math.round(12 * Math.sqrt(zoom / 0.001))));
+  ctx.font = `bold ${fs}px Courier New`;
   ctx.textAlign = 'center';
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = Math.max(3, fs / 4);
   ctx.strokeText(f.name, s.x, s.y - r - 8);
   ctx.fillStyle = '#fff';
   ctx.fillText(f.name, s.x, s.y - r - 8);
@@ -708,9 +709,10 @@ function drawGapCenter(gf) {
     ctx.setLineDash([]);
     if (si === 0) {
       const tag = gf.infeasible ? gf.name + ' ⚠' : gf.name;
-      ctx.font = 'bold 12px Courier New';
+      const fs = Math.max(11, Math.min(22, Math.round(12 * Math.sqrt(zoom / 0.001))));
+      ctx.font = `bold ${fs}px Courier New`;
       ctx.textAlign = 'center';
-      ctx.strokeStyle = '#000'; ctx.lineWidth = 3;
+      ctx.strokeStyle = '#000'; ctx.lineWidth = Math.max(3, fs / 4);
       ctx.strokeText(tag, s.x, s.y - r - 8);
       ctx.fillStyle = gf.infeasible ? '#ff6b6b' : '#fff';
       ctx.fillText(tag, s.x, s.y - r - 8);
@@ -744,9 +746,10 @@ function drawGapTown(gt) {
   ctx.lineTo(s.x, s.y + sz); ctx.lineTo(s.x - sz, s.y);
   ctx.closePath(); ctx.fill();
   ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-  ctx.font = 'bold 11px Courier New';
+  const fs = Math.max(11, Math.min(20, Math.round(11 * Math.sqrt(zoom / 0.001))));
+  ctx.font = `bold ${fs}px Courier New`;
   ctx.textAlign = 'center';
-  ctx.strokeStyle = '#000'; ctx.lineWidth = 3;
+  ctx.strokeStyle = '#000'; ctx.lineWidth = Math.max(3, fs / 4);
   ctx.strokeText(gt.name, s.x, s.y - sz - 6);
   ctx.fillStyle = '#fff';
   ctx.fillText(gt.name, s.x, s.y - sz - 6);
@@ -836,16 +839,17 @@ function drawTownCenter(mt) {
   ctx.restore();
 
   // Label
-  ctx.font = 'bold 12px Courier New';
+  const tfs = Math.max(12, Math.min(22, Math.round(12 * Math.sqrt(zoom / 0.001))));
+  ctx.font = `bold ${tfs}px Courier New`;
   ctx.textAlign = 'center';
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = Math.max(3, tfs / 4);
   ctx.strokeText(mt.name, s.x, s.y - r - 10);
   ctx.fillStyle = '#fff';
   ctx.fillText(mt.name, s.x, s.y - r - 10);
 
   // Pickaxe icon text inside
-  ctx.font = 'bold 9px Courier New';
+  ctx.font = `bold ${Math.max(9, Math.round(tfs * 0.75))}px Courier New`;
   ctx.fillStyle = '#000';
   ctx.fillText('\u26CF', s.x, s.y + 4);
   ctx.textAlign = 'left';
@@ -863,6 +867,21 @@ function buildLegend() {
   html += '<div class="row"><span class="dot" style="background:#ccc;width:13px;height:13px"></span>Pure (large)</div>';
   html += '<div class="row"><span class="dot" style="background:#ccc;width:10px;height:10px"></span>Normal</div>';
   html += '<div class="row"><span class="dot" style="background:#ccc;width:7px;height:7px"></span>Impure (small)</div>';
+  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Gap Factory Status</div>';
+  const gapStatuses = [
+    ['new','green','New build'],
+    ['scaled_in_place','teal','Scaled at existing'],
+    ['satellite','blue','Satellite of existing'],
+    ['relocated','orange','Relocated expansion'],
+    ['infeasible','red','Infeasible (shortfall)'],
+  ];
+  for (const [k,_,label] of gapStatuses) {
+    html += `<div class="row"><span class="dot" style="background:${GAP_COLORS[k]}"></span>${label}</div>`;
+  }
+  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Gap Mining Towns</div>';
+  html += '<div class="row"><span class="dot" style="background:#aaa;transform:rotate(45deg)"></span>Diamond = shared mining town</div>';
+  html += '<div class="row" style="color:#888;font-size:10px;margin-left:4px">color = resource type</div>';
+  html += '<div class="row" style="color:#888;font-size:10px;margin-left:4px">dashed = satellite of factory</div>';
   el.innerHTML = html;
 }
 
@@ -1132,26 +1151,121 @@ window.addEventListener('mousemove', (e) => {
         if (d < hitR) { hitTown = mt; break; }
       }
     }
+    // Gap factory hit (any site)
+    let hitGap = null;
+    if (!hit && !hitTown) {
+      for (const gf of GAP_FACTORIES) {
+        if (!gapVisible[gf.id] || !gf.sites) continue;
+        for (let i = 0; i < gf.sites.length; i++) {
+          const s = gf.sites[i];
+          const dx = mg.x - s.x, dy = mg.y - s.y;
+          if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) {
+            hitGap = {gf, siteIdx: i}; break;
+          }
+        }
+        if (hitGap) break;
+      }
+    }
+    // Gap mining town hit
+    let hitGapTown = null;
+    if (!hit && !hitTown && !hitGap && typeof GAP_TOWNS !== 'undefined') {
+      for (const gt of GAP_TOWNS) {
+        if (!gapTownVisible[gt.id]) continue;
+        const dx = mg.x - gt.cx, dy = mg.y - gt.cy;
+        if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) { hitGapTown = gt; break; }
+      }
+    }
     if (hit) {
       const {f} = hit;
       let tt = `<b>${f.name}</b> (${f.theme})<br>`;
       tt += `${f.totalNodes} resource nodes`;
-      tooltip.innerHTML = tt;
-      tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top = (e.clientY + 14) + 'px';
+      showTooltip(tt, e.clientX, e.clientY);
     } else if (hitTown) {
       let tt = `<b>${hitTown.name}</b> (${hitTown.theme})<br>`;
       tt += `${hitTown.nodeCount} ${hitTown.resource} nodes | ${hitTown.capacity}/min<br>`;
       tt += `${hitTown.purity.pure}P / ${hitTown.purity.normal}N / ${hitTown.purity.impure}I<br>`;
       tt += `Supplies: ${hitTown.supplies.join(', ')}`;
-      tooltip.innerHTML = tt;
-      tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top = (e.clientY + 14) + 'px';
-    } else {
+      showTooltip(tt, e.clientX, e.clientY);
+    } else if (hitGap) {
+      showTooltip(gapTooltipHtml(hitGap.gf, hitGap.siteIdx), e.clientX, e.clientY);
+    } else if (hitGapTown) {
+      showTooltip(gapTownTooltipHtml(hitGapTown), e.clientX, e.clientY);
+    } else if (!tooltipPinned) {
       tooltip.style.display = 'none';
     }
+  }
+});
+
+let tooltipPinned = false;
+function showTooltip(html, x, y) {
+  tooltip.innerHTML = html;
+  tooltip.style.display = 'block';
+  tooltip.style.left = (x + 14) + 'px';
+  tooltip.style.top = (y + 14) + 'px';
+}
+function gapTooltipHtml(gf, siteIdx) {
+  const siteLabel = (gf.sites||[]).length > 1 ? ` &middot; site ${siteIdx+1}/${gf.sites.length}` : '';
+  let tt = `<b>${gf.name}</b> &middot; ${gf.disp}${siteLabel}<br>`;
+  tt += `${gf.theme} &middot; signature: ${gf.sig}<br>`;
+  tt += `${gf.buildings||0} bldgs &middot; ${gf.power_mw||0} MW &middot; ${gf.shards||0} shards<br>`;
+  if ((gf.imports||[]).length) tt += `imports: ${gf.imports.join(', ')}<br>`;
+  if (gf.infeasible) tt += `<span style="color:#ff6b6b">&#9888; shortfall: ${gf.shortfall}/min</span><br>`;
+  tt += `${(gf.sites||[]).length} site(s), ${(gf.outposts||[]).length} outpost(s)`;
+  if ((gf.outposts||[]).length === 0) tt += ` &middot; trained via mining towns`;
+  return tt;
+}
+function gapTownTooltipHtml(gt) {
+  let tt = `<b>${gt.name}</b> &middot; ${gt.r}<br>`;
+  tt += `${gt.nodes.length} nodes &middot; ${gt.cap}/min cap &middot; ${gt.sh} shards<br>`;
+  tt += `<b>Supplies:</b><br>`;
+  for (const s of (gt.supplies||[])) {
+    tt += `&nbsp;&nbsp;${s.factory}: ${s.amount_per_min}/min<br>`;
+  }
+  return tt;
+}
+
+// Click / tap: pin tooltip persistently (works on touch where mousemove
+// doesn't fire). Click again on empty space to dismiss.
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mg = s2g(e.clientX - rect.left, e.clientY - rect.top);
+  let html = null;
+  for (const [fid, f] of Object.entries(FACTORIES)) {
+    if (!visible[fid]) continue;
+    const dx = mg.x - f.cx, dy = mg.y - f.cy;
+    if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) {
+      html = `<b>${f.name}</b> (${f.theme})<br>${f.totalNodes} resource nodes`;
+      break;
+    }
+  }
+  if (!html) for (const mt of MINING_TOWNS) {
+    if (!townVisible[mt.id]) continue;
+    const dx = mg.x - mt.cx, dy = mg.y - mt.cy;
+    if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) {
+      html = `<b>${mt.name}</b> (${mt.theme})<br>${mt.nodeCount} ${mt.resource} nodes | ${mt.capacity}/min<br>Supplies: ${mt.supplies.join(', ')}`;
+      break;
+    }
+  }
+  if (!html) for (const gf of GAP_FACTORIES) {
+    if (!gapVisible[gf.id] || !gf.sites) continue;
+    for (let i=0; i<gf.sites.length; i++) {
+      const s = gf.sites[i];
+      const dx = mg.x - s.x, dy = mg.y - s.y;
+      if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) { html = gapTooltipHtml(gf, i); break; }
+    }
+    if (html) break;
+  }
+  if (!html && typeof GAP_TOWNS !== 'undefined') for (const gt of GAP_TOWNS) {
+    if (!gapTownVisible[gt.id]) continue;
+    const dx = mg.x - gt.cx, dy = mg.y - gt.cy;
+    if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) { html = gapTownTooltipHtml(gt); break; }
+  }
+  if (html) {
+    tooltipPinned = true;
+    showTooltip(html, e.clientX, e.clientY);
+  } else {
+    tooltipPinned = false;
+    tooltip.style.display = 'none';
   }
 });
 
