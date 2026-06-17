@@ -628,12 +628,13 @@ function drawBackgroundNodes() {
     if (n.x < tlg.x - 5000 || n.x > brg.x + 5000) continue;
     if (n.y < tlg.y - 5000 || n.y > brg.y + 5000) continue;
     const s = g2s(n.x, n.y);
-    const r = 2 * PURITY_SCALE[n.p];
-    ctx.globalAlpha = 0.15 * PURITY_ALPHA[n.p];
-    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
-    ctx.fill();
+    if (!drawIcon(n.t, s.x, s.y, 6 * PURITY_SCALE[n.p], 0.4 * PURITY_ALPHA[n.p])) {
+      ctx.globalAlpha = 0.15 * PURITY_ALPHA[n.p];
+      ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 2 * PURITY_SCALE[n.p], 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
   ctx.globalAlpha = 1;
 }
@@ -669,20 +670,22 @@ function drawFactoryNodes(fid, f) {
     const s = g2s(n.x, n.y);
     const baseR = 4 * PURITY_SCALE[n.p];
 
-    // Filled dot in resource color
-    ctx.globalAlpha = PURITY_ALPHA[n.p];
-    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
-    ctx.fill();
-
     // Ring in factory color
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(s.x, s.y, baseR + 1.5, 0, Math.PI * 2);
+    ctx.arc(s.x, s.y, baseR + 2, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.globalAlpha = 1;
+
+    // Resource icon (dot fallback until loaded)
+    if (!drawIcon(n.t, s.x, s.y, baseR * 2.6, PURITY_ALPHA[n.p])) {
+      ctx.globalAlpha = PURITY_ALPHA[n.p];
+      ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
 
     // Purity + type label at high zoom
     if (zoom > ZOOM_SHOW_PURITY_TEXT) {
@@ -740,30 +743,35 @@ function drawGapNodes(gf) {
     for (const n of (site.nodes || [])) {
       const s = g2s(n.x, n.y);
       const baseR = 4 * (PURITY_SCALE[n.p] || 1);
-      ctx.globalAlpha = PURITY_ALPHA[n.p] || 0.7;
-      ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
-      ctx.beginPath(); ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = color;
       ctx.lineWidth = 1.5;
       ctx.setLineDash(si === 0 ? [] : [3, 2]);   // satellites dashed
-      ctx.beginPath(); ctx.arc(s.x, s.y, baseR + 1.5, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(s.x, s.y, baseR + 2, 0, Math.PI * 2); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
+      if (!drawIcon(n.t, s.x, s.y, baseR * 2.6, PURITY_ALPHA[n.p] || 0.7)) {
+        ctx.globalAlpha = PURITY_ALPHA[n.p] || 0.7;
+        ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+        ctx.beginPath(); ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
     }
   });
-  // outposts: small diamonds in resource colour, gap-coloured outline
+  // outposts: resource icon with gap-colored outline (was small diamonds)
   for (const o of (gf.outposts || [])) {
     for (const n of (o.nodes || [])) {
       const s = g2s(n.x, n.y);
       const r = 3.5 * (PURITY_SCALE[n.p] || 1);
-      ctx.globalAlpha = 0.6;
-      ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
-      ctx.beginPath();
-      ctx.moveTo(s.x, s.y - r); ctx.lineTo(s.x + r, s.y);
-      ctx.lineTo(s.x, s.y + r); ctx.lineTo(s.x - r, s.y);
-      ctx.closePath(); ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.stroke();
+      ctx.strokeStyle = color; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(s.x, s.y, r + 2, 0, Math.PI * 2); ctx.stroke();
+      if (!drawIcon(n.t, s.x, s.y, r * 2.4, 0.7)) {
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y - r); ctx.lineTo(s.x + r, s.y);
+        ctx.lineTo(s.x, s.y + r); ctx.lineTo(s.x - r, s.y);
+        ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
     }
   }
 }
@@ -803,13 +811,15 @@ function drawGapTown(gt) {
     for (const n of (gt.nodes || [])) {
       const s = g2s(n.x, n.y);
       const r = 4 * (PURITY_SCALE[n.p] || 1);
-      ctx.globalAlpha = PURITY_ALPHA[n.p] || 0.7;
-      ctx.fillStyle = color;
-      ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(s.x, s.y, r + 1, 0, Math.PI * 2); ctx.stroke();
-      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(s.x, s.y, r + 2, 0, Math.PI * 2); ctx.stroke();
+      if (!drawIcon(n.t || gt.r, s.x, s.y, r * 2.6, PURITY_ALPHA[n.p] || 0.7)) {
+        ctx.globalAlpha = PURITY_ALPHA[n.p] || 0.7;
+        ctx.fillStyle = color;
+        ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
     }
   }
   // Center diamond (mining-town style)
@@ -861,17 +871,19 @@ function drawTownNodes(mt) {
   for (const n of mt.nodes) {
     const s = g2s(n.x, n.y);
     const baseR = 4 * PURITY_SCALE[n.p];
-    ctx.globalAlpha = PURITY_ALPHA[n.p];
-    ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
-    ctx.fill();
     ctx.strokeStyle = mt.color;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(s.x, s.y, baseR + 1.5, 0, Math.PI * 2);
+    ctx.arc(s.x, s.y, baseR + 2, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.globalAlpha = 1;
+    if (!drawIcon(n.t, s.x, s.y, baseR * 2.6, PURITY_ALPHA[n.p])) {
+      ctx.globalAlpha = PURITY_ALPHA[n.p];
+      ctx.fillStyle = RESOURCE_COLORS[n.t] || '#666';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, baseR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     if (zoom > ZOOM_SHOW_PURITY_TEXT) {
       ctx.font = '9px Courier New';
       const label = PURITY_LABEL[n.p] + ' ' + n.t;
