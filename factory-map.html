@@ -11,6 +11,8 @@ body{font-family:'Courier New',monospace;display:flex;flex-direction:column;heig
 #legend{padding:8px 12px;border-bottom:1px solid #333;font-size:11px}
 #legend .row{display:flex;align-items:center;gap:6px;margin:2px 0}
 #legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+#legend .ic{display:inline-flex;width:15px;height:15px;flex-shrink:0}
+#legend .ic svg{width:15px;height:15px}
 #factory-list{flex:1;overflow-y:auto;padding:0}
 .factory-section{border-bottom:1px solid #333;padding:10px 12px}
 .factory-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -1008,10 +1010,14 @@ function drawTownCenter(mt) {
 // === SIDEBAR ===
 function buildLegend() {
   const el = document.getElementById('legend');
-  let html = '<div style="font-weight:bold;margin-bottom:4px;color:#fff;font-size:12px">Resource Types</div>';
-  const types = ['iron','limestone','copper','coal','oil','caterium','bauxite','quartz','sulfur','sam','uranium'];
+  let html = '<div style="font-weight:bold;margin-bottom:4px;color:#fff;font-size:12px">Products</div>';
+  for (const name of Object.keys(COMPONENT_META).sort()) {
+    html += `<div class="row"><span class="ic">${ICON_SVG[name] || ''}</span>${name}</div>`;
+  }
+  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Resource Types</div>';
+  const types = ['iron','limestone','copper','coal','oil','caterium','bauxite','quartz','sulfur','sam','uranium','nitrogen','water'];
   for (const t of types) {
-    html += `<div class="row"><span class="dot" style="background:${RESOURCE_COLORS[t]}"></span>${t}</div>`;
+    html += `<div class="row"><span class="ic">${ICON_SVG[t] || ''}</span>${t}</div>`;
   }
   html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Purity</div>';
   html += '<div class="row"><span class="dot" style="background:#ccc;width:13px;height:13px"></span>Pure (large)</div>';
