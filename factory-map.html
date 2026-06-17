@@ -141,6 +141,11 @@ canvas.grabbing{cursor:grabbing}
       <div id="legend"></div>
       <div id="factory-list"></div>
       <div id="controls">
+        <label style="display:block;font-size:11px;color:#ccc;margin-bottom:6px">Filter to component:
+          <select id="componentFilter" onchange="setComponentFilter(this.value)" style="width:100%;margin-top:3px;background:#16213e;color:#fff;border:1px solid #333;padding:4px;font-family:'Courier New',monospace;font-size:11px">
+            <option value="all">All components</option>
+          </select>
+        </label>
         <button id="export-btn">EXPORT SELECTIONS</button>
         <button id="reset-btn">Reset View</button>
       </div>
@@ -524,6 +529,25 @@ function drawIcon(name, sx, sy, size, alpha) {
 }
 
 let componentFilter = 'all';   // active component dropdown value ('all' = no filter)
+function setComponentFilter(v) { componentFilter = v; draw(); }
+function populateComponentFilter() {
+  const sel = document.getElementById('componentFilter');
+  if (!sel) return;
+  for (const name of Object.keys(COMPONENT_META).sort()) {
+    const o = document.createElement('option');
+    o.value = name; o.textContent = name;
+    sel.appendChild(o);
+  }
+}
+function factoryProducts(prod) {
+  return (prod || []).map(p => (typeof p === 'string') ? p : p.item);
+}
+function gapEligible(gf) {
+  return componentFilter === 'all' || factoryProducts(gf.prod).includes(componentFilter);
+}
+function baseEligible(fid) {
+  return componentFilter === 'all' || (BASE_FACTORY_PROD[fid] || []).includes(componentFilter);
+}
 
 // === DRAWING ===
 function draw() {
@@ -539,9 +563,10 @@ function draw() {
   }
 
   // Factory data
+  const filterActive = componentFilter !== 'all';
   const fids = Object.keys(FACTORIES);
   for (const fid of fids) {
-    if (!visible[fid]) continue;
+    if (!visible[fid] || !baseEligible(fid)) continue;
     const f = FACTORIES[fid];
 
     if (zoom > ZOOM_SHOW_RADIUS) drawSearchRadius(fid, f);
@@ -549,9 +574,9 @@ function draw() {
     if (zoom > ZOOM_SHOW_FACTORY_NODES) drawFactoryNodes(fid, f);
   }
 
-  // Mining towns
+  // Mining towns (hidden while a component filter is active)
   for (const mt of MINING_TOWNS) {
-    if (!townVisible[mt.id]) continue;
+    if (filterActive || !townVisible[mt.id]) continue;
     if (zoom > ZOOM_SHOW_RADIUS) drawSearchRadius_mt(mt);
     if (zoom > ZOOM_SHOW_LINES) drawConnections_mt(mt);
     if (zoom > ZOOM_SHOW_FACTORY_NODES) drawTownNodes(mt);
@@ -559,31 +584,31 @@ function draw() {
 
   // Gap supply-chain factories
   for (const gf of GAP_FACTORIES) {
-    if (!gapVisible[gf.id]) continue;
+    if (!gapVisible[gf.id] || !gapEligible(gf)) continue;
     if (zoom > ZOOM_SHOW_FACTORY_NODES) drawGapNodes(gf);
   }
 
   // Factory centers always on top
   for (const fid of fids) {
-    if (!visible[fid]) continue;
+    if (!visible[fid] || !baseEligible(fid)) continue;
     const f = FACTORIES[fid];
     drawFactoryCenter(fid, f);
   }
 
   // Mining town centers on top
   for (const mt of MINING_TOWNS) {
-    if (!townVisible[mt.id]) continue;
+    if (filterActive || !townVisible[mt.id]) continue;
     drawTownCenter(mt);
   }
 
   // Gap factory centers on top
   for (const gf of GAP_FACTORIES) {
-    if (!gapVisible[gf.id]) continue;
+    if (!gapVisible[gf.id] || !gapEligible(gf)) continue;
     drawGapCenter(gf);
   }
 
-  // Gap mining towns (diamonds in resource color)
-  if (typeof GAP_TOWNS !== 'undefined') {
+  // Gap mining towns (hidden while a component filter is active)
+  if (typeof GAP_TOWNS !== 'undefined' && !filterActive) {
     for (const gt of GAP_TOWNS) {
       if (!gapTownVisible[gt.id]) continue;
       drawGapTown(gt);
@@ -1428,6 +1453,7 @@ function init() {
   resize();
   fitZoom();
   for (const k of Object.keys(ICON_SVG)) getIconImage(k);  // warm the cache
+  populateComponentFilter();
   buildLegend();
   buildSidebar();
   draw();
