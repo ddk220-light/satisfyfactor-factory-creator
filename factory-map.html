@@ -498,6 +498,31 @@ function s2g(sx, sy) {
   };
 }
 
+// === ICON RASTER CACHE ===
+const ICON_IMG = new Map();   // key -> HTMLImageElement | null
+function getIconImage(name) {
+  const key = RES_ALIAS[name] || name;
+  if (ICON_IMG.has(key)) return ICON_IMG.get(key);
+  const svg = ICON_SVG[key];
+  if (!svg) { ICON_IMG.set(key, null); return null; }
+  const img = new Image();
+  img.onload = () => { draw(); };           // repaint once this icon is ready
+  img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  ICON_IMG.set(key, img);
+  return img;
+}
+// Draw an icon centered at (sx,sy). Returns false if not ready (caller draws fallback).
+function drawIcon(name, sx, sy, size, alpha) {
+  const img = getIconImage(name);
+  if (img && img.complete && img.naturalWidth) {
+    ctx.globalAlpha = (alpha == null) ? 1 : alpha;
+    ctx.drawImage(img, sx - size / 2, sy - size / 2, size, size);
+    ctx.globalAlpha = 1;
+    return true;
+  }
+  return false;
+}
+
 // === DRAWING ===
 function draw() {
   ctx.fillStyle = '#0d1117';
@@ -1352,6 +1377,7 @@ function resize() {
 function init() {
   resize();
   fitZoom();
+  for (const k of Object.keys(ICON_SVG)) getIconImage(k);  // warm the cache
   buildLegend();
   buildSidebar();
   draw();
