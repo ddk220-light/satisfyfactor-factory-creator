@@ -1,170 +1,180 @@
-# Design — Product icons + component filter on the factory map
+# Design — SVG resource/product icons + component filter on the factory map
 
 Date: 2026-06-17
-Status: approved (design)
+Status: design (revised — SVG icons, components + raw resources)
 
 ## Goal
 
-On the **Map** tab of `factory-map.html`, show which production component(s) each
-factory makes (as small colored letter-badges), and let the user filter the map
-to a single component via a dropdown, so they can see exactly which factories
-produce that component.
+On the **Map** tab of `factory-map.html`:
+1. Create an SVG icon for every resource in play — both **produced components**
+   (what each factory makes) and **raw resources** (what nodes/mining towns
+   mine) — and render them on the canvas in place of the current colored dots
+   and (previously proposed) letter-badges.
+2. Let the user filter the map to a single **component** via a dropdown, so they
+   can see exactly which factories produce it.
 
 ## Scope
 
 - **Map tab only.** The Factories (Factory Crazy) tab is unchanged.
-- Applies to two factory layers already drawn on the map:
-  - `GAP_FACTORIES` (13) — the gap supply-chain plan; each has explicit product
-    `targets` in `gap-factory-locations.json`.
-  - `FACTORIES` (5) — the original themed factories (Ferrium, Naphtheon,
-    Forgeholm, Luxara, Cathera). All are **Heavy Modular Frame** producers
-    (Option A, user-chosen) and are tagged as such so the HMF filter shows the
-    complete picture.
-- Gap mining **towns** (`GAP_TOWNS`, `MINING_TOWNS`) produce raw resources, not
-  components — they are **not** badged and are hidden while a component filter
-  is active.
+- Factory layers that get **product (component) icons**:
+  - `GAP_FACTORIES` (13) — products from each factory's plan `targets`.
+  - `FACTORIES` (5) — the base themed factories; all tagged **Heavy Modular
+    Frame** (Option A) so the HMF filter shows the complete picture.
+- Node/town layers that get **raw-resource icons** (replace colored dots):
+  - `ALL_NODES` (459 background nodes, zoom-gated by `ZOOM_SHOW_BG_NODES`).
+  - Factory site/outpost nodes (`drawFactoryNodes`, `drawGapNodes`).
+  - Mining-town nodes (`drawTownNodes`, `drawGapTown`).
+- Component filter (dropdown) targets **components only**. Raw-resource
+  filtering is out of scope.
 
-## The 11 components
+## Icon set — 24 SVG icons
 
-Distinct, non-export products across the gap plan:
+**11 components:** Aluminum Casing, Cooling System, Steel Beam, Motor, Stator,
+Heavy Modular Frame, Smart Plating, Modular Frame, High-Speed Connector,
+Copper Powder, Rubber.
 
-| Component | Code | Source |
-|---|---|---|
-| Aluminum Casing | AC | aldercast, bauxhold, silvashade |
-| Cooling System | CS | aldercast |
-| Steel Beam | SB | moldmarsh, silvashade |
-| Motor | MTR | voltreach, classic_iron_motor |
-| Stator | STA | voltreach, moldmarsh |
-| Heavy Modular Frame | HMF | ferrium_hmf, naphtheon_hmf, forgeholm_hmf, cathera_hmf + the 5 base FACTORIES |
-| Smart Plating | SP | ferrium+ |
-| Modular Frame | MF | ferrium+ |
-| High-Speed Connector | HSC | cathera+ |
-| Copper Powder | CuP | cathera+ |
-| Rubber | RUB | naphtheon+ |
+**13 raw resources:** iron, limestone, copper, coal, oil, caterium, bauxite,
+quartz, sulfur, sam, uranium, nitrogen, water.
 
 `"… (export)"` pseudo-targets (Petroleum Coke export, Rubber export on
-naphtheon+) are **dropped** — they are surpluses shipped out, not the factory's
-production purpose.
+naphtheon+) are dropped — surpluses shipped out, not the factory's purpose.
 
-## Data model
+### Per-factory component sources (from `targets`)
 
-### 1. Carry products into `GAP_DATA`
+| Component | Factories |
+|---|---|
+| Aluminum Casing | aldercast, bauxhold, silvashade |
+| Cooling System | aldercast |
+| Steel Beam | moldmarsh, silvashade |
+| Motor | voltreach, classic_iron_motor |
+| Stator | voltreach, moldmarsh |
+| Heavy Modular Frame | ferrium_hmf, naphtheon_hmf, forgeholm_hmf, cathera_hmf + the 5 base FACTORIES |
+| Smart Plating | ferrium+ |
+| Modular Frame | ferrium+ |
+| High-Speed Connector | cathera+ |
+| Copper Powder | cathera+ |
+| Rubber | naphtheon+ |
 
-Each gap factory's products live in `gap-factory-locations.json` as
-`targets` (e.g. moldmarsh → `{"Steel Beam": 400, "Stator": 159}`) but are not
-copied into the map's `GAP_DATA` block.
+## Icon authoring & storage
 
-- Add a `prod` field to the record builder in
-  `find_gap_factory_locations.py` (~line 1278): for each factory,
-  `prod = [{"item": k, "amt": v} for k, v in (targets or {}).items()
-           if not k.endswith("(export)")]`.
-- **Regenerate the block from the committed plan, not the DB.** Write a small
-  one-off (or reuse the existing writer) that loads `gap-factory-locations.json`
-  as `out` and invokes the same `GAP_DATA` writer function. The committed JSON
-  already has every key the writer reads (`factory_locations`,
-  `gap_mining_towns`, `building_totals`, `sites[].center/nodes`, etc.), so the
-  placements are preserved and only the `prod` field is added. **No DB run.**
-- Verify: a diff of the regenerated `GAP_DATA` vs the current one shows only the
-  added `prod` keys (factory ids, coordinates, node counts, towns unchanged).
+- Each icon is hand-authored SVG on a consistent **`0 0 24 24` viewBox**, simple
+  2-tone recognizable glyphs (e.g. iron = ingot bar, oil = droplet, coal = lump,
+  HMF = layered frame, Stator = coil, Rubber = tire). Raw-resource icons use
+  their `RESOURCE_COLORS` value as the accent; component icons use a
+  `COMPONENT_META` color.
+- Stored **inline in `factory-map.html`** as a single JS map
+  `const ICON_SVG = { "iron": '<svg …>…</svg>', "Aluminum Casing": '…', … }`
+  (keys = resource type strings for raw, full item names for components). Keeps
+  the page self-contained, matching the project's single-file convention.
+- `COMPONENT_META` maps each component → `{ code, color }` (code retained as the
+  alt/tooltip text and as a fallback). Unknown items → neutral fallback icon, so
+  the map never breaks if the plan adds a product.
+- Handle the `nitrogenGas` ↔ `nitrogen` key mismatch (data uses `nitrogenGas`;
+  `RESOURCE_COLORS`/`ICON_SVG` use `nitrogen`) with a small alias lookup.
 
-### 2. Tag the original 5 factories as HMF
+## Canvas rendering of SVG
 
-`FACTORIES` records have no product data. Add a constant in the HTML that maps
-each of the 5 ids to `["Heavy Modular Frame"]`, or attach a `prod` field at
-render time. (Kept HTML-side because `FACTORIES` is hand-maintained in the page,
-not generated.)
+Canvas cannot draw raw SVG markup directly, so:
 
-### 3. `COMPONENT_META` (HTML constant)
+- `getIconImage(name)` lazily builds an `Image` from a
+  `data:image/svg+xml;utf8,<encoded svg>` URL, rasterized at a base size
+  (e.g. 64px) and cached in a `Map`. On first load it sets `img.onload` to call
+  `draw()` once, so icons appear as soon as decoded.
+- A draw helper `drawIcon(name, sx, sy, size, alpha)` does
+  `ctx.drawImage(img, sx - size/2, sy - size/2, size, size)` when the cached
+  image is `complete`; otherwise it falls back to the **current colored dot**
+  for that position (graceful, no blank frame).
 
-```js
-const COMPONENT_META = {
-  "Aluminum Casing":      { code: "AC",  color: "#8fd3f4" },
-  "Cooling System":       { code: "CS",  color: "#4dd0e1" },
-  "Steel Beam":           { code: "SB",  color: "#b0bec5" },
-  "Motor":                { code: "MTR", color: "#ff8a65" },
-  "Stator":               { code: "STA", color: "#ffd54f" },
-  "Heavy Modular Frame":  { code: "HMF", color: "#ba68c8" },
-  "Smart Plating":        { code: "SP",  color: "#81c784" },
-  "Modular Frame":        { code: "MF",  color: "#aed581" },
-  "High-Speed Connector": { code: "HSC", color: "#f06292" },
-  "Copper Powder":        { code: "CuP", color: "#d4915d" },
-  "Rubber":               { code: "RUB", color: "#9e9e9e" }
-};
-```
+### Raw-resource nodes (replace dots)
 
-Unknown/unmapped items fall back to a neutral grey badge with the first 3 chars
-uppercased, so the map never breaks if the plan adds a new product.
+- In `drawFactoryNodes` / `drawGapNodes` / `drawTownNodes` / `drawGapTown` and
+  the `ALL_NODES` loop, swap the `ctx.arc` dot for
+  `drawIcon(resType, s.x, s.y, baseSize * PURITY_SCALE[p], PURITY_ALPHA[p])`.
+- **Purity preserved** exactly as today: size via `PURITY_SCALE`, opacity via
+  `PURITY_ALPHA`. Keep the existing thin resource-colored / white outline ring
+  behind the icon for node-vs-background legibility.
+- All existing **zoom gates unchanged** (`ZOOM_SHOW_BG_NODES`,
+  `ZOOM_SHOW_FACTORY_NODES`), so density/perf at low zoom is the same.
 
-## Rendering
+### Factory markers (product icons)
 
-### Canvas badges
+- `drawProductIcons(sx, sy, prodList, activeComponent)` draws a centered row of
+  component icons just under a factory's primary marker, called from
+  `drawGapCenter` (primary site `si === 0`) and `drawFactoryCenter` (the HMF
+  icon for base factories). Gated by the same zoom as the factory label.
+- When a component filter is active, the matching icon draws full-size/opaque
+  with a highlight ring; the factory's other product icons are dimmed.
 
-- A helper `drawProductBadges(screenX, screenY, prodList, activeComponent)`
-  draws a horizontal row of rounded-rect pills (component color fill, dark text
-  code, Courier font) centered under a factory's primary marker.
-- Called from `drawGapCenter` (for `GAP_FACTORIES`, primary site `si === 0`) and
-  `drawFactoryCenter` (for the 5 base factories, the HMF badge).
-- Gated by the same zoom threshold that already controls label visibility, so
-  low zoom stays uncluttered.
-- When a component filter is active, the matching badge is drawn at full
-  opacity/with an outline; the factory's other badges are dimmed.
+## Sidebar legend
 
-### Sidebar legend
-
-A "Products" legend block lists each component as `[badge] Full Name`, using the
-same code+color, so the canvas badges are decodable. Rendered once in the
-sidebar near the gap-factory list.
+A two-section legend ("Products" and "Resources"), each row `[inline SVG] Name`,
+reusing `ICON_SVG` markup directly via `innerHTML`, so on-canvas icons are
+decodable. Replaces/augments the existing color-dot resource legend.
 
 ## Filter — dropdown
 
-- A `<select id="componentFilter">` in the map controls area:
-  `All components` (default) + the 11 components (alphabetical, value = full
-  item name; `all` for the default).
-- State: `let componentFilter = 'all';` updated via `onchange`, then `draw()`.
-- A factory is **eligible** when `componentFilter === 'all'` or its `prod`
-  includes the selected component.
-- Visibility combines with existing per-factory checkboxes:
-  - Gap factory drawn iff `gapVisible[id] && eligible(gf)`.
-  - Base factory drawn iff `visible[fid] && eligible(f)`.
-- While `componentFilter !== 'all'`, **all gap towns and mining towns are
-  hidden** (raw suppliers, not component producers). `all` restores them to
-  their checkbox state.
-- Connecting lines / search radii follow their factory's visibility (existing
-  behavior keyed off the same visibility check).
+- `<select id="componentFilter">` in the map controls: `All components`
+  (default) + the 11 components (alphabetical; value = item name, `all` default).
+- State `let componentFilter = 'all';` → `onchange` updates and calls `draw()`.
+- Eligibility: `componentFilter === 'all'` OR the factory's `prod` includes the
+  selected component.
+- Combined with existing per-factory checkboxes:
+  - gap factory drawn iff `gapVisible[id] && eligible(gf)`
+  - base factory drawn iff `visible[fid] && eligible(f)`
+- While a component is selected, **gap towns and mining towns are hidden** (raw
+  suppliers, not component producers); `all` restores them to checkbox state.
+- Connecting lines / search radii follow their factory's visibility (existing).
+
+## Data model
+
+- `find_gap_factory_locations.py` (~line 1278): add a `prod` field to the
+  `GAP_DATA` record builder:
+  `prod = [{"item": k, "amt": v} for k, v in (targets or {}).items()
+           if not k.endswith("(export)")]`.
+- Regenerate the `GAP_DATA` block **from the committed
+  `gap-factory-locations.json`** (load it as `out`, call the existing writer) —
+  **no DB run**, placements preserved, only `prod` added. Verify via diff.
+- Base factories: a small HTML constant mapping the 5 ids →
+  `["Heavy Modular Frame"]`.
+- Raw-resource icons need **no data change** — nodes already carry `t`.
 
 ## Edge cases
 
-- **Fractional amounts:** HMF increments are 16.5/min — badge shows the code
-  only; amounts (if shown on hover/tooltip) display as-is.
+- **Async icons:** dot fallback until each SVG image decodes; one `draw()` on
+  load. No blank markers.
+- **Fractional amounts:** HMF 16.5/min — icon only; amount available in `prod`
+  for a future tooltip.
 - **Multi-product factories** (aldercast AC+CS, voltreach MTR+STA, moldmarsh
-  SB+STA, silvashade AC+SB, ferrium+ SP+MF): draw one badge per product, all in
-  the row; filter highlights the matching one.
-- **HMF duplication:** both the relocated `_hmf` gap entries and the 5 base
-  factories carry HMF and both appear under the HMF filter — intended.
-- **New/unknown product:** neutral grey fallback badge; never throws.
+  SB+STA, silvashade AC+SB, ferrium+ SP+MF): one icon per product in the row.
+- **HMF duplication:** relocated `_hmf` gap entries and the 5 base factories both
+  carry HMF and both appear under the HMF filter — intended.
+- **Key alias:** `nitrogenGas` → `nitrogen` for color/icon lookup.
+- **Unknown resource/product:** neutral fallback icon; never throws.
 
 ## Files touched
 
 - `find_gap_factory_locations.py` — add `prod` to the `GAP_DATA` record builder.
-- `factory-map.html` — `COMPONENT_META`, base-factory HMF tags, regenerated
-  `GAP_DATA` block (with `prod`), `drawProductBadges`, calls in
-  `drawGapCenter`/`drawFactoryCenter`, sidebar legend, `<select>` + filter
-  state + eligibility checks in the draw loop, town hiding under active filter.
+- `factory-map.html` — `ICON_SVG` (24 inline SVGs), `COMPONENT_META`, base-factory
+  HMF tags, regenerated `GAP_DATA` (with `prod`), `getIconImage`/`drawIcon`
+  helpers, icon swaps in the four node-draw paths + `ALL_NODES` loop,
+  `drawProductIcons` in `drawGapCenter`/`drawFactoryCenter`, legend sections,
+  `<select>` + filter state + eligibility checks + town hiding.
 
 ## Verification
 
-- `python -c` parse check that the regenerated `GAP_DATA` JSON is valid and each
+- `python -c` parse check that regenerated `GAP_DATA` is valid JSON and every
   record has `prod`; diff confirms placements unchanged.
-- Serve `python server.py`, open the Map tab, and confirm: badges render under
-  factories; the legend decodes them; the dropdown isolates each component
-  (correct factories shown, towns hidden); "All components" restores everything;
-  per-factory checkboxes still work in combination.
+- Serve `python server.py`, open the Map tab; confirm: raw-resource icons render
+  on nodes/towns with purity size/alpha intact; product icons render under
+  factories; legend decodes both sets; the dropdown isolates each component
+  (correct factories shown, towns hidden); `All components` restores everything;
+  per-factory checkboxes still combine correctly; zoom in/out behaves.
 
 ## Out of scope / future
 
-- Product badges/filter on the Factories (Factory Crazy) tab.
-- Real game sprite icons (chosen against — letter-badges instead).
-- Showing per-product throughput amounts on the badges (codes only for now;
-  amounts available in `prod` if a tooltip is added later).
-- Auto-filtering towns to those that supply the visible producing factories
-  (towns are simply hidden under an active filter for now).
+- Product icons/filter on the Factories (Factory Crazy) tab.
+- Filtering the map by **raw resource** (icons only for now).
+- Per-product throughput labels on icons (amounts available in `prod` for a
+  later hover tooltip).
+- Auto-filtering towns to those supplying the visible producing factories (towns
+  are simply hidden under an active component filter for now).
