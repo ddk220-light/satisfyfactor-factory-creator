@@ -523,6 +523,8 @@ function drawIcon(name, sx, sy, size, alpha) {
   return false;
 }
 
+let componentFilter = 'all';   // active component dropdown value ('all' = no filter)
+
 // === DRAWING ===
 function draw() {
   ctx.fillStyle = '#0d1117';
@@ -734,6 +736,7 @@ function drawFactoryCenter(fid, f) {
   ctx.fillStyle = '#fff';
   ctx.fillText(f.name, s.x, s.y - r - 8);
   ctx.textAlign = 'left';
+  drawProductIcons(s.x, s.y, BASE_FACTORY_PROD[fid], r);
 }
 
 // === GAP FACTORY DRAWING ===
@@ -800,6 +803,7 @@ function drawGapCenter(gf) {
       ctx.fillStyle = gf.infeasible ? '#ff6b6b' : '#fff';
       ctx.fillText(tag, s.x, s.y - r - 8);
       ctx.textAlign = 'left';
+      drawProductIcons(s.x, s.y, gf.prod, r);
     }
   });
 }
@@ -839,6 +843,40 @@ function drawGapTown(gt) {
   ctx.fillStyle = '#fff';
   ctx.fillText(gt.name, s.x, s.y - sz - 6);
   ctx.textAlign = 'left';
+}
+
+// Row of component icons under a factory marker. prodList items: string | {item,amt}.
+function drawProductIcons(sx, sy, prodList, r) {
+  if (!prodList || !prodList.length) return;
+  const size = Math.max(13, Math.min(26, Math.round(15 * Math.sqrt(zoom / 0.001))));
+  const step = size + 3;
+  const totalW = prodList.length * step - 3;
+  let x = sx - totalW / 2 + size / 2;
+  const y = sy + r + 10 + size / 2;
+  const active = componentFilter !== 'all';
+  for (const p of prodList) {
+    const item = (typeof p === 'string') ? p : p.item;
+    const isMatch = item === componentFilter;
+    const a = (!active || isMatch) ? 1 : 0.25;
+    if (active && isMatch) {
+      ctx.strokeStyle = (COMPONENT_META[item] && COMPONENT_META[item].color) || '#fff';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, size / 2 + 3, 0, Math.PI * 2); ctx.stroke();
+    }
+    if (!drawIcon(item, x, y, size, a)) {
+      const meta = COMPONENT_META[item] || { code: item.slice(0, 3).toUpperCase(), color: '#888' };
+      ctx.globalAlpha = a;
+      ctx.fillStyle = meta.color;
+      ctx.fillRect(x - size / 2, y - size / 2, size, size);
+      ctx.fillStyle = '#1a1a2e';
+      ctx.font = `bold ${Math.round(size * 0.4)}px Courier New`;
+      ctx.textAlign = 'center';
+      ctx.fillText(meta.code, x, y + size * 0.15);
+      ctx.textAlign = 'left';
+      ctx.globalAlpha = 1;
+    }
+    x += step;
+  }
 }
 
 // === MINING TOWN DRAWING ===
