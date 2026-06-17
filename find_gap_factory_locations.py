@@ -1278,6 +1278,9 @@ def inject_map(out):
         arr.append({
             'id': fid, 'name': f['factory_name'], 'theme': f['theme'],
             'sig': f['signature_resource'], 'disp': f['disposition'],
+            'prod': [{'item': k, 'amt': v}
+                     for k, v in (f.get('targets') or {}).items()
+                     if not k.endswith('(export)')],
             'infeasible': f['disposition'] == 'infeasible'
                           or f.get('sig_shortfall', 0) > 1e-6,
             'shortfall': f.get('sig_shortfall', 0),
@@ -1316,12 +1319,12 @@ def inject_map(out):
           + 'const GAP_TOWNS = '
           + json.dumps(towns, separators=(',', ':')) + ';\n'
           + '// </GAP_DATA>')
-    html = open(MAP_HTML).read()
+    html = open(MAP_HTML, encoding='utf-8').read()
     new = re.sub(r'// <GAP_DATA>.*?// </GAP_DATA>', lambda _: js, html,
                  count=1, flags=re.DOTALL)
     if new == html and '// <GAP_DATA>' not in html:
         raise RuntimeError("GAP_DATA markers not found in factory-map.html")
-    open(MAP_HTML, 'w').write(new)
+    open(MAP_HTML, 'w', encoding='utf-8').write(new)
     # parse-check both injected literals (A10/Task7 Step7)
     m1 = re.search(r'const GAP_FACTORIES = (\[.*?\]);', new, re.DOTALL)
     m2 = re.search(r'const GAP_TOWNS = (\[.*?\]);', new, re.DOTALL)
