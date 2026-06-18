@@ -1,0 +1,410 @@
+[
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode487_UAID_40B076DF2F7934DF01_1597642799",
+    "x": 103845.6,
+    "y": -94854,
+    "type": "caterium",
+    "purity": "Normal",
+    "resource": "Caterium Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode445",
+    "x": 56109.2,
+    "y": -85970.2,
+    "type": "copper",
+    "purity": "Pure",
+    "resource": "Copper Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode461",
+    "x": 128296.1,
+    "y": -75942,
+    "type": "sulfur",
+    "purity": "Impure",
+    "resource": "Sulfur"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode440",
+    "x": 69552.1,
+    "y": -100368.7,
+    "type": "limestone",
+    "purity": "Pure",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode_C_UAID_A036BCACDEB0A6A601_2086848673",
+    "x": -26897.7,
+    "y": -145468.8,
+    "type": "copper",
+    "purity": "Pure",
+    "resource": "Copper Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode53_510",
+    "x": -21758.4,
+    "y": -145311.8,
+    "type": "copper",
+    "purity": "Pure",
+    "resource": "Copper Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode55_1215",
+    "x": -47085.4,
+    "y": -141054.7,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode462",
+    "x": -37614.5,
+    "y": -142250.5,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode487",
+    "x": -12814.5,
+    "y": -104642.1,
+    "type": "caterium",
+    "purity": "Normal",
+    "resource": "Caterium Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F790FE201_1577140465",
+    "x": 66756.9,
+    "y": -150677,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode464",
+    "x": 50259.7,
+    "y": -157152.8,
+    "type": "limestone",
+    "purity": "Pure",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode442",
+    "x": 60592.7,
+    "y": -77890.8,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode439_1",
+    "x": 79670.5,
+    "y": -75852.1,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode441",
+    "x": 67878.4,
+    "y": -95777.4,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode60_984",
+    "x": 75114.8,
+    "y": -123003.5,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F7915E201_1334543513",
+    "x": 40251.4,
+    "y": -144690.5,
+    "type": "limestone",
+    "purity": "Normal",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode136",
+    "x": 37926.1,
+    "y": 120939.2,
+    "type": "quartz",
+    "purity": "Pure",
+    "resource": "Raw Quartz"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode589_UAID_40B076DF2F79B2E101_1298360096",
+    "x": 146861,
+    "y": 115062.8,
+    "type": "limestone",
+    "purity": "Pure",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode589_UAID_40B076DF2F79B1E101_1767545917",
+    "x": 135005.2,
+    "y": 123175.5,
+    "type": "limestone",
+    "purity": "Impure",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode179",
+    "x": 225503.8,
+    "y": 55772.5,
+    "type": "copper",
+    "purity": "Pure",
+    "resource": "Copper Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode65_1865",
+    "x": 219394.8,
+    "y": 37188.8,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode476",
+    "x": 263148.1,
+    "y": 53611.2,
+    "type": "bauxite",
+    "purity": "Normal",
+    "resource": "Bauxite"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode479",
+    "x": 260298.5,
+    "y": 56227.5,
+    "type": "bauxite",
+    "purity": "Pure",
+    "resource": "Bauxite"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite12",
+    "x": 218169.4,
+    "y": 137548.9,
+    "type": "nitrogenGas",
+    "purity": "Pure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite9",
+    "x": 218040.9,
+    "y": 134223.3,
+    "type": "nitrogenGas",
+    "purity": "Normal",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite8",
+    "x": 215726,
+    "y": 132791,
+    "type": "nitrogenGas",
+    "purity": "Normal",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite7",
+    "x": 213448.9,
+    "y": 132706.9,
+    "type": "nitrogenGas",
+    "purity": "Impure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite13",
+    "x": 211685.9,
+    "y": 133160.9,
+    "type": "nitrogenGas",
+    "purity": "Pure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite6",
+    "x": 214659.7,
+    "y": 137993.5,
+    "type": "nitrogenGas",
+    "purity": "Impure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite10",
+    "x": 212492.4,
+    "y": 138086.9,
+    "type": "nitrogenGas",
+    "purity": "Pure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_FrackingSatellite11",
+    "x": 216407.4,
+    "y": 139499.9,
+    "type": "nitrogenGas",
+    "purity": "Pure",
+    "resource": "Nitrogen Gas"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser14",
+    "x": 202233,
+    "y": 45027,
+    "type": "geyser",
+    "purity": "Pure",
+    "resource": "Geyser"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNodeGeyser19",
+    "x": 206903,
+    "y": 45592,
+    "type": "geyser",
+    "purity": "Normal",
+    "resource": "Geyser"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode477",
+    "x": 261128,
+    "y": 48274.6,
+    "type": "bauxite",
+    "purity": "Impure",
+    "resource": "Bauxite"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7980E001_1705275252",
+    "x": 155600.5,
+    "y": 113111.6,
+    "type": "coal",
+    "purity": "Impure",
+    "resource": "Coal"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7981E001_1464253430",
+    "x": 177478,
+    "y": 129905.3,
+    "type": "coal",
+    "purity": "Impure",
+    "resource": "Coal"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode573_UAID_40B076DF2F7984E001_1664435967",
+    "x": 180820,
+    "y": 141195.3,
+    "type": "coal",
+    "purity": "Impure",
+    "resource": "Coal"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode464_UAID_40B076DF2F790EE201_1850696287",
+    "x": 15240.3,
+    "y": -158578.6,
+    "type": "limestone",
+    "purity": "Impure",
+    "resource": "Limestone"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode57_UAID_40B076DF2F7935DF01_1413169977",
+    "x": 55041.6,
+    "y": -130641.3,
+    "type": "quartz",
+    "purity": "Impure",
+    "resource": "Raw Quartz"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode57_UAID_40B076DF2F7991DF01_1459615180",
+    "x": 62290,
+    "y": -137424.1,
+    "type": "quartz",
+    "purity": "Impure",
+    "resource": "Raw Quartz"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode238",
+    "x": 304839.7,
+    "y": -172907.9,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode239",
+    "x": 297575.8,
+    "y": -150186.4,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode203",
+    "x": 319464.1,
+    "y": -158098.3,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode207",
+    "x": 273729.5,
+    "y": -148172.9,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode219",
+    "x": 282689.3,
+    "y": -179305,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode426",
+    "x": 68075.3,
+    "y": -81001.1,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode427",
+    "x": 70865.3,
+    "y": -78125.8,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode431",
+    "x": 64576.3,
+    "y": -71386.9,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode430",
+    "x": 59113.4,
+    "y": -71501.6,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode435_26",
+    "x": 84199.1,
+    "y": -86393.5,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  },
+  {
+    "id": "Persistent_Level:PersistentLevel.BP_ResourceNode437_30",
+    "x": 83508.5,
+    "y": -90506.8,
+    "type": "iron",
+    "purity": "Pure",
+    "resource": "Iron Ore"
+  }
+]

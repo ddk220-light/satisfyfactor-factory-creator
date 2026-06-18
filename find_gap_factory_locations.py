@@ -13,16 +13,19 @@ amounts phase.
 Coordinate convention: +x=east/right, +y=south/bottom, cm (100=1m).
 Top-left = NW = (x<0,y<0); bottom-right = SE = (x>0,y>0).
 """
+import base64
 import json
 import math
 import re
 import sqlite3
+import zlib
 from collections import defaultdict, deque
 
 MAP_HTML = 'factory-map.html'
+SFT_EXPORT = 'planner-export/sftools-export-2026-04-01-20-02-03.sft'
 
 # ---------------------------------------------------------------- paths/const
-DB_PATH            = '/home/starlight/satisfy/satisfyfactor-factory-creator/satisfactory.db'
+DB_PATH            = 'satisfactory.db'
 RESOURCE_NODES     = 'resource_nodes.json'
 OCCUPIED_NODES     = 'planner-export/occupied-nodes.json'
 EXISTING_LOCATIONS = 'selected-factory-locations.json'
@@ -57,19 +60,48 @@ BUILDING_FOOTPRINT = {        # reused from build_factory_crazy.py
     'Converter': 240,
 }
 
-SEARCH_RADIUS  = 40_000          # 400 m cluster radius (HMF method, tunable)
+SEARCH_RADIUS  = 70_000          # 700 m cluster radius: a wider primary capture lets
+                                  # factories meet more demand from LOCAL nodes, cutting
+                                  # far railway hauls ~63% (3081k->1138k) without
+                                  # sprawling primaries (90k+ starts to over-spread)
 MIN_SEPARATION = 25_000          # 250 m between distinct sites/centers
+MAP_SPAN          = 750_000      # ~full map extent in game units
+LOCAL_RADIUS      = MAP_SPAN // 16  # ≈46.9k: signature clusters within this of a
+                                  # factory's home are "local"; farther clusters are
+                                  # railwayed-in and distance-penalized in scoring, so
+                                  # the planner keeps a factory's inputs close (prefers
+                                  # local lower-purity nodes over distant pure ones).
+LOCAL_PENALTY_EXP = 1.6          # steepness of the remote-cluster distance penalty
 BELT_LIMIT     = 780             # items/min per node; user's belt cap
                                  # (pure Mk.3 @ 250% = 1200 but belt clamps to
                                  # 780, so shard 3 on pure is wasted)
 PURITY_WEIGHT  = {'impure': 1, 'normal': 2, 'pure': 4}
+PURE_PREF_BUCKET = 12_000        # SOFT pure-node preference: when claiming nodes
+                                  # around a factory, distances are bucketed into
+                                  # ~120 m bands and PURE nodes are taken first
+                                  # within a band — so pure nodes get more chance
+                                  # of being used for REAL demand, without dragging
+                                  # a factory far off its recipe's resources.
 # All extractors assumed at max overclock (3 power shards = 250%) per user.
 # Base Mk.3: 120/240/480; OIL: 60/120/240; WELL satellite: 30/60/120.
 _OC = 2.5
 MINER_RATE     = {'impure': int(120 * _OC), 'normal': int(240 * _OC), 'pure': int(480 * _OC)}
 OIL_RATE       = {'impure':  60 * _OC,      'normal': 120 * _OC,      'pure': 240 * _OC}
 WELL_RATE      = {'impure':  30 * _OC,      'normal':  60 * _OC,      'pure': 120 * _OC}
-QUADRANT_BONUS = 1.5             # soft NW/SE multiplier (A-design)
+QUADRANT_WEIGHT = {'NW': 1.5, 'NE': 1.4, 'SE': 1.4, 'SW': 1.0}
+                                 # soft NW-majority bias (balanced; replaces the
+                                 # old flat 1.5x for NW/SE only — now includes NE)
+POCKET_MATCH_WEIGHT = 1.0        # strength of the pocket-match score term: a
+                                 # candidate center is favored when the LOCAL
+                                 # unreserved nodes around it are predominantly
+                                 # the job's own signature type, so a (e.g.)
+                                 # copper factory lands INSIDE a copper pocket
+                                 # rather than parked on a foreign-ore field.
+POCKET_MATCH_FLOOR  = 0.15       # never zero out a center entirely (avoids
+                                 # starving a job whose only nodes sit amid
+                                 # other ore); blend toward 1.0 by weight.
+NE_SATURATION_BONUS = 6.0        # >> quadrant weight; biases scoring toward
+                                 # claiming/anchoring NE pure nodes.
 OCC_MATCH_TOL  = 5_000           # 50 m nearest-node occupancy match (A1/Task2)
 MAX_SITES      = 8               # satellite cap per factory (design §3.5
                                  # multi-sites Aluminium factories; belt cap
@@ -101,41 +133,141 @@ OCC_NAME_MAP = {'Iron Ore': 'iron', 'Copper Ore': 'copper',
                 'Sulfur': 'sulfur', 'Uranium': 'uranium', 'Geyser': 'geyser'}
 
 # ---------------------------------------------------------------- gap targets
-GAP_TARGETS = {  # items/min, locked (design spec §2.3)
-    'Aluminum Casing': 3900, 'Steel Beam': 450, 'Motor': 220, 'Stator': 289,
-    'Cooling System': 150, 'Copper Powder': 1000, 'High-Speed Connector': 115,
-    'Smart Plating': 150, 'Modular Frame': 38, 'Rubber': 917,
-    'Heavy Modular Frame': 66,
+# CORRECTED gap-factory END-PRODUCT targets (2026-06 retarget). Each =
+# .sft SET production target − live PRODUCED (current-production.txt). The old
+# hand-authored dict ignored both the .sft `input` declarations (items already
+# supplied) and live production, inventing five PHANTOM lines (High-Speed
+# Connector, Copper Powder, Cooling System, Rubber-export, Modular Frame) that
+# are either .sft input-only or already covered by live output. Those are gone.
+#   Aluminum Casing     5000 − 1350 live = 3650
+#   Steel Beam           900 −  302 live =  598   (Desc_SteelPlate_C)
+#   Motor                250 −   45 live =  205
+#   Stator               250 −  120 live =  130
+#   Smart Plating        150 −    0 live =  150   (Desc_SpaceElevatorPart_1_C)
+#   Heavy Modular Frame   95 −   35 live =   60   (Desc_ModularFrameHeavy_C)
+GAP_TARGETS = {  # items/min, end-product gap demand
+    'Aluminum Casing': 3650, 'Steel Beam': 598, 'Motor': 205, 'Stator': 130,
+    'Smart Plating': 150, 'Heavy Modular Frame': 60,
 }
-# ESTIMATE — heuristic flavor splits, shifted to minimize bauxite use without
-# eliminating any factory: max Al Casing to Aldercast (1.33 bauxite/casing,
-# most efficient); minima at Bauxhold/Silvashade (1.5) to preserve identity;
-# Steel Beam bulk to Moldmarsh (Molded Beam = no bauxite) with a small
-# Silvashade share for its Aluminum-Beam identity.
-FLAVOR_SPLITS = {
-    'Aluminum Casing': {'aldercast': 3500, 'bauxhold': 200, 'silvashade': 200},
+# Flavor splits as relative WEIGHTS, rescaled to GAP_TARGETS[item] at load
+# (so a split can never silently drift from its target). Weights preserve the
+# old proportions where the products survive:
+#   Aluminum Casing  1700:1100:1100  (aldercast:bauxhold:silvashade)
+#   Steel Beam        400:50          (moldmarsh bulk : silvashade Al-Beam id)
+#   Motor             1:1             (voltreach : classic_iron_motor)
+#   Stator            159:130         (moldmarsh : voltreach)
+FLAVOR_WEIGHTS = {
+    'Aluminum Casing': {'aldercast': 1700, 'bauxhold': 1100, 'silvashade': 1100},
     'Steel Beam':       {'moldmarsh': 400, 'silvashade': 50},
-    'Motor':            {'voltreach': 110, 'classic_iron_motor': 110},
+    'Motor':            {'voltreach': 1, 'classic_iron_motor': 1},
     'Stator':           {'moldmarsh': 159, 'voltreach': 130},
 }
-# HMF +66 split: Luxara's HMF chain is the only one using bauxite, so its
-# share = 0 (Luxara still exists at base scale; just doesn't take the
-# increment). Redistribute 66/min across the 4 non-bauxite HMF flavors.
-HMF_SPLIT = {'ferrium': 16.5, 'naphtheon': 16.5,
-             'forgeholm': 16.5, 'cathera': 16.5, 'luxara': 0.0}
+# HMF split weights: Luxara's HMF chain is the only bauxite one, so weight 0
+# (Luxara exists at base scale, just takes no increment). The remaining 60/min
+# spreads evenly across ferrium/naphtheon/forgeholm/cathera (15 each).
+HMF_WEIGHTS = {'ferrium': 1, 'naphtheon': 1,
+               'forgeholm': 1, 'cathera': 1, 'luxara': 0}
+
+
+def _rescale(weights, total):
+    """Distribute `total` across {key: weight} proportionally. Keys with
+    weight 0 get exactly 0; the remainder is split by weight share, rounded to
+    0.1 with the rounding residue dropped on the largest share so the sum is
+    exactly `total`."""
+    wsum = sum(weights.values())
+    if wsum <= 0:
+        return {k: 0.0 for k in weights}
+    out = {k: round(w / wsum * total, 1) for k, w in weights.items()}
+    drift = round(total - sum(out.values()), 1)
+    if abs(drift) > 1e-9:
+        big = max((k for k in out if weights[k] > 0), key=lambda k: out[k])
+        out[big] = round(out[big] + drift, 1)
+    return out
+
+
+# Rescale weights -> absolute per-factory amounts that sum to the target.
+FLAVOR_SPLITS = {item: _rescale(w, GAP_TARGETS[item])
+                 for item, w in FLAVOR_WEIGHTS.items()}
+HMF_SPLIT = _rescale(HMF_WEIGHTS, GAP_TARGETS['Heavy Modular Frame'])
+
+
+def _decode_sft(path=SFT_EXPORT):
+    """Decode a Satisfactory Tools .sft export -> top-level dict.
+    Format: first non-blank/non-# line is a version byte + base64(zlib(json))."""
+    line = next(ln for ln in open(path).read().splitlines()
+                if ln.strip() and not ln.startswith('#'))
+    return json.loads(zlib.decompress(base64.b64decode(line[1:])))
+
+
+def _sft_name_maps(db):
+    """Build {Desc_*_C suffix: human name} from items.class_name."""
+    suffix = {}
+    for name, cn in db.c.execute('SELECT name, class_name FROM items'):
+        suffix[cn.rsplit('.', 1)[-1]] = name   # trailing Desc_*_C
+    return suffix
+
+
+def sft_production_and_inputs(db):
+    """Decode the .sft and return (production_names, input_names) as sets of
+    human item names. `production_names` = every item appearing in any tab's
+    production[] (genuine SET targets). `input_names` = every item in any tab's
+    input[] (declared already-supplied)."""
+    data = _decode_sft()
+    suffix = _sft_name_maps(db)
+
+    def nm(cn):
+        return suffix.get(cn, cn)
+    prod, inputs = set(), set()
+    for t in data.get('tabs', []):
+        req = t.get('request', {})
+        for p in req.get('production', []):
+            prod.add(nm(p['item']))
+        for i in req.get('input', []):
+            inputs.add(nm(i['item']))
+    return prod, inputs
+
+
+def assert_no_phantom_targets(db):
+    """GUARD: no GAP_TARGETS key may be a PHANTOM. A phantom = an item that
+    appears in a .sft input[] list but in NO production[] list (i.e. declared
+    already-supplied, never an actual SET target). This is what produced the
+    old High-Speed Connector / Copper Powder / Cooling System / Rubber lines.
+    Genuine SET-target items (Aluminum Casing, Steel Beam, Motor, Stator,
+    Smart Plating, HMF) appear in production[] AND may also appear in other
+    tabs' input[] — that is fine; only input-ONLY items are phantoms."""
+    prod, inputs = sft_production_and_inputs(db)
+    phantoms = inputs - prod
+    bad = [k for k in GAP_TARGETS if k in phantoms]
+    assert not bad, (f"PHANTOM gap targets (input-only in .sft, never a SET "
+                     f"production target): {bad}")
+    # Also assert each gap target is a real .sft production target (defense in
+    # depth — catches typos / future drift away from the .sft).
+    missing = [k for k in GAP_TARGETS if k not in prod]
+    assert not missing, (f"GAP_TARGETS not found among .sft production "
+                         f"targets: {missing}")
+
+
+def assert_splits_match_targets():
+    """Every flavor split must sum to its GAP_TARGETS total (±0.2 for the
+    0.1-rounding residue), so a split can never silently diverge."""
+    for item, splits in FLAVOR_SPLITS.items():
+        s = round(sum(splits.values()), 1)
+        assert abs(s - GAP_TARGETS[item]) <= 0.2, \
+            f"FLAVOR_SPLITS[{item}] sums to {s}, target {GAP_TARGETS[item]}"
+    s = round(sum(HMF_SPLIT.values()), 1)
+    assert abs(s - GAP_TARGETS['Heavy Modular Frame']) <= 0.2, \
+        f"HMF_SPLIT sums to {s}, target {GAP_TARGETS['Heavy Modular Frame']}"
 
 # pinned signature recipes (output item -> exact DB recipe name), design §3
 NEW_FACTORIES = {
     'aldercast': {
         'theme': 'Alclad / Copper-fused', 'signature': 'bauxite',
-        'products': {'Aluminum Casing': ('split',), 'Cooling System': ('target',)},
+        'products': {'Aluminum Casing': ('split',)},
         'recipes': {'Alumina Solution': 'Alternate: Sloppy Alumina',
                     'Aluminum Scrap': 'Alternate: Electrode Aluminum Scrap',
                     'Aluminum Ingot': 'Alternate: Pure Aluminum Ingot',
-                    'Aluminum Casing': 'Alternate: Alclad Casing',
-                    'Heat Sink': 'Alternate: Heat Exchanger',
-                    'Cooling System': 'Cooling System'},
-        'imports': {'Petroleum Coke', 'Rubber'}},
+                    'Aluminum Casing': 'Alternate: Alclad Casing'},
+        'imports': {'Petroleum Coke'}},   # Rubber dropped with Cooling System
     'bauxhold': {
         'theme': 'Chemical / Sulfuric', 'signature': 'bauxite',
         'products': {'Aluminum Casing': ('split',)},
@@ -173,14 +305,13 @@ NEW_FACTORIES = {
         'imports': set()},
 }
 EXTENSIONS = {
-    'naphtheon': {'signature': 'oil',
-                  'added': {'Rubber': ('target',)}, 'exports': True},
-    'cathera':   {'signature': 'copper',
-                  'added': {'High-Speed Connector': ('target',),
-                            'Copper Powder': ('target',)}, 'exports': False},
+    # naphtheon (Rubber export) DROPPED — Rubber is .sft input-only + live
+    # surplus +1808/min.  cathera (High-Speed Connector + Copper Powder)
+    # DROPPED ENTIRELY — both were .sft input-only phantoms; removing it also
+    # removes that factory's far caterium outposts.  Modular Frame removed from
+    # ferrium (live makes 148.5/min ≥ 75 target).
     'ferrium':   {'signature': 'iron',
-                  'added': {'Smart Plating': ('target',),
-                            'Modular Frame': ('target',)},
+                  'added': {'Smart Plating': ('target',)},
                   'recipes': {'Rotor': 'Rotor'}, 'exports': False},
 }
 HMF_CRITICAL = {'ferrium': 'iron', 'naphtheon': 'oil', 'forgeholm': 'coal',
@@ -313,14 +444,37 @@ def load_pool():
     return pool
 
 
+# Live nodes the user marked REUSE-ELIGIBLE in the Occupied Nodes picker
+# (reuse-nodes.json export). Matched by position; these are NOT marked occupied,
+# so the optimizer is free to repurpose them. Unmarked live miners stay locked.
+def load_released(path='reuse-nodes.json'):
+    try:
+        data = json.load(open(path))
+    except (OSError, ValueError):
+        return []
+    return [(n['x'], n['y']) for n in data if 'x' in n and 'y' in n]
+
+
+RELEASED = load_released()
+
+
+def is_released(x, y):
+    return any(abs(rx - x) <= OCC_MATCH_TOL and abs(ry - y) <= OCC_MATCH_TOL
+               for rx, ry in RELEASED)
+
+
 def mark_occupied(pool):
     occ = json.load(open(OCCUPIED_NODES))
     recs = []
+    released = 0
     for rec in occ:
         p = rec.get('node_pos') or rec.get('miner_pos')
         if not p:
             recs.append((math.inf, None, rec))
             continue
+        if is_released(p[0], p[1]):
+            released += 1
+            continue                       # user freed this node -> leave available
         ntype = OCC_NAME_MAP.get(rec.get('resource'), '')
         same = [n for n in pool if n['type'] == ntype]
         nd = min((dist((p[0], p[1]), (n['x'], n['y'])) for n in same),
@@ -348,6 +502,8 @@ def mark_occupied(pool):
             matched += 1
         else:
             unmatched.append((rec.get('resource'), round(px), round(py)))
+    if released:
+        print(f"Released {released} live node(s) per reuse-nodes.json -> back in pool")
     return matched, len(occ), unmatched
 
 
@@ -386,7 +542,11 @@ def claim_nearest(pool, ntype, center, demand, job_id, radius=None):
     cand = avail(pool, ntype)
     if radius is not None:
         cand = [n for n in cand if dist(center, (n['x'], n['y'])) <= radius]
-    cand.sort(key=lambda n: (round(dist(center, (n['x'], n['y'])), 1),
+    # Distance-first, but within a ~PURE_PREF_BUCKET band prefer higher purity
+    # so PURE nodes get used preferentially for real demand (soft, not forced).
+    cand.sort(key=lambda n: (round(dist(center, (n['x'], n['y'])) / PURE_PREF_BUCKET),
+                             -PURITY_WEIGHT[n['purity']],
+                             round(dist(center, (n['x'], n['y'])), 1),
                              n['path']))
     claimed, cap = [], 0.0
     for n in cand:
@@ -642,13 +802,25 @@ def site_min_overclock(nodes, demand):
 
 
 # ---------------------------------------------------------------- allocation
-def score_centers(pool, sig, sig_demand, placed_centers):
+def score_centers(pool, sig, sig_demand, placed_centers, home=None,
+                  demand_types=None):
     """Candidate centers = available signature nodes; HMF-style score with
-    NW/SE soft bonus; exclude within MIN_SEPARATION of any placed center
-    (A4). Returns sorted [(score, center, cluster_nodes)]."""
+    quadrant soft bonus; exclude within MIN_SEPARATION of any placed center
+    (A4). When `home` is given (a factory's primary center, i.e. satellite
+    rounds), clusters farther than LOCAL_RADIUS are distance-penalized so the
+    planner keeps inputs local.
+
+    POCKET MATCH (Change 3): the score is multiplied by the fraction of ALL
+    unreserved pool nodes within SEARCH_RADIUS of the center whose type matches
+    the job's signature (or, when given, any of `demand_types`). A center that
+    sits inside a pocket of its own ore beats one merely reachable across a
+    foreign-ore field, so e.g. a copper factory never parks on an iron pocket.
+    Returns sorted [(score, center, cluster_nodes, path)]."""
     sig_nodes = avail(pool, sig)
     if not sig_nodes:                               # A9 empty guard
         return []
+    match_types = set(demand_types) if demand_types else set()
+    match_types.add(sig)
     counts = defaultdict(int)
     for n in pool:
         counts[n['type']] += 1
@@ -667,26 +839,51 @@ def score_centers(pool, sig, sig_demand, placed_centers):
         if any(dist(ctr, pc) < MIN_SEPARATION * 1.25 for pc in placed_centers):
             continue
         sc = sum(PURITY_WEIGHT[n['purity']] for n in near) * sig_demand * rarity
-        if quadrant(*ctr) in ('NW', 'SE'):
-            sc *= QUADRANT_BONUS
+        sc *= QUADRANT_WEIGHT.get(quadrant(*ctr), 1.0)
+        # Pocket-match: fraction of all unreserved local nodes that are the
+        # job's own ore. Blended toward 1.0 by POCKET_MATCH_WEIGHT and floored
+        # so a sparse-signature job is penalized, not eliminated.
+        local_all = [n for n in pool if n['reserved_by'] is None
+                     and dist(ctr, (n['x'], n['y'])) <= SEARCH_RADIUS]
+        if local_all:
+            frac = sum(1 for n in local_all if n['type'] in match_types) \
+                / len(local_all)
+        else:
+            frac = 1.0
+        frac = max(frac, POCKET_MATCH_FLOOR)
+        sc *= (1.0 - POCKET_MATCH_WEIGHT) + POCKET_MATCH_WEIGHT * frac
+        # Locality penalty for satellites: clusters beyond LOCAL_RADIUS of the
+        # factory's home are railwayed-in, so down-weight them by distance —
+        # this favors local (even lower-purity) nodes over distant pure ones.
+        if home is not None:
+            d = dist(ctr, home)
+            sc *= min(1.0, LOCAL_RADIUS / max(d, 1.0)) ** LOCAL_PENALTY_EXP
         out.append((round(sc, 3), ctr, near, c['path']))
     out.sort(key=lambda t: (-t[0], t[3]))
     return out
 
 
-def alloc_signature(pool, job, placed_centers):
+def alloc_signature(pool, job, placed_centers, home=None):
     """Claim signature sites for one job: best cluster, spill to satellites
-    up to MAX_SITES. Mutates pool/placed_centers. Sets job sites/infeasible."""
+    up to MAX_SITES. Mutates pool/placed_centers. Sets job sites/infeasible.
+    `home` (optional): anchor point for the locality penalty (used by anchored
+    ext factories whose real home is the existing factory, not the first spill)."""
     sig = job['signature']
     remaining = job['raw_demand'].get(sig, 0.0)
     if remaining <= 0:
         job['sites'] = []
         return
+    dem_types = set(job.get('raw_demand', {}).keys())
     sites = []
     for _ in range(MAX_SITES):
         if remaining <= 1e-6:
             break
-        ranked = score_centers(pool, sig, remaining, placed_centers)
+        # Penalize distant clusters relative to the factory's home: an explicit
+        # `home` (anchored/ext factories) else the already-placed primary site.
+        cur_home = home if home is not None else \
+            ((sites[0]['center']['x'], sites[0]['center']['y']) if sites else None)
+        ranked = score_centers(pool, sig, remaining, placed_centers, cur_home,
+                               demand_types=dem_types)
         if not ranked:
             break
         _, ctr, _, _ = ranked[0]
@@ -903,16 +1100,25 @@ def alloc_anchored(pool, job, placed_centers):
         job['sites'] = []
         job['disposition'] = 'scaled_in_place'
         return
+    built = job.get('built', False)
     claimed, cap = claim_nearest(pool, sig, actr, demand, job['id'],
                                  radius=SEARCH_RADIUS)
     if claimed:
-        c2 = centroid(claimed)
+        c2 = centroid(claimed) if not built else (actr[0], actr[1])
+        # For a BUILT factory the primary site stays exactly on the anchor —
+        # the factory physically exists there; claimed coal feeds it in place.
         job['sites'] = [{'center': {'x': c2[0], 'y': c2[1]},
                          'signature_capacity': round(cap, 1),
                          'nodes': [{'x': n['x'], 'y': n['y'], 't': n['type'],
                                     'p': n['purity'][0], 'k': n['kind']}
                                    for n in claimed]}]
         placed_centers.append(c2)
+    elif built:
+        # Built but no coal claimable at the anchor — still keep the pinned
+        # primary site at the anchor (it exists in-game); shortfall spills.
+        job['sites'] = [{'center': {'x': actr[0], 'y': actr[1]},
+                         'signature_capacity': 0.0, 'nodes': []}]
+        placed_centers.append(actr)
     else:
         job['sites'] = []
     if cap + 1e-6 >= demand:
@@ -924,11 +1130,17 @@ def alloc_anchored(pool, job, placed_centers):
     job['raw_demand'][sig] = demand - cap
     free = dict(job)
     free['sites'] = []
-    alloc_signature(pool, free, placed_centers)
+    alloc_signature(pool, free, placed_centers, home=actr)   # penalize vs the anchor
     job['sites'] += free.get('sites', [])
     short = free.get('sig_shortfall', 0.0)
     job['sig_shortfall'] = short
-    if short <= 1e-6 and job['sites']:
+    if built:
+        # PINNED: never relocate. Home stays at the anchor; only the shortfall
+        # spilled to satellites. Disposition reflects scale-in-place vs spill.
+        job['disposition'] = 'pinned_satellite' if free.get('sites') \
+            else 'scaled_in_place'
+        job['infeasible'] = short > 1e-6
+    elif short <= 1e-6 and job['sites']:
         job['disposition'] = 'satellite' if cap > 0 else 'relocated'
     elif job['kind'] == 'ext':
         job['disposition'] = 'relocated' if not job['sites'] else 'satellite'
@@ -954,28 +1166,14 @@ def build_jobs(db, extras=None):
                      'imports_resolved': sorted(imports),
                      'building_chain': chain,
                      'building_totals': factory_building_totals(chain)})
-    ald_imp = aldercast_imports(db)
     exist = json.load(open(EXISTING_LOCATIONS))['selections']
     for fid, e in EXTENSIONS.items():
         added = dict(e['added'])
         prods, recipes = added, e.get('recipes', {})
         imports = extras.get(fid + '+', set())
         rd, tgt = job_raw_demand(db, fid, prods, recipes, imports)
-        if e.get('exports') and fid == 'naphtheon':       # Naphtheon+ exports
-            for raw, pm in ald_imp.items():
-                for r2, p2 in decompose(db, raw, pm, {}, set()).items():
-                    if r2 == 'Water':
-                        continue
-                    nt = ITEM_TO_NODETYPE.get(r2)
-                    if nt:
-                        rd[nt] = rd.get(nt, 0) + p2
-            tgt = dict(tgt); tgt.update({k + ' (export)': round(v, 1)
-                                         for k, v in ald_imp.items()})
         ext_products = {p: (split_rate(p, fid) if m[0] == 'split'
                             else GAP_TARGETS[p]) for p, m in prods.items()}
-        if e.get('exports') and fid == 'naphtheon':
-            for raw, pm in ald_imp.items():
-                ext_products[raw] = ext_products.get(raw, 0) + pm
         chain = building_chain(db, ext_products, recipes, imports)
         assert fid in exist, f"A13: no existing center for {fid}"
         ctr = exist[fid]['center']
@@ -991,7 +1189,7 @@ def build_jobs(db, extras=None):
         m = sub[fid]
         per_hmf = {k: v['per_min'] / m['hmf_per_min']
                    for k, v in m['raw_inputs'].items()}
-        inc = HMF_SPLIT.get(fid, 66.0 / 5.0)
+        inc = HMF_SPLIT.get(fid, 0.0)
         if inc <= 0:                             # skip jobs with 0 increment
             continue
         # Building totals for the increment: scale subunits steps by
@@ -1016,10 +1214,18 @@ def build_jobs(db, extras=None):
                 rd[nt] = ph * inc
         assert fid in exist, f"A13: no existing center for HMF {fid}"
         ctr = exist[fid]['center']
-        jobs.append({'id': fid + '_hmf', 'name': fid + ' (+HMF)',
+        # Anvilreach is the gap +HMF increment — a DISTINCT factory from the
+        # built base Forgeholm, so it must NOT pin onto the base (that stacked
+        # the two map markers on the same spot). It relocates to its own coal
+        # cluster; the base center is still seeded into placed_centers via this
+        # job's anchor, so every other factory also keeps clear of it.
+        built = False
+        jobs.append({'id': fid + '_hmf',
+                     'name': ('Anvilreach' if fid == 'forgeholm' else fid + ' (+HMF)'),
                      'kind': 'hmf', 'theme': f'HMF +{inc:.1f}', 'signature': crit,
                      'raw_demand': rd, 'targets': {'Heavy Modular Frame': round(inc, 1)},
                      'anchor': {'x': ctr['x'], 'y': ctr['y']},
+                     'built': built, 'pinned': built,
                      'imports_resolved': [],
                      'building_chain': hmf_chain,
                      'building_totals': factory_building_totals(hmf_chain)})
@@ -1042,6 +1248,14 @@ def pressure_key(pool, job):
 
 def allocate(pool, jobs):
     placed_centers = []
+    # Pre-seed anchored (ext/hmf) job centers: they sit at FIXED existing
+    # in-game factory locations and cannot move, so seeding them up front makes
+    # every `new` factory respect MIN_SEPARATION from them regardless of the
+    # pressure order in which jobs are placed (avoids a new factory landing on
+    # top of e.g. the pinned forgeholm/Anvilreach or a themed HMF site).
+    anchored_seed = [(j['anchor']['x'], j['anchor']['y'])
+                     for j in jobs if j.get('anchor')]
+    placed_centers.extend(anchored_seed)
     pending = sorted(jobs, key=lambda j: pressure_key(pool, j))
     done = set()
     order = []
@@ -1062,7 +1276,8 @@ def allocate(pool, jobs):
             while active and rounds < MAX_SITES:
                 for p in list(active):
                     ranked = score_centers(pool, p['signature'],
-                                           p['remaining'], placed_centers)
+                                           p['remaining'], placed_centers,
+                                           demand_types=set(p['raw_demand']))
                     if not ranked:
                         active.remove(p)
                         continue
@@ -1213,7 +1428,7 @@ def build_output(db, pool, jobs, occ_stat, placed_centers,
                         'oil_rate_m3min_max': OIL_RATE,
                         'search_radius_m': SEARCH_RADIUS / 100,
                         'min_separation_m': MIN_SEPARATION / 100,
-                        'quadrant_bonus': QUADRANT_BONUS},
+                        'quadrant_weight': QUADRANT_WEIGHT},
         'flavor_splits': FLAVOR_SPLITS,
         'hmf_split': HMF_SPLIT,
         'caveat_centroid': 'A14: a node-centroid can land on water/cliff; '
@@ -1256,11 +1471,25 @@ def validate(out, pool, order, unmatched):
     assert total == occ + res + free, "pool conservation failed"
     centers = []
     for j in order:
+        # Saturation anchors deliberately RELAX MIN_SEPARATION (Change 2) so
+        # clustered pure nodes inside another factory's exclusion zone are not
+        # stranded — exempt them from the A4 separation hard check.
+        if j.get('kind') == 'saturation':
+            continue
+        # ext/hmf jobs are ANCHORED at fixed existing in-game factory centers
+        # (the user already built them); a new factory landing within
+        # MIN_SEPARATION of such a fixed point is not a buildability conflict so
+        # long as no node is double-booked (checked above). Flag the pair only
+        # when BOTH sides are freely-placeable `new`/saturation centers.
+        anchored = j.get('kind') in ('ext', 'hmf') or bool(j.get('anchor'))
         for s in j.get('sites', []):
-            centers.append((s['center']['x'], s['center']['y'], j['id']))
+            centers.append((s['center']['x'], s['center']['y'], j['id'],
+                            anchored))
     for i in range(len(centers)):
         for k in range(i + 1, len(centers)):
             if centers[i][2] == centers[k][2]:
+                continue
+            if centers[i][3] or centers[k][3]:     # one side is an anchor
                 continue
             if dist(centers[i][:2], centers[k][:2]) < MIN_SEPARATION - 1:
                 issues.append(f"A4 separation: {centers[i][2]} vs "
@@ -1335,6 +1564,13 @@ def inject_map(out):
 
 def main():
     db = DB(DB_PATH)
+    # CHANGE 1 module-init guards: targets must be real .sft SET targets (no
+    # input-only phantoms) and every flavor split must sum to its target.
+    assert_no_phantom_targets(db)
+    assert_splits_match_targets()
+    print("Gap targets (corrected, gap = .sft SET - live):")
+    for k, v in GAP_TARGETS.items():
+        print(f"  {k:22} {v}")
     pool = load_pool()
     occ_stat = mark_occupied(pool)
     matched, total_occ, unmatched = occ_stat
@@ -1376,7 +1612,9 @@ def main():
               f"pk={pk[0]:.3f} raw={ {k: round(v) for k, v in j['raw_demand'].items()} }")
 
     order, placed, mining_towns = allocate(pool, jobs)
-    out, unmatched = build_output(db, pool, jobs, occ_stat, placed,
+    # `order` includes the NE saturation factories (Change 2) added during
+    # allocation; build output from it so they reach the JSON + map injection.
+    out, unmatched = build_output(db, pool, order, occ_stat, placed,
                                    erosion_report, mining_towns)
     issues, (total, occ, res, free) = validate(out, pool, order, unmatched)
 

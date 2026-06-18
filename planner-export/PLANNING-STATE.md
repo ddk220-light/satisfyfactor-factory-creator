@@ -36,9 +36,10 @@ depends on alternate-recipe choices not yet locked. Never treat them as needs.
 | Thermal Propulsion Rocket | 30 | 0 | −30 | final assembly | (main factory) |
 | Nuclear Pasta | 5 | 0 | −5 | final assembly | (main factory) |
 
-Plus new products in the gap plan: Copper Powder 1,000, High-Speed Connector
-115, Rubber 917, Cooling System 150 (Cathera+, Cathera+, Naphtheon+, Aldercast
-respectively).
+NOTE (2026-06-18): the gap plan was re-derived from the `.sft`. Copper Powder,
+High-Speed Connector, Rubber, Cooling System and Modular Frame are NOT gap needs
+— the `.sft` declares them as already-supplied `input` (and/or live production
+already covers them), so no gap factory builds them. See §4.
 
 MFG/TPR/Nuclear Pasta targets are **corrected (halved)** from the raw `.sft`
 (60/60/10 → 30/30/5) to match the main factory's real consumption. Stator and
@@ -92,83 +93,79 @@ Per-node coordinates: `occupied-nodes.json`. 109/109 material nodes are
 matched 1-to-1 to `resource_nodes.json`; 6 unmatched Geyser records (geysers
 aren't material) and 2 unattached miners are structurally unmatchable.
 
-## 4. Gap factory plan — placed (2026-05-19 amounts phase)
+## 4. Gap factory plan — REBUILT from .sft constraints (2026-06-18)
 
-The gap supply-chain plan from the design spec has been sized, sited, and
-build-quantified. Full details in `../gap-factory-locations.json`.
+The gap supply-chain was **re-derived from scratch** by
+`find_gap_factory_locations.py`. Targets are no longer hand-authored: they come
+from the `.sft` `production` SET targets **minus** items the `.sft` declares as
+already-supplied `input` **minus** live production (`current-production.txt`).
+Two independent derivations + a phantom-hunt + a code audit (multi-agent) agreed,
+and the result was independently re-verified: no phantom outputs, all 6 targets
+sum exact, no node double-booked, no overlapping factory markers. Full data in
+`../gap-factory-locations.json`.
 
-**Locked tunables (this plan):** Aluminum Casing 3,900 split = Aldercast 1,400
-/ Bauxhold 1,500 / Silvashade 1,000 → revised to **3,500 / 200 / 200**
-(bauxite-optimal shift toward most-efficient Aldercast, minima preserved for
-identity). Steel Beam 450 split = **Moldmarsh 400 / Silvashade 50**. Motor 220
-split = Voltreach 110 / Classic Iron Motor 110. Stator 289 split = Moldmarsh
-159 / Voltreach 130. HMF +66 split = **Ferrium / Naphtheon / Forgeholm /
-Cathera 16.5 each; Luxara 0** (Luxara HMF uses bauxite, omitted from
-increment). Miner overclock = up to 250% (3 power shards); belt cap 780/min;
-nitrogen wells modeled by Pressurizer per-satellite, reserved by `core`.
+**Phantoms removed** (the old plan built these; the `.sft` already supplies them):
 
-**Design §2.2 erosion check** (existing surplus vs new consumption):
+| Old line | per/min | Why dropped |
+|---|--:|---|
+| High-Speed Connector | 115 | `.sft input`=99999 (supplied) + live net **+30** |
+| Copper Powder | 1,000 | `.sft input`=9999/999999 (supplied) |
+| Cooling System | 150 | `.sft input`-only, not a SET target; live +3 |
+| Rubber (export) | 917 | `.sft input`-only; live surplus **+1,808** |
+| Modular Frame | 38 | live makes **148.5** ≥ 75 target — already covered |
 
-| Item | Existing net | New consumption | Decision |
-|---|--:|--:|---|
-| Wire | +5,481 | +5,845 | in-house (existing can't cover) |
-| Copper Sheet | −133 | +340 | in-house (already deficit) |
-| Crystal Oscillator | +56 | +18 | in-house (below 100/min margin) |
-| Circuit Board | +998 | +115 | **import from existing** (Cathera+) |
-| Computer | +120 | 0 | (no consumption) |
+The entire **cathera+** copper factory (its only outputs were the two phantoms)
+and its 7 far caterium outposts were deleted.
 
-**Per-factory placement + sizing:**
+**Genuine gap targets** (SET `.sft` target − live produced):
 
-| Factory | Disp. | Sig nodes | Outposts | Buildings | Power | Shards | Imports |
-|---|---|--:|--:|--:|--:|--:|---|
-| Aldercast | new | 11 (7 sites) | 8 | 385 | 5,478 MW | 95 | Petroleum Coke, Rubber |
-| Bauxhold | new | 1 | 2 | 18 | 263 MW | 0 | — |
-| Silvashade | new | 1 | 2 | 30 | 294 MW | 3 | — |
-| Voltreach | new | 2 | 5 | 323 | 3,490 MW | 20 | — |
-| Moldmarsh | new | 5 (2 sites) | 4 | 218 | 1,841 MW | 30 | — |
-| Classic Iron Motor | new | 5 | 3 | 605 | 4,008 MW | 14 | — |
-| Naphtheon+ | satellite | 13 (2 sites) | 0 | 146 | 4,349 MW | 32 | — |
-| Cathera+ | relocated | 11 (4 sites) | 6 | 600 | 3,953 MW | 41 | Circuit Board |
-| Ferrium+ | satellite | 8 (2 sites) | 0 | 658 | 4,520 MW | 16 | — |
-| Ferrium (+HMF) | relocated | 5 | 2 | 208 | 1,489 MW | 13 | — |
-| Naphtheon (+HMF) | relocated | 3 | 4 | 288 | 3,250 MW | 8 | — |
-| Forgeholm (+HMF) | relocated | 3 | 7 | 224 | 2,555 MW | 18 | — |
-| Cathera (+HMF) | relocated | 1 | 6 | 143 | 1,705 MW | 13 | — |
-| **TOTAL** | | | | **3,846** | **37,195 MW** | **285** | |
+| Product | SET | live | gap built |
+|---|--:|--:|--:|
+| Aluminum Casing | 5,000 | 1,350 | **3,650** |
+| Steel Beam | 900 | 302 | **598** |
+| Motor | 250 | 45 | **205** |
+| Stator | 250 | 120 | **130** |
+| Smart Plating | 150 | 0 | **150** |
+| Heavy Modular Frame | 95 | 35 | **60** |
 
-**Gap mining towns** (shared outposts for the high-volume trained resources
-— matches the existing Siderith / Calcara pattern; each town supplies 3–5
-factories over rail/truck rather than each factory mining its own):
+**11 factories:**
 
-| Resource | Towns | Total nodes | Total cap/min | Shards | Supplies |
-|---|--:|--:|--:|--:|---|
-| Coal | 2 | 6 | 3,600 | 12 | silvashade, bauxhold, voltreach, moldmarsh, classic_iron_motor |
-| Copper | 6 | 8 | 5,160 | 22 | aldercast, voltreach, moldmarsh, classic_iron_motor |
-| Iron | 5 | 14 | 8,160 | 35 | voltreach, moldmarsh, forgeholm_hmf, naphtheon_hmf, cathera_hmf |
-| Limestone | 3 | 7 | 4,080 | 13 | forgeholm_hmf, naphtheon_hmf, ferrium_hmf, cathera_hmf |
-| **Total** | **16** | **35** | **21,000/min** | **82** | |
+| Factory | Disp | Quad | Produces | Bldgs | Power | Shards |
+|---|---|---|---|--:|--:|--:|
+| aldercast | new | SE | Aluminum Casing 1591 | 148 | 1,379 MW | 7 |
+| bauxhold | new | SE | Aluminum Casing 1029 | 92 | 1,356 MW | 10 |
+| silvashade | new | SW | Aluminum Casing 1029 + Steel Beam 66 | 123 | 1,329 MW | 4 |
+| moldmarsh | new | NW | Steel Beam 532 + Stator 71 | 141 | 1,339 MW | 4 |
+| voltreach | new | SW | Motor 102 + Stator 58 | 242 | 2,891 MW | 2 |
+| classic_iron_motor | new | NE | Motor 102 | 484 | 3,406 MW | 4 |
+| ferrium+ | scaled_in_place | NE | Smart Plating 150 | 587 | 3,908 MW | 17 |
+| ferrium_hmf | satellite | NE | HMF 15 | 190 | 1,354 MW | 16 |
+| naphtheon_hmf | scaled_in_place | NE | HMF 15 | 262 | 2,955 MW | 4 |
+| cathera_hmf | scaled_in_place | NE | HMF 15 | 131 | 1,550 MW | 0 |
+| Anvilreach (forgeholm_hmf) | relocated | SE | HMF 15 | 203 | 2,322 MW | 10 |
+| **TOTAL** | | | | **2,603** | **23,787 MW** | **136** |
 
-**Projected resource pool after gap factory build:**
+HMF +60 = ferrium / naphtheon / cathera / Anvilreach 15 each; luxara 0.
+**Anvilreach** is the +HMF increment as a DISTINCT factory from the built base
+Forgeholm — no longer pinned on top of the base; it relocated to its own 5-node
+coal cluster (≈173 k from the base) so the two markers no longer overlap.
 
-| Resource | Total | Currently occupied | Gap-plan reserved | Remaining unoccupied |
-|---|--:|--:|--:|--:|
-| Bauxite | 17 | 3 | 13 | **1** (very tight) |
-| Caterium Ore | 17 | 5 | 9 | 3 |
-| Coal | 62 | 12 | 13 | 37 |
-| Copper Ore | 55 | 14 | 23 | 18 |
-| Iron Ore | 127 | 26 | 34 | 67 |
-| Limestone | 94 | 13 | 13 | 68 |
-| Nitrogen Gas (wells) | 45 | 14 | 17 | 14 |
-| Crude Oil | 48 | 6 | 16 | 26 |
-| Raw Quartz | 17 | 6 | 2 | 9 |
-| SAM Ore | 19 | 1 | 0 | 18 |
-| Sulfur | 16 | 7 | 1 | 8 |
-| Uranium | 5 | 0 | 0 | 5 |
-| Water | 55 | 0 | 0 | 55 |
+**Mining towns** (shared bulk resources): coal 2 towns (7 nodes), copper 1 (3),
+iron 1 (11) + existing Siderith/Calcara, limestone 1 (5).
 
-Bauxite remains the binding constraint (1 node free post-plan); any further
-aluminum scaling would require either reclaiming a current-occupied bauxite
-node, accepting Aldercast's 7-site spread, or revisiting the splits.
+**Pure-node policy:** there are NO "saturation" factories. An earlier attempt to
+force-consume every NE pure node by building sink factories was removed — only
+factories that make the 6 useful products exist. Instead a SOFT preference
+(`PURE_PREF_BUCKET` ≈ 120 m band) makes real factories favour PURE nodes when
+claiming ore, so pure nodes get more chance of being used for genuine demand
+without overbuilding. Some pure nodes may remain free — expected and acceptable.
+
+**Key tunables:** `SEARCH_RADIUS` 70 k (wide local capture), `MIN_SEPARATION`
+25 k, locality penalty (`LOCAL_RADIUS` ≈ 47 k, exp 1.6), pocket-match scoring (a
+factory centre must sit inside a pocket of its own signature ore, not a
+foreign-ore field), `PURE_PREF_BUCKET` 12 k, `QUADRANT_WEIGHT` NW 1.5 / NE 1.4 /
+SE 1.4 / SW 1.0 (soft). Occupancy: 58/115 live nodes matched; user-released nodes
+from `../reuse-nodes.json` returned to the pool.
 
 ## Planning rules
 
