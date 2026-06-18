@@ -2889,7 +2889,7 @@
       "reason": "relocated; signature=oil; 1 site(s); 0 outpost(s)"
     },
     "forgeholm_hmf": {
-      "factory_name": "forgeholm (+HMF)",
+      "factory_name": "Anvilreach",
       "theme": "HMF +16.5",
       "kind": "hmf",
       "signature_resource": "coal",
