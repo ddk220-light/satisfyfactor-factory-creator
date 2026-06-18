@@ -171,7 +171,6 @@ canvas.grabbing{cursor:grabbing}
 <div id="tab-bar">
   <button class="tab-btn active" onclick="switchTab('map')">Map</button>
   <button class="tab-btn" onclick="switchTab('crazy')">Factories</button>
-  <button class="tab-btn" onclick="switchTab('occupied')">Occupied Nodes</button>
 </div>
 <div id="tab-content">
   <div id="map-view">
@@ -185,10 +184,6 @@ canvas.grabbing{cursor:grabbing}
             <option value="all">All components</option>
           </select>
         </label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#ccc;margin-bottom:8px;cursor:pointer">
-          <input type="checkbox" id="showOccupied-toggle" onchange="setShowOccupied(this.checked)" style="accent-color:#2ecc71;width:14px;height:14px">
-          Show occupied nodes
-        </label>
         <button id="export-btn">EXPORT SELECTIONS</button>
         <button id="reset-btn">Reset View</button>
       </div>
@@ -200,23 +195,9 @@ canvas.grabbing{cursor:grabbing}
       <button id="zoom-in-btn" title="Zoom in (+)">+</button>
       <button id="zoom-fit-btn" title="Fit (0)">Fit</button>
     </div>
-    <div id="picker-panel" style="display:none">
-      <div class="pp-title">Reuse Picker — click nodes on the map to toggle</div>
-      <div class="pp-count"><b id="picker-count">0</b> of <span id="picker-total">113</span> marked reuse-eligible</div>
-      <div class="pp-legend"><span class="pp-dot reuse"></span>reuse-eligible&nbsp;&nbsp;<span class="pp-dot leave"></span>leave alone (live miners)</div>
-      <div class="pp-actions">
-        <button class="occ-btn" onclick="suggestRemovedFactoryNodes()">Suggest 21</button>
-        <button class="occ-btn secondary" onclick="clearAllReuse()">Clear all</button>
-        <button class="occ-btn" onclick="exportReuseSelection()">Export</button>
-      </div>
-    </div>
   </div>
   <div id="crazy-view" style="display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:24px 32px;font-family:'Courier New',monospace">
     <div id="crazy-content" style="max-width:1400px;margin:0 auto;width:100%"></div>
-  </div>
-  <div id="occupied-view" style="display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;font-family:'Courier New',monospace">
-    <div id="occupied-header"></div>
-    <div id="occupied-list" style="max-width:900px;margin:0 auto;width:100%;padding:0 24px 32px"></div>
   </div>
 </div>
 <div id="tooltip"></div>
@@ -226,25 +207,15 @@ canvas.grabbing{cursor:grabbing}
 let currentTab = 'map';
 function switchTab(tab) {
   currentTab = tab;
-  pickerMode = (tab === 'occupied');
-  // The Occupied Nodes tab IS the map, in reuse-picker mode (dimmed map, bold
-  // clickable occupied nodes). The legacy list view (#occupied-view) is unused.
-  const mapVisible = (tab === 'map' || tab === 'occupied');
+  const mapVisible = (tab === 'map');
   document.getElementById('map-view').style.display = mapVisible ? 'flex' : 'none';
   document.getElementById('crazy-view').style.display = tab === 'crazy' ? 'flex' : 'none';
-  document.getElementById('occupied-view').style.display = 'none';
-  const pp = document.getElementById('picker-panel');
-  if (pp) pp.style.display = pickerMode ? 'block' : 'none';
-  // pickerMode drives the overlay directly (see draw/hit-test), so the Map tab
-  // stays clean unless the user opts in via the "Show occupied nodes" toggle.
   document.querySelectorAll('.tab-btn').forEach(btn => {
     var btnTab = btn.textContent.trim().toLowerCase();
     btn.classList.toggle('active',
       (btnTab === 'map' && tab === 'map') ||
-      (btnTab === 'factories' && tab === 'crazy') ||
-      (btnTab === 'occupied nodes' && tab === 'occupied'));
+      (btnTab === 'factories' && tab === 'crazy'));
   });
-  if (pickerMode) updateOccCount();
   if (mapVisible) { resize(); draw(); }
   if (tab === 'crazy' && !crazyLoaded) { loadCrazy(); }
 }
@@ -999,6 +970,9 @@ function draw() {
     if (zoom > ZOOM_SHOW_FACTORY_NODES) drawGapNodes(gf);
   }
 
+  // Town -> factory supply arrows (under the markers, above footprints)
+  drawTownSupplyArrows();
+
   // Factory centers always on top
   for (const fid of fids) {
     if (!visible[fid] || !baseEligible(fid)) continue;
@@ -1225,25 +1199,7 @@ function drawFactoryCenter(fid, f) {
   const hov = (hoverKey === ('fc:' + fid)) ? HOVER_MUL : 1;
   const r = Math.max(8, Math.round(11 * markerScale())) * hov;
 
-  // Outer glow
-  ctx.fillStyle = color + '30';
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, r + 4, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Main circle
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Border
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
-  ctx.stroke();
-
+  // (blue disc removed per user — keep just the name label + product icons)
   // Label (translucent pill behind text instead of bare stroke)
   const fs = labelFont(12, 12, 30);
   ctx.font = `bold ${fs}px Courier New`;
@@ -1431,15 +1387,12 @@ function drawGapCenter(gf) {
     const s = g2s(site.x, site.y);
     const hov = (hoverKey === ('gc:' + gf.id + ':' + si)) ? HOVER_MUL : 1;
     const r = Math.max(7, Math.round(10 * markerScale())) * hov;
-    ctx.fillStyle = color + '30';
-    ctx.beginPath(); ctx.arc(s.x, s.y, r + 4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = color;
-    ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = si === 0 ? '#fff' : color;
-    ctx.lineWidth = 2;
-    ctx.setLineDash(si === 0 ? [] : [3, 2]);
-    ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.stroke();
-    ctx.setLineDash([]);
+    if (si !== 0) {
+      // satellite site: small dashed ring marker only (no big disc)
+      ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.setLineDash([3, 2]);
+      ctx.beginPath(); ctx.arc(s.x, s.y, Math.max(3, r * 0.5), 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+    }
     if (si === 0) {
       const tag = gf.infeasible ? gf.name + ' ⚠' : gf.name;
       const fs = labelFont(12, 11, 30);
@@ -1517,6 +1470,61 @@ function drawProductIcons(sx, sy, prodList, r) {
       ctx.globalAlpha = 1;
     }
     x += step;
+  }
+}
+
+// Primary-site center for a factory id (target of a town supply arrow).
+function factoryCenterById(id) {
+  if (typeof GAP_FACTORIES !== 'undefined') {
+    const gf = GAP_FACTORIES.find(g => g.id === id);
+    if (gf && gf.sites && gf.sites.length) return { x: gf.sites[0].x, y: gf.sites[0].y };
+  }
+  if (typeof FACTORIES !== 'undefined' && FACTORIES[id]) return { x: FACTORIES[id].cx, y: FACTORIES[id].cy };
+  return null;
+}
+
+// Arrow from (ax,ay)->(bx,by) in screen coords; stops short of the target and
+// caps with a filled arrowhead.
+function drawArrow(ax, ay, bx, by, style, width, dash) {
+  const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy) || 1;
+  if (len < 18) return;
+  const ux = dx / len, uy = dy / len, gap = 13;
+  const ex = bx - ux * gap, ey = by - uy * gap;
+  ctx.save();
+  ctx.strokeStyle = style; ctx.fillStyle = style; ctx.lineWidth = width;
+  ctx.setLineDash(dash || []);
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ex, ey); ctx.stroke();
+  ctx.setLineDash([]);
+  const ah = Math.max(6, width * 3.2), ang = Math.atan2(ey - ay, ex - ax);
+  ctx.beginPath();
+  ctx.moveTo(ex, ey);
+  ctx.lineTo(ex - ah * Math.cos(ang - 0.42), ey - ah * Math.sin(ang - 0.42));
+  ctx.lineTo(ex - ah * Math.cos(ang + 0.42), ey - ah * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+// Supply lines: an arrow from each gap mining town to every factory it feeds.
+// Faint by default; bold when that town OR a fed factory is hovered. Shown once
+// zoomed in past the connection-line threshold.
+function drawTownSupplyArrows() {
+  if (typeof GAP_TOWNS === 'undefined' || componentFilter !== 'all') return;
+  if (zoom <= ZOOM_SHOW_LINES) return;
+  for (const gt of GAP_TOWNS) {
+    if (!gapTownVisible[gt.id]) continue;
+    const townHov = hoverKey === ('gt:' + gt.id);
+    const color = RESOURCE_COLORS[gt.r] || '#9fb0c8';
+    const ts = g2s(gt.cx, gt.cy);
+    for (const sup of (gt.supplies || [])) {
+      if (typeof gapVisible !== 'undefined' && gapVisible[sup.factory] === false) continue;
+      const fc = factoryCenterById(sup.factory);
+      if (!fc) continue;
+      const facHov = !!hoverKey && hoverKey.indexOf('gc:' + sup.factory + ':') === 0;
+      const on = townHov || facHov;
+      const fp = g2s(fc.x, fc.y);
+      drawArrow(ts.x, ts.y, fp.x, fp.y,
+                withAlpha(color, on ? 0.9 : 0.18), on ? 2.4 : 1.1, [6, 5]);
+    }
   }
 }
 
@@ -1645,25 +1653,6 @@ function buildLegend() {
   html += '<div class="row"><span class="dot" style="background:#ccc;width:13px;height:13px"></span>Pure (large)</div>';
   html += '<div class="row"><span class="dot" style="background:#ccc;width:10px;height:10px"></span>Normal</div>';
   html += '<div class="row"><span class="dot" style="background:#ccc;width:7px;height:7px"></span>Impure (small)</div>';
-  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Gap Factory Status</div>';
-  const gapStatuses = [
-    ['new','green','New build'],
-    ['scaled_in_place','teal','Scaled at existing'],
-    ['satellite','blue','Satellite of existing'],
-    ['relocated','orange','Relocated expansion'],
-    ['infeasible','red','Infeasible (shortfall)'],
-  ];
-  for (const [k,_,label] of gapStatuses) {
-    html += `<div class="row"><span class="dot" style="background:${GAP_COLORS[k]}"></span>${label}</div>`;
-  }
-  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Gap Mining Towns</div>';
-  html += '<div class="row"><span class="dot" style="background:#aaa;transform:rotate(45deg)"></span>Diamond = shared mining town</div>';
-  html += '<div class="row" style="color:#888;font-size:10px;margin-left:4px">color = resource type</div>';
-  html += '<div class="row" style="color:#888;font-size:10px;margin-left:4px">dashed = satellite of factory</div>';
-  html += '<div style="margin-top:6px;font-weight:bold;color:#fff;font-size:12px">Occupied Nodes</div>';
-  html += '<div class="row"><span class="dot" style="background:transparent;border:2px solid #2ecc71;width:11px;height:11px"></span>Green = reuse-eligible</div>';
-  html += '<div class="row"><span class="dot" style="background:transparent;border:1px dashed #5a6473;width:11px;height:11px"></span>Dim = leave-alone</div>';
-  html += '<div class="row" style="color:#888;font-size:10px;margin-left:4px">click a node to toggle reuse</div>';
   el.innerHTML = html;
 }
 
