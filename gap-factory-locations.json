@@ -44,8 +44,7 @@
         "silvashade": 66.4
       },
       "Motor": {
-        "voltreach": 102.5,
-        "classic_iron_motor": 102.5
+        "voltreach": 205.0
       },
       "Stator": {
         "moldmarsh": 71.5,
@@ -65,38 +64,38 @@
       "bauxite": {
         "total": 17,
         "occupied": 0,
-        "reserved_new": 11,
-        "remaining": 6
+        "reserved_new": 10,
+        "remaining": 7
       },
       "caterium": {
         "total": 17,
         "occupied": 3,
-        "reserved_new": 2,
-        "remaining": 12
+        "reserved_new": 3,
+        "remaining": 11
       },
       "coal": {
         "total": 62,
         "occupied": 9,
-        "reserved_new": 12,
-        "remaining": 41
+        "reserved_new": 14,
+        "remaining": 39
       },
       "copper": {
         "total": 55,
         "occupied": 10,
-        "reserved_new": 4,
-        "remaining": 41
+        "reserved_new": 15,
+        "remaining": 30
       },
       "iron": {
         "total": 127,
         "occupied": 12,
-        "reserved_new": 31,
-        "remaining": 84
+        "reserved_new": 33,
+        "remaining": 82
       },
       "limestone": {
         "total": 94,
         "occupied": 2,
-        "reserved_new": 10,
-        "remaining": 82
+        "reserved_new": 15,
+        "remaining": 77
       },
       "nitrogenGas": {
         "total": 45,
@@ -113,8 +112,8 @@
       "quartz": {
         "total": 17,
         "occupied": 3,
-        "reserved_new": 3,
-        "remaining": 11
+        "reserved_new": 5,
+        "remaining": 9
       },
       "sam": {
         "total": 19,
@@ -125,8 +124,8 @@
       "sulfur": {
         "total": 16,
         "occupied": 6,
-        "reserved_new": 2,
-        "remaining": 8
+        "reserved_new": 1,
+        "remaining": 9
       },
       "uranium": {
         "total": 5,
@@ -142,50 +141,6 @@
       }
     },
     "erosion_report": {
-      "Crystal Oscillator": {
-        "existing_net": 56.2,
-        "new_consumption": 17.1,
-        "residual_net": 39.2,
-        "decision": "in_house",
-        "consumers": [
-          [
-            "voltreach",
-            17.1
-          ]
-        ]
-      },
-      "Copper Sheet": {
-        "existing_net": -133.1,
-        "new_consumption": 102.5,
-        "residual_net": -235.6,
-        "decision": "in_house",
-        "consumers": [
-          [
-            "voltreach",
-            102.5
-          ]
-        ]
-      },
-      "Wire": {
-        "existing_net": 5481.2,
-        "new_consumption": 2690.3,
-        "residual_net": 2790.9,
-        "decision": "import_from_existing",
-        "consumers": [
-          [
-            "voltreach",
-            478.3
-          ],
-          [
-            "moldmarsh",
-            572.0
-          ],
-          [
-            "classic_iron_motor",
-            1640.0
-          ]
-        ]
-      },
       "Computer": {
         "existing_net": 120.0,
         "new_consumption": 0.0,
@@ -193,64 +148,95 @@
         "decision": "in_house",
         "consumers": []
       },
+      "Crystal Oscillator": {
+        "existing_net": 56.2,
+        "new_consumption": 34.2,
+        "residual_net": 22.1,
+        "decision": "in_house",
+        "consumers": [
+          [
+            "voltreach",
+            34.2
+          ]
+        ]
+      },
       "Circuit Board": {
         "existing_net": 998.2,
         "new_consumption": 0.0,
         "residual_net": 998.2,
         "decision": "in_house",
         "consumers": []
+      },
+      "Wire": {
+        "existing_net": 5481.2,
+        "new_consumption": 17276.7,
+        "residual_net": -11795.4,
+        "decision": "in_house",
+        "consumers": [
+          [
+            "voltreach",
+            956.7
+          ],
+          [
+            "moldmarsh",
+            1040.0
+          ],
+          [
+            "ironclad_ne",
+            7640.0
+          ],
+          [
+            "ironclad_cathera",
+            7640.0
+          ]
+        ]
+      },
+      "Copper Sheet": {
+        "existing_net": -133.1,
+        "new_consumption": 205.0,
+        "residual_net": -338.1,
+        "decision": "in_house",
+        "consumers": [
+          [
+            "voltreach",
+            205.0
+          ]
+        ]
       }
     },
-    "total_shards_global": 136
+    "total_shards_global": 196
   },
   "factory_locations": {
-    "aldercast": {
-      "factory_name": "aldercast",
-      "theme": "Alclad / Copper-fused",
+    "silvashade": {
+      "factory_name": "silvashade",
+      "theme": "Classic Silica Foundry",
       "kind": "new",
       "signature_resource": "bauxite",
       "disposition": "new",
       "targets": {
-        "Aluminum Casing": 1591.0
+        "Aluminum Casing": 1409,
+        "Steel Beam": 91
       },
       "center": {
-        "x": 44838.3,
-        "y": 60317.4
+        "x": 7780.6,
+        "y": 49575.9
       },
       "sites": [
         {
           "center": {
-            "x": 44838.3,
-            "y": 60317.4
+            "x": 7780.6,
+            "y": 49575.9
           },
-          "signature_capacity": 2160.0,
+          "signature_capacity": 2220.0,
           "nodes": [
-            {
-              "x": 39477.6484375,
-              "y": 52119.98828125,
-              "t": "bauxite",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 89592.6484375,
-              "y": 62638.78125,
-              "t": "bauxite",
-              "p": "i",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            },
             {
               "x": -5633.59375,
               "y": 44274.0625,
               "t": "bauxite",
               "p": "i",
               "k": "node",
-              "oc": 100,
-              "sh": 0
+              "oc": 250,
+              "sh": 3
             },
             {
               "x": -5292.68359375,
@@ -262,8 +248,224 @@
               "sh": 1
             },
             {
-              "x": 106047.6484375,
-              "y": 50478.78515625,
+              "x": 39477.6484375,
+              "y": 52119.98828125,
+              "t": "bauxite",
+              "p": "n",
+              "k": "node",
+              "oc": 250,
+              "sh": 3
+            },
+            {
+              "x": 2570.9895019531,
+              "y": 9834.4873046875,
+              "t": "bauxite",
+              "p": "n",
+              "k": "node",
+              "oc": 250,
+              "sh": 3
+            }
+          ],
+          "demand_met": 2204.5,
+          "shards": 10
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "quartz",
+          "center": {
+            "x": 36447.1,
+            "y": 119701.7
+          },
+          "capacity": 1380.0,
+          "nodes": [
+            {
+              "x": 37926.109375,
+              "y": 120939.234375,
+              "t": "quartz",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": 34968.0703125,
+              "y": 118464.15625,
+              "t": "quartz",
+              "p": "n",
+              "k": "node",
+              "oc": 250,
+              "sh": 3
+            }
+          ],
+          "demand_met": 1380,
+          "shards": 5
+        },
+        {
+          "resource": "quartz",
+          "center": {
+            "x": -90370.4,
+            "y": 63712.2
+          },
+          "capacity": 780.0,
+          "nodes": [
+            {
+              "x": -90370.421875,
+              "y": 63712.15625,
+              "t": "quartz",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            }
+          ],
+          "demand_met": 780,
+          "shards": 2
+        }
+      ],
+      "resources": {
+        "bauxite": {
+          "demand": 2204.5,
+          "reserved_capacity": 2220.0
+        },
+        "coal": {
+          "demand": 1102.2,
+          "reserved_capacity": 0.0
+        },
+        "quartz": {
+          "demand": 1653.4,
+          "reserved_capacity": 2160.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Constructor": 103,
+          "Foundry": 37,
+          "Refinery": 29
+        },
+        "total_buildings": 169,
+        "total_power_mw": 1818.6,
+        "footprint_m2": 16704
+      },
+      "building_chain": [
+        {
+          "recipe": "Aluminum Casing",
+          "item": "Aluminum Casing",
+          "building": "Constructor",
+          "rate_per_min": 1409.0,
+          "recipe_output_per_min": 60.0,
+          "buildings_exact": 23.48,
+          "buildings_ceil": 24,
+          "power_mw": 93.9
+        },
+        {
+          "recipe": "Alternate: Aluminum Beam",
+          "item": "Steel Beam",
+          "building": "Constructor",
+          "rate_per_min": 91.0,
+          "recipe_output_per_min": 22.5,
+          "buildings_exact": 4.04,
+          "buildings_ceil": 5,
+          "power_mw": 16.2
+        },
+        {
+          "recipe": "Aluminum Ingot",
+          "item": "Aluminum Ingot",
+          "building": "Foundry",
+          "rate_per_min": 2204.5,
+          "recipe_output_per_min": 60.0,
+          "buildings_exact": 36.74,
+          "buildings_ceil": 37,
+          "power_mw": 587.9
+        },
+        {
+          "recipe": "Aluminum Scrap",
+          "item": "Aluminum Scrap",
+          "building": "Refinery",
+          "rate_per_min": 3306.75,
+          "recipe_output_per_min": 360.0,
+          "buildings_exact": 9.19,
+          "buildings_ceil": 10,
+          "power_mw": 275.6
+        },
+        {
+          "recipe": "Silica",
+          "item": "Silica",
+          "building": "Constructor",
+          "rate_per_min": 2755.62,
+          "recipe_output_per_min": 37.5,
+          "buildings_exact": 73.48,
+          "buildings_ceil": 74,
+          "power_mw": 293.9
+        },
+        {
+          "recipe": "Alumina Solution",
+          "item": "Alumina Solution",
+          "building": "Refinery",
+          "rate_per_min": 2204.5,
+          "recipe_output_per_min": 120.0,
+          "buildings_exact": 18.37,
+          "buildings_ceil": 19,
+          "power_mw": 551.1
+        }
+      ],
+      "total_shards": 17,
+      "reason": "new; signature=bauxite; 1 site(s); 2 outpost(s)"
+    },
+    "aldercast": {
+      "factory_name": "aldercast",
+      "theme": "Alclad / Copper-fused",
+      "kind": "new",
+      "signature_resource": "bauxite",
+      "disposition": "new",
+      "targets": {
+        "Aluminum Casing": 1591.0
+      },
+      "center": {
+        "x": 245895.4,
+        "y": 61821.6
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 245895.4,
+            "y": 61821.6
+          },
+          "signature_capacity": 2160.0,
+          "nodes": [
+            {
+              "x": 260298.515625,
+              "y": 56227.52734375,
+              "t": "bauxite",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": 263148.09375,
+              "y": 53611.1640625,
+              "t": "bauxite",
+              "p": "n",
+              "k": "node",
+              "oc": 250,
+              "sh": 3
+            },
+            {
+              "x": 261127.96875,
+              "y": 48274.6015625,
+              "t": "bauxite",
+              "p": "i",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 199007.171875,
+              "y": 89173.1875,
               "t": "bauxite",
               "p": "n",
               "k": "node",
@@ -272,7 +474,7 @@
             }
           ],
           "demand_met": 2121.3,
-          "shards": 7
+          "shards": 9
         }
       ],
       "outposts": [],
@@ -353,186 +555,8 @@
           "power_mw": 318.2
         }
       ],
-      "total_shards": 7,
+      "total_shards": 9,
       "reason": "new; signature=bauxite; 1 site(s); 0 outpost(s)"
-    },
-    "silvashade": {
-      "factory_name": "silvashade",
-      "theme": "Classic Silica Foundry",
-      "kind": "new",
-      "signature_resource": "bauxite",
-      "disposition": "new",
-      "targets": {
-        "Aluminum Casing": 1029.5,
-        "Steel Beam": 66.4
-      },
-      "center": {
-        "x": -181664.8,
-        "y": 18739.5
-      },
-      "sites": [
-        {
-          "center": {
-            "x": -181664.8,
-            "y": 18739.5
-          },
-          "signature_capacity": 1680.0,
-          "nodes": [
-            {
-              "x": -177367.203125,
-              "y": 44998.91796875,
-              "t": "bauxite",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -217052.25,
-              "y": 11242.14453125,
-              "t": "bauxite",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -150574.796875,
-              "y": -22.557600021362,
-              "t": "bauxite",
-              "p": "n",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            }
-          ],
-          "demand_met": 1610.7,
-          "shards": 2
-        }
-      ],
-      "outposts": [
-        {
-          "resource": "quartz",
-          "center": {
-            "x": -90422.4,
-            "y": 65486.0
-          },
-          "capacity": 1440.0,
-          "nodes": [
-            {
-              "x": -90370.421875,
-              "y": 63712.15625,
-              "t": "quartz",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -90474.3671875,
-              "y": 67259.8046875,
-              "t": "quartz",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            }
-          ],
-          "demand_met": 1208.0,
-          "shards": 2
-        }
-      ],
-      "resources": {
-        "bauxite": {
-          "demand": 1610.7,
-          "reserved_capacity": 1680.0
-        },
-        "coal": {
-          "demand": 805.3,
-          "reserved_capacity": 0.0
-        },
-        "quartz": {
-          "demand": 1208.0,
-          "reserved_capacity": 1440.0
-        }
-      },
-      "sig_shortfall": 0,
-      "trained_shortfall": {},
-      "imports_resolved": [],
-      "building_totals": {
-        "by_building": {
-          "Constructor": 75,
-          "Foundry": 27,
-          "Refinery": 21
-        },
-        "total_buildings": 123,
-        "total_power_mw": 1328.7,
-        "footprint_m2": 12144
-      },
-      "building_chain": [
-        {
-          "recipe": "Aluminum Casing",
-          "item": "Aluminum Casing",
-          "building": "Constructor",
-          "rate_per_min": 1029.5,
-          "recipe_output_per_min": 60.0,
-          "buildings_exact": 17.16,
-          "buildings_ceil": 18,
-          "power_mw": 68.6
-        },
-        {
-          "recipe": "Alternate: Aluminum Beam",
-          "item": "Steel Beam",
-          "building": "Constructor",
-          "rate_per_min": 66.4,
-          "recipe_output_per_min": 22.5,
-          "buildings_exact": 2.95,
-          "buildings_ceil": 3,
-          "power_mw": 11.8
-        },
-        {
-          "recipe": "Aluminum Ingot",
-          "item": "Aluminum Ingot",
-          "building": "Foundry",
-          "rate_per_min": 1610.65,
-          "recipe_output_per_min": 60.0,
-          "buildings_exact": 26.84,
-          "buildings_ceil": 27,
-          "power_mw": 429.5
-        },
-        {
-          "recipe": "Aluminum Scrap",
-          "item": "Aluminum Scrap",
-          "building": "Refinery",
-          "rate_per_min": 2415.98,
-          "recipe_output_per_min": 360.0,
-          "buildings_exact": 6.71,
-          "buildings_ceil": 7,
-          "power_mw": 201.3
-        },
-        {
-          "recipe": "Silica",
-          "item": "Silica",
-          "building": "Constructor",
-          "rate_per_min": 2013.31,
-          "recipe_output_per_min": 37.5,
-          "buildings_exact": 53.69,
-          "buildings_ceil": 54,
-          "power_mw": 214.8
-        },
-        {
-          "recipe": "Alumina Solution",
-          "item": "Alumina Solution",
-          "building": "Refinery",
-          "rate_per_min": 1610.65,
-          "recipe_output_per_min": 120.0,
-          "buildings_exact": 13.42,
-          "buildings_ceil": 14,
-          "power_mw": 402.7
-        }
-      ],
-      "total_shards": 4,
-      "reason": "new; signature=bauxite; 1 site(s); 1 outpost(s)"
     },
     "bauxhold": {
       "factory_name": "bauxhold",
@@ -544,20 +568,20 @@
         "Aluminum Casing": 1029.5
       },
       "center": {
-        "x": 261524.9,
-        "y": 52704.4
+        "x": -197209.7,
+        "y": 28120.5
       },
       "sites": [
         {
           "center": {
-            "x": 261524.9,
-            "y": 52704.4
+            "x": -197209.7,
+            "y": 28120.5
           },
           "signature_capacity": 1560.0,
           "nodes": [
             {
-              "x": 260298.515625,
-              "y": 56227.52734375,
+              "x": -177367.203125,
+              "y": 44998.91796875,
               "t": "bauxite",
               "p": "p",
               "k": "node",
@@ -565,70 +589,40 @@
               "sh": 2
             },
             {
-              "x": 263148.09375,
-              "y": 53611.1640625,
+              "x": -217052.25,
+              "y": 11242.14453125,
               "t": "bauxite",
-              "p": "n",
+              "p": "p",
               "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 261127.96875,
-              "y": 48274.6015625,
-              "t": "bauxite",
-              "p": "i",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
+              "oc": 200,
+              "sh": 2
             }
           ],
           "demand_met": 1544.3,
-          "shards": 6
+          "shards": 4
         }
       ],
       "outposts": [
         {
           "resource": "sulfur",
           "center": {
-            "x": 296499.8,
-            "y": 13253.5
+            "x": -101381.7,
+            "y": 91578.5
           },
-          "capacity": 300.0,
+          "capacity": 600.0,
           "nodes": [
             {
-              "x": 296499.78125,
-              "y": 13253.51171875,
+              "x": -101381.7265625,
+              "y": 91578.5234375,
               "t": "sulfur",
-              "p": "i",
+              "p": "n",
               "k": "node",
               "oc": 250,
               "sh": 3
             }
           ],
-          "demand_met": 300,
-          "shards": 3
-        },
-        {
-          "resource": "sulfur",
-          "center": {
-            "x": 242310.0,
-            "y": 152778.9
-          },
-          "capacity": 720.0,
-          "nodes": [
-            {
-              "x": 242309.96875,
-              "y": 152778.875,
-              "t": "sulfur",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            }
-          ],
           "demand_met": 514.8,
-          "shards": 1
+          "shards": 3
         }
       ],
       "resources": {
@@ -642,7 +636,7 @@
         },
         "sulfur": {
           "demand": 514.8,
-          "reserved_capacity": 1020.0
+          "reserved_capacity": 600.0
         }
       },
       "sig_shortfall": 0,
@@ -701,8 +695,8 @@
           "power_mw": 308.9
         }
       ],
-      "total_shards": 10,
-      "reason": "new; signature=bauxite; 1 site(s); 2 outpost(s)"
+      "total_shards": 7,
+      "reason": "new; signature=bauxite; 1 site(s); 1 outpost(s)"
     },
     "voltreach": {
       "factory_name": "voltreach",
@@ -711,20 +705,20 @@
       "signature_resource": "caterium",
       "disposition": "new",
       "targets": {
-        "Motor": 102.5,
-        "Stator": 58.5
+        "Motor": 240,
+        "Stator": 137
       },
       "center": {
-        "x": -131573.7,
-        "y": 227253.1
+        "x": -111958.5,
+        "y": 254429.5
       },
       "sites": [
         {
           "center": {
-            "x": -131573.7,
-            "y": 227253.1
+            "x": -111958.5,
+            "y": 254429.5
           },
-          "signature_capacity": 720.0,
+          "signature_capacity": 1200.0,
           "nodes": [
             {
               "x": -131573.671875,
@@ -734,9 +728,18 @@
               "k": "node",
               "oc": 150,
               "sh": 1
+            },
+            {
+              "x": -92343.3359375,
+              "y": 281605.875,
+              "t": "caterium",
+              "p": "p",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
             }
           ],
-          "demand_met": 493.9,
+          "demand_met": 1156.5,
           "shards": 1
         }
       ],
@@ -744,10 +747,10 @@
         {
           "resource": "quartz",
           "center": {
-            "x": 61653.5,
-            "y": 196432.2
+            "x": 58453.4,
+            "y": 201144.2
           },
-          "capacity": 720.0,
+          "capacity": 1200.0,
           "nodes": [
             {
               "x": 61653.5234375,
@@ -757,225 +760,923 @@
               "k": "node",
               "oc": 150,
               "sh": 1
+            },
+            {
+              "x": 55253.2578125,
+              "y": 205856.15625,
+              "t": "quartz",
+              "p": "n",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
             }
           ],
-          "demand_met": 512.5,
-          "shards": 1
+          "demand_met": 1200.0,
+          "shards": 3
         }
       ],
       "resources": {
         "caterium": {
-          "demand": 493.9,
-          "reserved_capacity": 720.0
+          "demand": 1156.5,
+          "reserved_capacity": 1200.0
         },
         "coal": {
-          "demand": 329.2,
+          "demand": 771.0,
           "reserved_capacity": 0.0
         },
         "copper": {
-          "demand": 205.0,
+          "demand": 1040.0,
           "reserved_capacity": 0.0
         },
         "iron": {
-          "demand": 1063.8,
+          "demand": 2491.0,
           "reserved_capacity": 0.0
         },
         "quartz": {
-          "demand": 512.5,
-          "reserved_capacity": 720.0
+          "demand": 1200.0,
+          "reserved_capacity": 1200.0
         }
       },
       "sig_shortfall": 0,
       "trained_shortfall": {},
-      "imports_resolved": [
-        "Wire"
-      ],
+      "imports_resolved": [],
       "building_totals": {
         "by_building": {
-          "Manufacturer": 32,
-          "Assembler": 28,
-          "Constructor": 131,
-          "Smelter": 43,
-          "Foundry": 8
+          "Manufacturer": 72,
+          "Assembler": 64,
+          "Constructor": 339,
+          "Smelter": 119,
+          "Foundry": 18
         },
-        "total_buildings": 242,
-        "total_power_mw": 2890.8,
-        "footprint_m2": 31658
+        "total_buildings": 612,
+        "total_power_mw": 6992.8,
+        "footprint_m2": 76122
       },
       "building_chain": [
         {
           "recipe": "Alternate: Rigor Motor",
           "item": "Motor",
           "building": "Manufacturer",
-          "rate_per_min": 102.5,
+          "rate_per_min": 240.0,
           "recipe_output_per_min": 7.5,
-          "buildings_exact": 13.67,
-          "buildings_ceil": 14,
-          "power_mw": 751.7
+          "buildings_exact": 32.0,
+          "buildings_ceil": 32,
+          "power_mw": 1760.0
         },
         {
           "recipe": "Alternate: Quickwire Stator",
           "item": "Stator",
           "building": "Assembler",
-          "rate_per_min": 109.75,
+          "rate_per_min": 257.0,
           "recipe_output_per_min": 8.0,
-          "buildings_exact": 13.72,
-          "buildings_ceil": 14,
-          "power_mw": 205.8
+          "buildings_exact": 32.12,
+          "buildings_ceil": 33,
+          "power_mw": 481.9
         },
         {
           "recipe": "Crystal Oscillator",
           "item": "Crystal Oscillator",
           "building": "Manufacturer",
-          "rate_per_min": 17.08,
+          "rate_per_min": 40.0,
           "recipe_output_per_min": 1.0,
-          "buildings_exact": 17.08,
-          "buildings_ceil": 18,
-          "power_mw": 939.6
+          "buildings_exact": 40.0,
+          "buildings_ceil": 40,
+          "power_mw": 2200.0
         },
         {
           "recipe": "Alternate: Copper Rotor",
           "item": "Rotor",
           "building": "Assembler",
-          "rate_per_min": 51.25,
+          "rate_per_min": 120.0,
           "recipe_output_per_min": 11.25,
-          "buildings_exact": 4.56,
-          "buildings_ceil": 5,
-          "power_mw": 68.3
+          "buildings_exact": 10.67,
+          "buildings_ceil": 11,
+          "power_mw": 160.0
         },
         {
           "recipe": "Quickwire",
           "item": "Quickwire",
           "building": "Constructor",
-          "rate_per_min": 823.12,
+          "rate_per_min": 1927.5,
           "recipe_output_per_min": 60.0,
-          "buildings_exact": 13.72,
-          "buildings_ceil": 14,
-          "power_mw": 54.9
+          "buildings_exact": 32.12,
+          "buildings_ceil": 33,
+          "power_mw": 128.5
         },
         {
           "recipe": "Steel Pipe",
           "item": "Steel Pipe",
           "building": "Constructor",
-          "rate_per_min": 219.5,
+          "rate_per_min": 514.0,
           "recipe_output_per_min": 20.0,
-          "buildings_exact": 10.97,
-          "buildings_ceil": 11,
-          "power_mw": 43.9
+          "buildings_exact": 25.7,
+          "buildings_ceil": 26,
+          "power_mw": 102.8
         },
         {
           "recipe": "Cable",
           "item": "Cable",
           "building": "Constructor",
-          "rate_per_min": 239.17,
+          "rate_per_min": 560.0,
           "recipe_output_per_min": 30.0,
-          "buildings_exact": 7.97,
-          "buildings_ceil": 8,
-          "power_mw": 31.9
+          "buildings_exact": 18.67,
+          "buildings_ceil": 19,
+          "power_mw": 74.7
         },
         {
           "recipe": "Reinforced Iron Plate",
           "item": "Reinforced Iron Plate",
           "building": "Assembler",
-          "rate_per_min": 42.71,
+          "rate_per_min": 100.0,
           "recipe_output_per_min": 5.0,
-          "buildings_exact": 8.54,
-          "buildings_ceil": 9,
-          "power_mw": 128.1
+          "buildings_exact": 20.0,
+          "buildings_ceil": 20,
+          "power_mw": 300.0
         },
         {
           "recipe": "Quartz Crystal",
           "item": "Quartz Crystal",
           "building": "Constructor",
-          "rate_per_min": 307.5,
+          "rate_per_min": 720.0,
           "recipe_output_per_min": 22.5,
-          "buildings_exact": 13.67,
-          "buildings_ceil": 14,
-          "power_mw": 54.7
+          "buildings_exact": 32.0,
+          "buildings_ceil": 32,
+          "power_mw": 128.0
         },
         {
           "recipe": "Copper Sheet",
           "item": "Copper Sheet",
           "building": "Constructor",
-          "rate_per_min": 102.5,
+          "rate_per_min": 240.0,
           "recipe_output_per_min": 10.0,
-          "buildings_exact": 10.25,
-          "buildings_ceil": 11,
-          "power_mw": 41.0
+          "buildings_exact": 24.0,
+          "buildings_ceil": 24,
+          "power_mw": 96.0
         },
         {
           "recipe": "Screws",
           "item": "Screws",
           "building": "Constructor",
-          "rate_per_min": 1400.83,
+          "rate_per_min": 3280.0,
           "recipe_output_per_min": 40.0,
-          "buildings_exact": 35.02,
-          "buildings_ceil": 36,
-          "power_mw": 140.1
+          "buildings_exact": 82.0,
+          "buildings_ceil": 82,
+          "power_mw": 328.0
         },
         {
           "recipe": "Caterium Ingot",
           "item": "Caterium Ingot",
           "building": "Smelter",
-          "rate_per_min": 164.62,
+          "rate_per_min": 385.5,
           "recipe_output_per_min": 15.0,
-          "buildings_exact": 10.97,
-          "buildings_ceil": 11,
-          "power_mw": 43.9
+          "buildings_exact": 25.7,
+          "buildings_ceil": 26,
+          "power_mw": 102.8
         },
         {
           "recipe": "Steel Ingot",
           "item": "Steel Ingot",
           "building": "Foundry",
-          "rate_per_min": 329.25,
+          "rate_per_min": 771.0,
           "recipe_output_per_min": 45.0,
-          "buildings_exact": 7.32,
-          "buildings_ceil": 8,
-          "power_mw": 117.1
+          "buildings_exact": 17.13,
+          "buildings_ceil": 18,
+          "power_mw": 274.1
+        },
+        {
+          "recipe": "Wire",
+          "item": "Wire",
+          "building": "Constructor",
+          "rate_per_min": 1120.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 37.33,
+          "buildings_ceil": 38,
+          "power_mw": 149.3
         },
         {
           "recipe": "Iron Plate",
           "item": "Iron Plate",
           "building": "Constructor",
-          "rate_per_min": 256.25,
+          "rate_per_min": 600.0,
           "recipe_output_per_min": 20.0,
-          "buildings_exact": 12.81,
-          "buildings_ceil": 13,
-          "power_mw": 51.2
+          "buildings_exact": 30.0,
+          "buildings_ceil": 30,
+          "power_mw": 120.0
         },
         {
           "recipe": "Copper Ingot",
           "item": "Copper Ingot",
           "building": "Smelter",
-          "rate_per_min": 205.0,
+          "rate_per_min": 1040.0,
           "recipe_output_per_min": 30.0,
-          "buildings_exact": 6.83,
-          "buildings_ceil": 7,
-          "power_mw": 27.3
+          "buildings_exact": 34.67,
+          "buildings_ceil": 35,
+          "power_mw": 138.7
         },
         {
           "recipe": "Iron Rod",
           "item": "Iron Rod",
           "building": "Constructor",
-          "rate_per_min": 350.21,
+          "rate_per_min": 820.0,
           "recipe_output_per_min": 15.0,
-          "buildings_exact": 23.35,
-          "buildings_ceil": 24,
-          "power_mw": 93.4
+          "buildings_exact": 54.67,
+          "buildings_ceil": 55,
+          "power_mw": 218.7
         },
         {
           "recipe": "Iron Ingot",
           "item": "Iron Ingot",
           "building": "Smelter",
-          "rate_per_min": 734.58,
+          "rate_per_min": 1720.0,
           "recipe_output_per_min": 30.0,
-          "buildings_exact": 24.49,
-          "buildings_ceil": 25,
-          "power_mw": 97.9
+          "buildings_exact": 57.33,
+          "buildings_ceil": 58,
+          "power_mw": 229.3
+        }
+      ],
+      "total_shards": 4,
+      "reason": "new; signature=caterium; 1 site(s); 1 outpost(s)"
+    },
+    "coppermill": {
+      "factory_name": "Dustforge",
+      "theme": "Copper Powder (Nuclear Pasta)",
+      "kind": "new",
+      "signature_resource": "copper",
+      "disposition": "scaled_in_place",
+      "targets": {
+        "Copper Powder": 1000
+      },
+      "center": {
+        "x": 357005.3,
+        "y": -154997.1
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 357005.3,
+            "y": -154997.1
+          },
+          "signature_capacity": 2400.0,
+          "nodes": [
+            {
+              "x": 355461.71875,
+              "y": -149808.078125,
+              "t": "copper",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 380813.625,
+              "y": -169867.75,
+              "t": "copper",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 342806.28125,
+              "y": -114728.1015625,
+              "t": "copper",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 348939.46875,
+              "y": -185584.4375,
+              "t": "copper",
+              "p": "n",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            }
+          ],
+          "demand_met": 2400.0,
+          "shards": 3
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "copper": {
+          "demand": 2400.0,
+          "reserved_capacity": 2400.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Constructor": 20,
+          "Refinery": 160
+        },
+        "total_buildings": 180,
+        "total_power_mw": 4880.0,
+        "footprint_m2": 33600
+      },
+      "building_chain": [
+        {
+          "recipe": "Copper Powder",
+          "item": "Copper Powder",
+          "building": "Constructor",
+          "rate_per_min": 1000.0,
+          "recipe_output_per_min": 50.0,
+          "buildings_exact": 20.0,
+          "buildings_ceil": 20,
+          "power_mw": 80.0
+        },
+        {
+          "recipe": "Alternate: Pure Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Refinery",
+          "rate_per_min": 6000.0,
+          "recipe_output_per_min": 37.5,
+          "buildings_exact": 160.0,
+          "buildings_ceil": 160,
+          "power_mw": 4800.0
+        }
+      ],
+      "total_shards": 3,
+      "reason": "scaled_in_place; signature=copper; 1 site(s); 0 outpost(s)"
+    },
+    "moldmarsh": {
+      "factory_name": "moldmarsh",
+      "theme": "Cast Steel",
+      "kind": "new",
+      "signature_resource": "limestone",
+      "disposition": "new",
+      "targets": {
+        "Steel Beam": 990,
+        "Stator": 133
+      },
+      "center": {
+        "x": -236031.6,
+        "y": -136504.3
+      },
+      "sites": [
+        {
+          "center": {
+            "x": -236031.6,
+            "y": -136504.3
+          },
+          "signature_capacity": 6000.0,
+          "nodes": [
+            {
+              "x": -227331.09375,
+              "y": -158278.328125,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -206172.671875,
+              "y": -141688.640625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -261495.65625,
+              "y": -116492.59375,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -221696.6875,
+              "y": -104736.0078125,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -281761.40625,
+              "y": -134704.46875,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -231390.296875,
+              "y": -89529.7265625,
+              "t": "limestone",
+              "p": "n",
+              "k": "node",
+              "oc": 250,
+              "sh": 3
+            },
+            {
+              "x": -178099.0625,
+              "y": -165241.5625,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
+            {
+              "x": -280305.96875,
+              "y": -181362.96875,
+              "t": "limestone",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            }
+          ],
+          "demand_met": 5998.2,
+          "shards": 16
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "coal": {
+          "demand": 3039.0,
+          "reserved_capacity": 0.0
+        },
+        "copper": {
+          "demand": 532.0,
+          "reserved_capacity": 0.0
+        },
+        "iron": {
+          "demand": 3039.0,
+          "reserved_capacity": 0.0
+        },
+        "limestone": {
+          "demand": 5998.2,
+          "reserved_capacity": 6000.0
+        }
+      },
+      "sig_shortfall": 0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Foundry": 98,
+          "Assembler": 27,
+          "Constructor": 170,
+          "Smelter": 18
+        },
+        "total_buildings": 313,
+        "total_power_mw": 2705.2,
+        "footprint_m2": 25678
+      },
+      "building_chain": [
+        {
+          "recipe": "Alternate: Molded Beam",
+          "item": "Steel Beam",
+          "building": "Foundry",
+          "rate_per_min": 990.0,
+          "recipe_output_per_min": 45.0,
+          "buildings_exact": 22.0,
+          "buildings_ceil": 22,
+          "power_mw": 352.0
+        },
+        {
+          "recipe": "Stator",
+          "item": "Stator",
+          "building": "Assembler",
+          "rate_per_min": 133.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 26.6,
+          "buildings_ceil": 27,
+          "power_mw": 399.0
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "rate_per_min": 1999.4,
+          "recipe_output_per_min": 15.0,
+          "buildings_exact": 133.29,
+          "buildings_ceil": 134,
+          "power_mw": 533.2
+        },
+        {
+          "recipe": "Steel Ingot",
+          "item": "Steel Ingot",
+          "building": "Foundry",
+          "rate_per_min": 3039.0,
+          "recipe_output_per_min": 45.0,
+          "buildings_exact": 67.53,
+          "buildings_ceil": 68,
+          "power_mw": 1080.5
+        },
+        {
+          "recipe": "Alternate: Molded Steel Pipe",
+          "item": "Steel Pipe",
+          "building": "Foundry",
+          "rate_per_min": 399.0,
+          "recipe_output_per_min": 50.0,
+          "buildings_exact": 7.98,
+          "buildings_ceil": 8,
+          "power_mw": 127.7
+        },
+        {
+          "recipe": "Wire",
+          "item": "Wire",
+          "building": "Constructor",
+          "rate_per_min": 1064.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 35.47,
+          "buildings_ceil": 36,
+          "power_mw": 141.9
+        },
+        {
+          "recipe": "Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Smelter",
+          "rate_per_min": 532.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 17.73,
+          "buildings_ceil": 18,
+          "power_mw": 70.9
+        }
+      ],
+      "total_shards": 16,
+      "reason": "new; signature=limestone; 1 site(s); 0 outpost(s)"
+    },
+    "ironclad_ne": {
+      "factory_name": "Bronzereach",
+      "theme": "Iron-Copper Plating & Motors",
+      "kind": "new",
+      "signature_resource": "iron",
+      "disposition": "scaled_in_place",
+      "targets": {
+        "Smart Plating": 75,
+        "Motor": 51
+      },
+      "center": {
+        "x": 286563.2,
+        "y": -196456.5
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 286563.2,
+            "y": -196456.5
+          },
+          "signature_capacity": 1680.0,
+          "nodes": [
+            {
+              "x": 298733.9375,
+              "y": -199292.71875,
+              "t": "iron",
+              "p": "n",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            },
+            {
+              "x": 278266.3125,
+              "y": -210771.859375,
+              "t": "iron",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 282689.3125,
+              "y": -179305.015625,
+              "t": "iron",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            }
+          ],
+          "demand_met": 1608.0,
+          "shards": 2
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "copper": {
+          "demand": 1591.0,
+          "reserved_capacity": 0.0
+        },
+        "iron": {
+          "demand": 1608.0,
+          "reserved_capacity": 1680.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Assembler": 120,
+          "Constructor": 120,
+          "Foundry": 41,
+          "Smelter": 40
+        },
+        "total_buildings": 321,
+        "total_power_mw": 3026.9,
+        "footprint_m2": 32712
+      },
+      "building_chain": [
+        {
+          "recipe": "Smart Plating",
+          "item": "Smart Plating",
+          "building": "Assembler",
+          "rate_per_min": 75.0,
+          "recipe_output_per_min": 2.0,
+          "buildings_exact": 37.5,
+          "buildings_ceil": 38,
+          "power_mw": 562.5
+        },
+        {
+          "recipe": "Motor",
+          "item": "Motor",
+          "building": "Assembler",
+          "rate_per_min": 51.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 10.2,
+          "buildings_ceil": 11,
+          "power_mw": 153.0
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "rate_per_min": 75.0,
+          "recipe_output_per_min": 5.62,
+          "buildings_exact": 13.33,
+          "buildings_ceil": 14,
+          "power_mw": 200.0
+        },
+        {
+          "recipe": "Alternate: Steel Rotor",
+          "item": "Rotor",
+          "building": "Assembler",
+          "rate_per_min": 177.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 35.4,
+          "buildings_ceil": 36,
+          "power_mw": 531.0
+        },
+        {
+          "recipe": "Stator",
+          "item": "Stator",
+          "building": "Assembler",
+          "rate_per_min": 102.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 20.4,
+          "buildings_ceil": 21,
+          "power_mw": 306.0
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "rate_per_min": 250.0,
+          "recipe_output_per_min": 20.0,
+          "buildings_exact": 12.5,
+          "buildings_ceil": 13,
+          "power_mw": 50.0
+        },
+        {
+          "recipe": "Wire",
+          "item": "Wire",
+          "building": "Constructor",
+          "rate_per_min": 2378.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 79.27,
+          "buildings_ceil": 80,
+          "power_mw": 317.1
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "rate_per_min": 660.0,
+          "recipe_output_per_min": 25.0,
+          "buildings_exact": 26.4,
+          "buildings_ceil": 27,
+          "power_mw": 105.6
+        },
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "item": "Iron Ingot",
+          "building": "Foundry",
+          "rate_per_min": 3015.0,
+          "recipe_output_per_min": 75.0,
+          "buildings_exact": 40.2,
+          "buildings_ceil": 41,
+          "power_mw": 643.2
+        },
+        {
+          "recipe": "Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Smelter",
+          "rate_per_min": 1189.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 39.63,
+          "buildings_ceil": 40,
+          "power_mw": 158.5
         }
       ],
       "total_shards": 2,
-      "reason": "new; signature=caterium; 1 site(s); 1 outpost(s)"
+      "reason": "scaled_in_place; signature=iron; 1 site(s); 0 outpost(s)"
+    },
+    "ironclad_cathera": {
+      "factory_name": "Brasshold",
+      "theme": "Iron-Copper Plating & Motors",
+      "kind": "new",
+      "signature_resource": "iron",
+      "disposition": "scaled_in_place",
+      "targets": {
+        "Smart Plating": 75,
+        "Motor": 51
+      },
+      "center": {
+        "x": 79524.3,
+        "y": -85008.7
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 79524.3,
+            "y": -85008.7
+          },
+          "signature_capacity": 1680.0,
+          "nodes": [
+            {
+              "x": 84199.140625,
+              "y": -86393.546875,
+              "t": "iron",
+              "p": "p",
+              "k": "node",
+              "oc": 150,
+              "sh": 1
+            },
+            {
+              "x": 83508.5390625,
+              "y": -90506.7890625,
+              "t": "iron",
+              "p": "p",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            },
+            {
+              "x": 70865.265625,
+              "y": -78125.8203125,
+              "t": "iron",
+              "p": "p",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            }
+          ],
+          "demand_met": 1608.0,
+          "shards": 1
+        }
+      ],
+      "outposts": [],
+      "resources": {
+        "copper": {
+          "demand": 1591.0,
+          "reserved_capacity": 0.0
+        },
+        "iron": {
+          "demand": 1608.0,
+          "reserved_capacity": 1680.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Assembler": 120,
+          "Constructor": 120,
+          "Foundry": 41,
+          "Smelter": 40
+        },
+        "total_buildings": 321,
+        "total_power_mw": 3026.9,
+        "footprint_m2": 32712
+      },
+      "building_chain": [
+        {
+          "recipe": "Smart Plating",
+          "item": "Smart Plating",
+          "building": "Assembler",
+          "rate_per_min": 75.0,
+          "recipe_output_per_min": 2.0,
+          "buildings_exact": 37.5,
+          "buildings_ceil": 38,
+          "power_mw": 562.5
+        },
+        {
+          "recipe": "Motor",
+          "item": "Motor",
+          "building": "Assembler",
+          "rate_per_min": 51.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 10.2,
+          "buildings_ceil": 11,
+          "power_mw": 153.0
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "rate_per_min": 75.0,
+          "recipe_output_per_min": 5.62,
+          "buildings_exact": 13.33,
+          "buildings_ceil": 14,
+          "power_mw": 200.0
+        },
+        {
+          "recipe": "Alternate: Steel Rotor",
+          "item": "Rotor",
+          "building": "Assembler",
+          "rate_per_min": 177.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 35.4,
+          "buildings_ceil": 36,
+          "power_mw": 531.0
+        },
+        {
+          "recipe": "Stator",
+          "item": "Stator",
+          "building": "Assembler",
+          "rate_per_min": 102.0,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 20.4,
+          "buildings_ceil": 21,
+          "power_mw": 306.0
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "rate_per_min": 250.0,
+          "recipe_output_per_min": 20.0,
+          "buildings_exact": 12.5,
+          "buildings_ceil": 13,
+          "power_mw": 50.0
+        },
+        {
+          "recipe": "Wire",
+          "item": "Wire",
+          "building": "Constructor",
+          "rate_per_min": 2378.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 79.27,
+          "buildings_ceil": 80,
+          "power_mw": 317.1
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "rate_per_min": 660.0,
+          "recipe_output_per_min": 25.0,
+          "buildings_exact": 26.4,
+          "buildings_ceil": 27,
+          "power_mw": 105.6
+        },
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "item": "Iron Ingot",
+          "building": "Foundry",
+          "rate_per_min": 3015.0,
+          "recipe_output_per_min": 75.0,
+          "buildings_exact": 40.2,
+          "buildings_ceil": 41,
+          "power_mw": 643.2
+        },
+        {
+          "recipe": "Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Smelter",
+          "rate_per_min": 1189.0,
+          "recipe_output_per_min": 30.0,
+          "buildings_exact": 39.63,
+          "buildings_ceil": 40,
+          "power_mw": 158.5
+        }
+      ],
+      "total_shards": 1,
+      "reason": "scaled_in_place; signature=iron; 1 site(s); 0 outpost(s)"
     },
     "forgeholm_hmf": {
       "factory_name": "Anvilreach",
@@ -1193,171 +1894,14 @@
       "total_shards": 10,
       "reason": "relocated; signature=coal; 1 site(s); 0 outpost(s)"
     },
-    "moldmarsh": {
-      "factory_name": "moldmarsh",
-      "theme": "Cast Steel",
-      "kind": "new",
-      "signature_resource": "limestone",
-      "disposition": "new",
-      "targets": {
-        "Steel Beam": 531.6,
-        "Stator": 71.5
-      },
-      "center": {
-        "x": -239691.5,
-        "y": -131180.0
-      },
-      "sites": [
-        {
-          "center": {
-            "x": -239691.5,
-            "y": -131180.0
-          },
-          "signature_capacity": 3360.0,
-          "nodes": [
-            {
-              "x": -227331.09375,
-              "y": -158278.328125,
-              "t": "limestone",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -206172.671875,
-              "y": -141688.640625,
-              "t": "limestone",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -261495.65625,
-              "y": -116492.59375,
-              "t": "limestone",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -221696.6875,
-              "y": -104736.0078125,
-              "t": "limestone",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": -281761.40625,
-              "y": -134704.46875,
-              "t": "limestone",
-              "p": "p",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            }
-          ],
-          "demand_met": 3221.3,
-          "shards": 4
-        }
-      ],
-      "outposts": [],
-      "resources": {
-        "coal": {
-          "demand": 1632.1,
-          "reserved_capacity": 0.0
-        },
-        "iron": {
-          "demand": 1632.1,
-          "reserved_capacity": 0.0
-        },
-        "limestone": {
-          "demand": 3221.3,
-          "reserved_capacity": 3360.0
-        }
-      },
-      "sig_shortfall": 0,
-      "trained_shortfall": {},
-      "imports_resolved": [
-        "Wire"
-      ],
-      "building_totals": {
-        "by_building": {
-          "Foundry": 54,
-          "Assembler": 15,
-          "Constructor": 72
-        },
-        "total_buildings": 141,
-        "total_power_mw": 1338.7,
-        "footprint_m2": 11898
-      },
-      "building_chain": [
-        {
-          "recipe": "Alternate: Molded Beam",
-          "item": "Steel Beam",
-          "building": "Foundry",
-          "rate_per_min": 531.6,
-          "recipe_output_per_min": 45.0,
-          "buildings_exact": 11.81,
-          "buildings_ceil": 12,
-          "power_mw": 189.0
-        },
-        {
-          "recipe": "Stator",
-          "item": "Stator",
-          "building": "Assembler",
-          "rate_per_min": 71.5,
-          "recipe_output_per_min": 5.0,
-          "buildings_exact": 14.3,
-          "buildings_ceil": 15,
-          "power_mw": 214.5
-        },
-        {
-          "recipe": "Concrete",
-          "item": "Concrete",
-          "building": "Constructor",
-          "rate_per_min": 1073.77,
-          "recipe_output_per_min": 15.0,
-          "buildings_exact": 71.58,
-          "buildings_ceil": 72,
-          "power_mw": 286.3
-        },
-        {
-          "recipe": "Steel Ingot",
-          "item": "Steel Ingot",
-          "building": "Foundry",
-          "rate_per_min": 1632.1,
-          "recipe_output_per_min": 45.0,
-          "buildings_exact": 36.27,
-          "buildings_ceil": 37,
-          "power_mw": 580.3
-        },
-        {
-          "recipe": "Alternate: Molded Steel Pipe",
-          "item": "Steel Pipe",
-          "building": "Foundry",
-          "rate_per_min": 214.5,
-          "recipe_output_per_min": 50.0,
-          "buildings_exact": 4.29,
-          "buildings_ceil": 5,
-          "power_mw": 68.6
-        }
-      ],
-      "total_shards": 4,
-      "reason": "new; signature=limestone; 1 site(s); 0 outpost(s)"
-    },
     "naphtheon_hmf": {
       "factory_name": "naphtheon (+HMF)",
-      "theme": "HMF +15.0",
+      "theme": "HMF +17.0",
       "kind": "hmf",
       "signature_resource": "oil",
       "disposition": "scaled_in_place",
       "targets": {
-        "Heavy Modular Frame": 15.0
+        "Heavy Modular Frame": 17
       },
       "center": {
         "x": 49521.1,
@@ -1369,7 +1913,7 @@
             "x": 49521.1,
             "y": -2044.1
           },
-          "signature_capacity": 780.0,
+          "signature_capacity": 900.0,
           "nodes": [
             {
               "x": 49638.54296875,
@@ -1386,27 +1930,27 @@
               "t": "oil",
               "p": "n",
               "k": "node",
-              "oc": 150,
-              "sh": 1
+              "oc": 250,
+              "sh": 3
             }
           ],
-          "demand_met": 759.4,
-          "shards": 4
+          "demand_met": 860.6,
+          "shards": 6
         }
       ],
       "outposts": [],
       "resources": {
         "iron": {
-          "demand": 1413.8,
+          "demand": 1602.3,
           "reserved_capacity": 0.0
         },
         "limestone": {
-          "demand": 300.0,
+          "demand": 340.0,
           "reserved_capacity": 0.0
         },
         "oil": {
-          "demand": 759.4,
-          "reserved_capacity": 780.0
+          "demand": 860.6,
+          "reserved_capacity": 900.0
         }
       },
       "sig_shortfall": 0.0,
@@ -1414,183 +1958,398 @@
       "imports_resolved": [],
       "building_totals": {
         "by_building": {
-          "Smelter": 34,
-          "Refinery": 30,
-          "Foundry": 6,
-          "Assembler": 84,
-          "Constructor": 104,
-          "Manufacturer": 4
+          "Smelter": 39,
+          "Refinery": 33,
+          "Foundry": 7,
+          "Assembler": 96,
+          "Constructor": 120,
+          "Manufacturer": 5
         },
-        "total_buildings": 262,
-        "total_power_mw": 2955.0,
-        "footprint_m2": 30948
+        "total_buildings": 300,
+        "total_power_mw": 3349.0,
+        "footprint_m2": 35410
       },
       "building_chain": [
         {
           "recipe": "Iron Ingot",
           "item": "Iron Ingot",
           "building": "Smelter",
-          "rate_per_min": 1008.75,
+          "rate_per_min": 1143.25,
           "recipe_output_per_min": 252.1875,
-          "buildings_exact": 33.62,
-          "buildings_ceil": 34,
-          "power_mw": 134.5
+          "buildings_exact": 38.11,
+          "buildings_ceil": 39,
+          "power_mw": 152.4
         },
         {
           "recipe": "Petroleum Coke",
           "item": "Petroleum Coke",
           "building": "Refinery",
-          "rate_per_min": 405.0,
+          "rate_per_min": 459.0,
           "recipe_output_per_min": 101.25,
-          "buildings_exact": 3.38,
+          "buildings_exact": 3.83,
           "buildings_ceil": 4,
-          "power_mw": 101.3
+          "power_mw": 114.8
         },
         {
           "recipe": "Alternate: Coke Steel Ingot",
           "item": "Steel Ingot",
           "building": "Foundry",
-          "rate_per_min": 540.0,
+          "rate_per_min": 612.0,
           "recipe_output_per_min": 135.0,
-          "buildings_exact": 5.4,
-          "buildings_ceil": 6,
-          "power_mw": 86.4
+          "buildings_exact": 6.12,
+          "buildings_ceil": 7,
+          "power_mw": 97.9
         },
         {
           "recipe": "Plastic",
           "item": "Plastic",
           "building": "Refinery",
-          "rate_per_min": 33.75,
+          "rate_per_min": 38.25,
           "recipe_output_per_min": 8.4375,
-          "buildings_exact": 1.69,
+          "buildings_exact": 1.91,
           "buildings_ceil": 2,
-          "power_mw": 50.6
+          "power_mw": 57.4
         },
         {
           "recipe": "Rubber",
           "item": "Rubber",
           "building": "Refinery",
-          "rate_per_min": 472.5,
+          "rate_per_min": 535.5,
           "recipe_output_per_min": 118.125,
-          "buildings_exact": 23.62,
-          "buildings_ceil": 24,
-          "power_mw": 708.7
+          "buildings_exact": 26.77,
+          "buildings_ceil": 27,
+          "power_mw": 803.2
         },
         {
           "recipe": "Alternate: Rubber Concrete",
           "item": "Concrete",
           "building": "Assembler",
-          "rate_per_min": 270.0,
+          "rate_per_min": 306.0,
           "recipe_output_per_min": 67.5,
-          "buildings_exact": 3.0,
-          "buildings_ceil": 3,
-          "power_mw": 45.0
+          "buildings_exact": 3.4,
+          "buildings_ceil": 4,
+          "power_mw": 51.0
         },
         {
           "recipe": "Steel Beam",
           "item": "Steel Beam",
           "building": "Constructor",
-          "rate_per_min": 135.0,
+          "rate_per_min": 153.0,
           "recipe_output_per_min": 33.75,
-          "buildings_exact": 9.0,
-          "buildings_ceil": 9,
-          "power_mw": 36.0
+          "buildings_exact": 10.2,
+          "buildings_ceil": 11,
+          "power_mw": 40.8
         },
         {
           "recipe": "Iron Rod",
           "item": "Iron Rod",
           "building": "Constructor",
-          "rate_per_min": 840.0,
+          "rate_per_min": 952.0,
           "recipe_output_per_min": 210.0,
-          "buildings_exact": 56.0,
-          "buildings_ceil": 56,
-          "power_mw": 224.0
+          "buildings_exact": 63.47,
+          "buildings_ceil": 64,
+          "power_mw": 253.9
         },
         {
           "recipe": "Screws",
           "item": "Screws",
           "building": "Constructor",
-          "rate_per_min": 1560.0,
+          "rate_per_min": 1768.0,
           "recipe_output_per_min": 390.0,
-          "buildings_exact": 39.0,
-          "buildings_ceil": 39,
-          "power_mw": 156.0
+          "buildings_exact": 44.2,
+          "buildings_ceil": 45,
+          "power_mw": 176.8
         },
         {
           "recipe": "Alternate: Coated Iron Plate",
           "item": "Iron Plate",
           "building": "Assembler",
-          "rate_per_min": 337.5,
+          "rate_per_min": 382.5,
           "recipe_output_per_min": 84.375,
-          "buildings_exact": 4.5,
-          "buildings_ceil": 5,
-          "power_mw": 67.5
+          "buildings_exact": 5.1,
+          "buildings_ceil": 6,
+          "power_mw": 76.5
         },
         {
           "recipe": "Encased Industrial Beam",
           "item": "Encased Industrial Beam",
           "building": "Assembler",
-          "rate_per_min": 45.0,
+          "rate_per_min": 51.0,
           "recipe_output_per_min": 11.25,
-          "buildings_exact": 7.5,
-          "buildings_ceil": 8,
-          "power_mw": 112.5
+          "buildings_exact": 8.5,
+          "buildings_ceil": 9,
+          "power_mw": 127.5
         },
         {
           "recipe": "Alternate: Adhered Iron Plate",
           "item": "Reinforced Iron Plate",
           "building": "Assembler",
-          "rate_per_min": 112.5,
+          "rate_per_min": 127.5,
           "recipe_output_per_min": 28.125,
-          "buildings_exact": 30.0,
-          "buildings_ceil": 30,
-          "power_mw": 450.0
+          "buildings_exact": 34.0,
+          "buildings_ceil": 34,
+          "power_mw": 510.0
         },
         {
           "recipe": "Modular Frame",
           "item": "Modular Frame",
           "building": "Assembler",
-          "rate_per_min": 75.0,
+          "rate_per_min": 85.0,
           "recipe_output_per_min": 18.75,
-          "buildings_exact": 37.5,
-          "buildings_ceil": 38,
-          "power_mw": 562.5
+          "buildings_exact": 42.5,
+          "buildings_ceil": 43,
+          "power_mw": 637.5
         },
         {
           "recipe": "Alternate: Heavy Flexible Frame",
           "item": "Heavy Modular Frame",
           "building": "Manufacturer",
-          "rate_per_min": 15.0,
+          "rate_per_min": 17.0,
           "recipe_output_per_min": 3.75,
-          "buildings_exact": 4.0,
-          "buildings_ceil": 4,
-          "power_mw": 220.0
+          "buildings_exact": 4.53,
+          "buildings_ceil": 5,
+          "power_mw": 249.3
         }
       ],
-      "total_shards": 4,
+      "total_shards": 6,
       "reason": "scaled_in_place; signature=oil; 1 site(s); 0 outpost(s)"
     },
-    "classic_iron_motor": {
-      "factory_name": "classic_iron_motor",
-      "theme": "Classic Iron Motor",
-      "kind": "new",
-      "signature_resource": "iron",
-      "disposition": "new",
+    "cathera_hmf": {
+      "factory_name": "cathera (+HMF)",
+      "theme": "HMF +30.0",
+      "kind": "hmf",
+      "signature_resource": "copper",
+      "disposition": "scaled_in_place",
       "targets": {
-        "Motor": 102.5
+        "Heavy Modular Frame": 30
       },
       "center": {
-        "x": 295659.7,
-        "y": -161734.1
+        "x": 56109.2,
+        "y": -85970.2
       },
       "sites": [
         {
           "center": {
-            "x": 295659.7,
-            "y": -161734.1
+            "x": 56109.2,
+            "y": -85970.2
           },
-          "signature_capacity": 3360.0,
+          "signature_capacity": 780.0,
           "nodes": [
+            {
+              "x": 56109.1640625,
+              "y": -85970.15625,
+              "t": "copper",
+              "p": "p",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            }
+          ],
+          "demand_met": 737.2,
+          "shards": 2
+        }
+      ],
+      "outposts": [
+        {
+          "resource": "caterium",
+          "center": {
+            "x": 103845.6,
+            "y": -94854.0
+          },
+          "capacity": 240.0,
+          "nodes": [
+            {
+              "x": 103845.5703125,
+              "y": -94854.0390625,
+              "t": "caterium",
+              "p": "n",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            }
+          ],
+          "demand_met": 35.5,
+          "shards": 0
+        }
+      ],
+      "resources": {
+        "caterium": {
+          "demand": 35.5,
+          "reserved_capacity": 240.0
+        },
+        "copper": {
+          "demand": 737.2,
+          "reserved_capacity": 780.0
+        },
+        "iron": {
+          "demand": 2759.1,
+          "reserved_capacity": 0.0
+        },
+        "limestone": {
+          "demand": 2160.0,
+          "reserved_capacity": 0.0
+        }
+      },
+      "sig_shortfall": 0.0,
+      "trained_shortfall": {},
+      "imports_resolved": [],
+      "building_totals": {
+        "by_building": {
+          "Smelter": 3,
+          "Foundry": 69,
+          "Constructor": 107,
+          "Assembler": 67,
+          "Manufacturer": 11
+        },
+        "total_buildings": 257,
+        "total_power_mw": 3100.3,
+        "footprint_m2": 28580
+      },
+      "building_chain": [
+        {
+          "recipe": "Caterium Ingot",
+          "item": "Caterium Ingot",
+          "building": "Smelter",
+          "rate_per_min": 11.85,
+          "recipe_output_per_min": 1.1111,
+          "buildings_exact": 0.79,
+          "buildings_ceil": 1,
+          "power_mw": 3.2
+        },
+        {
+          "recipe": "Copper Ingot",
+          "item": "Copper Ingot",
+          "building": "Smelter",
+          "rate_per_min": 47.41,
+          "recipe_output_per_min": 4.4444,
+          "buildings_exact": 1.58,
+          "buildings_ceil": 2,
+          "power_mw": 6.3
+        },
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "item": "Iron Ingot",
+          "building": "Foundry",
+          "rate_per_min": 5173.33,
+          "recipe_output_per_min": 485.0,
+          "buildings_exact": 68.98,
+          "buildings_ceil": 69,
+          "power_mw": 1103.7
+        },
+        {
+          "recipe": "Concrete",
+          "item": "Concrete",
+          "building": "Constructor",
+          "rate_per_min": 720.0,
+          "recipe_output_per_min": 67.5,
+          "buildings_exact": 48.0,
+          "buildings_ceil": 48,
+          "power_mw": 192.0
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "item": "Steel Pipe",
+          "building": "Constructor",
+          "rate_per_min": 1226.67,
+          "recipe_output_per_min": 115.0,
+          "buildings_exact": 49.07,
+          "buildings_ceil": 50,
+          "power_mw": 196.3
+        },
+        {
+          "recipe": "Iron Plate",
+          "item": "Iron Plate",
+          "building": "Constructor",
+          "rate_per_min": 177.78,
+          "recipe_output_per_min": 16.6667,
+          "buildings_exact": 8.89,
+          "buildings_ceil": 9,
+          "power_mw": 35.6
+        },
+        {
+          "recipe": "Alternate: Fused Wire",
+          "item": "Wire",
+          "building": "Assembler",
+          "rate_per_min": 355.56,
+          "recipe_output_per_min": 33.3333,
+          "buildings_exact": 3.95,
+          "buildings_ceil": 4,
+          "power_mw": 59.3
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "item": "Encased Industrial Beam",
+          "building": "Assembler",
+          "rate_per_min": 100.0,
+          "recipe_output_per_min": 9.375,
+          "buildings_exact": 25.0,
+          "buildings_ceil": 26,
+          "power_mw": 375.0
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "item": "Reinforced Iron Plate",
+          "building": "Assembler",
+          "rate_per_min": 53.33,
+          "recipe_output_per_min": 5.0,
+          "buildings_exact": 9.48,
+          "buildings_ceil": 10,
+          "power_mw": 142.2
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "item": "Modular Frame",
+          "building": "Assembler",
+          "rate_per_min": 80.0,
+          "recipe_output_per_min": 7.5,
+          "buildings_exact": 26.67,
+          "buildings_ceil": 27,
+          "power_mw": 400.0
+        },
+        {
+          "recipe": "Alternate: Heavy Encased Frame",
+          "item": "Heavy Modular Frame",
+          "building": "Manufacturer",
+          "rate_per_min": 30.0,
+          "recipe_output_per_min": 2.8125,
+          "buildings_exact": 10.67,
+          "buildings_ceil": 11,
+          "power_mw": 586.7
+        }
+      ],
+      "total_shards": 2,
+      "reason": "scaled_in_place; signature=copper; 1 site(s); 1 outpost(s)"
+    },
+    "ferrium_hmf": {
+      "factory_name": "Heavyhold",
+      "theme": "HMF +15.0",
+      "kind": "hmf",
+      "signature_resource": "iron",
+      "disposition": "scaled_in_place",
+      "targets": {
+        "Heavy Modular Frame": 15.0
+      },
+      "center": {
+        "x": 283411.8,
+        "y": -165853.2
+      },
+      "sites": [
+        {
+          "center": {
+            "x": 283411.8,
+            "y": -165853.2
+          },
+          "signature_capacity": 2760.0,
+          "nodes": [
+            {
+              "x": 276673.5625,
+              "y": -195099.8125,
+              "t": "iron",
+              "p": "n",
+              "k": "node",
+              "oc": 200,
+              "sh": 2
+            },
             {
               "x": 304839.65625,
               "y": -172907.90625,
@@ -1601,8 +2360,17 @@
               "sh": 1
             },
             {
-              "x": 319464.0625,
-              "y": -158098.328125,
+              "x": 264240.25,
+              "y": -162899.203125,
+              "t": "iron",
+              "p": "i",
+              "k": "node",
+              "oc": 100,
+              "sh": 0
+            },
+            {
+              "x": 273729.53125,
+              "y": -148172.90625,
               "t": "iron",
               "p": "p",
               "k": "node",
@@ -1617,440 +2385,17 @@
               "k": "node",
               "oc": 150,
               "sh": 1
-            },
-            {
-              "x": 282689.3125,
-              "y": -179305.015625,
-              "t": "iron",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            },
-            {
-              "x": 273729.53125,
-              "y": -148172.90625,
-              "t": "iron",
-              "p": "p",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
             }
           ],
-          "demand_met": 3228.8,
-          "shards": 4
-        }
-      ],
-      "outposts": [],
-      "resources": {
-        "coal": {
-          "demand": 922.5,
-          "reserved_capacity": 0.0
-        },
-        "iron": {
-          "demand": 3228.8,
-          "reserved_capacity": 3360.0
-        }
-      },
-      "sig_shortfall": 0,
-      "trained_shortfall": {},
-      "imports_resolved": [
-        "Wire"
-      ],
-      "building_totals": {
-        "by_building": {
-          "Assembler": 114,
-          "Constructor": 314,
-          "Smelter": 35,
-          "Foundry": 21
-        },
-        "total_buildings": 484,
-        "total_power_mw": 3406.5,
-        "footprint_m2": 45622
-      },
-      "building_chain": [
-        {
-          "recipe": "Motor",
-          "item": "Motor",
-          "building": "Assembler",
-          "rate_per_min": 102.5,
-          "recipe_output_per_min": 5.0,
-          "buildings_exact": 20.5,
-          "buildings_ceil": 21,
-          "power_mw": 307.5
-        },
-        {
-          "recipe": "Rotor",
-          "item": "Rotor",
-          "building": "Assembler",
-          "rate_per_min": 205.0,
-          "recipe_output_per_min": 4.0,
-          "buildings_exact": 51.25,
-          "buildings_ceil": 52,
-          "power_mw": 768.8
-        },
-        {
-          "recipe": "Stator",
-          "item": "Stator",
-          "building": "Assembler",
-          "rate_per_min": 205.0,
-          "recipe_output_per_min": 5.0,
-          "buildings_exact": 41.0,
-          "buildings_ceil": 41,
-          "power_mw": 615.0
-        },
-        {
-          "recipe": "Iron Rod",
-          "item": "Iron Rod",
-          "building": "Constructor",
-          "rate_per_min": 2306.25,
-          "recipe_output_per_min": 15.0,
-          "buildings_exact": 153.75,
-          "buildings_ceil": 154,
-          "power_mw": 615.0
-        },
-        {
-          "recipe": "Screws",
-          "item": "Screws",
-          "building": "Constructor",
-          "rate_per_min": 5125.0,
-          "recipe_output_per_min": 40.0,
-          "buildings_exact": 128.12,
-          "buildings_ceil": 129,
-          "power_mw": 512.5
-        },
-        {
-          "recipe": "Steel Pipe",
-          "item": "Steel Pipe",
-          "building": "Constructor",
-          "rate_per_min": 615.0,
-          "recipe_output_per_min": 20.0,
-          "buildings_exact": 30.75,
-          "buildings_ceil": 31,
-          "power_mw": 123.0
-        },
-        {
-          "recipe": "Iron Ingot",
-          "item": "Iron Ingot",
-          "building": "Smelter",
-          "rate_per_min": 1025.0,
-          "recipe_output_per_min": 30.0,
-          "buildings_exact": 34.17,
-          "buildings_ceil": 35,
-          "power_mw": 136.7
-        },
-        {
-          "recipe": "Steel Ingot",
-          "item": "Steel Ingot",
-          "building": "Foundry",
-          "rate_per_min": 922.5,
-          "recipe_output_per_min": 45.0,
-          "buildings_exact": 20.5,
-          "buildings_ceil": 21,
-          "power_mw": 328.0
-        }
-      ],
-      "total_shards": 4,
-      "reason": "new; signature=iron; 1 site(s); 0 outpost(s)"
-    },
-    "ferrium+": {
-      "factory_name": "ferrium+",
-      "theme": "extension",
-      "kind": "ext",
-      "signature_resource": "iron",
-      "disposition": "scaled_in_place",
-      "targets": {
-        "Smart Plating": 150
-      },
-      "center": {
-        "x": 283166.0,
-        "y": -178846.1
-      },
-      "sites": [
-        {
-          "center": {
-            "x": 283166.0,
-            "y": -178846.1
-          },
-          "signature_capacity": 3540.0,
-          "nodes": [
-            {
-              "x": 276673.5625,
-              "y": -195099.8125,
-              "t": "iron",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 278266.3125,
-              "y": -210771.859375,
-              "t": "iron",
-              "p": "p",
-              "k": "node",
-              "oc": 200,
-              "sh": 2
-            },
-            {
-              "x": 298733.9375,
-              "y": -199292.71875,
-              "t": "iron",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 264240.25,
-              "y": -162899.203125,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 314598.09375,
-              "y": -196773.4375,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 311798.84375,
-              "y": -215343.4375,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            },
-            {
-              "x": 248481.4375,
-              "y": -146160.34375,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            },
-            {
-              "x": 242691.671875,
-              "y": -149432.5625,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            },
-            {
-              "x": 313010.1875,
-              "y": -133841.609375,
-              "t": "iron",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            }
-          ],
-          "demand_met": 3487.5,
-          "shards": 17
-        }
-      ],
-      "outposts": [],
-      "resources": {
-        "iron": {
-          "demand": 3487.5,
-          "reserved_capacity": 3540.0
-        }
-      },
-      "sig_shortfall": 0.0,
-      "trained_shortfall": {},
-      "imports_resolved": [],
-      "building_totals": {
-        "by_building": {
-          "Assembler": 143,
-          "Constructor": 327,
-          "Smelter": 117
-        },
-        "total_buildings": 587,
-        "total_power_mw": 3907.5,
-        "footprint_m2": 53928
-      },
-      "building_chain": [
-        {
-          "recipe": "Smart Plating",
-          "item": "Smart Plating",
-          "building": "Assembler",
-          "rate_per_min": 150.0,
-          "recipe_output_per_min": 2.0,
-          "buildings_exact": 75.0,
-          "buildings_ceil": 75,
-          "power_mw": 1125.0
-        },
-        {
-          "recipe": "Reinforced Iron Plate",
-          "item": "Reinforced Iron Plate",
-          "building": "Assembler",
-          "rate_per_min": 150.0,
-          "recipe_output_per_min": 5.0,
-          "buildings_exact": 30.0,
-          "buildings_ceil": 30,
-          "power_mw": 450.0
-        },
-        {
-          "recipe": "Rotor",
-          "item": "Rotor",
-          "building": "Assembler",
-          "rate_per_min": 150.0,
-          "recipe_output_per_min": 4.0,
-          "buildings_exact": 37.5,
-          "buildings_ceil": 38,
-          "power_mw": 562.5
-        },
-        {
-          "recipe": "Iron Plate",
-          "item": "Iron Plate",
-          "building": "Constructor",
-          "rate_per_min": 900.0,
-          "recipe_output_per_min": 20.0,
-          "buildings_exact": 45.0,
-          "buildings_ceil": 45,
-          "power_mw": 180.0
-        },
-        {
-          "recipe": "Screws",
-          "item": "Screws",
-          "building": "Constructor",
-          "rate_per_min": 5550.0,
-          "recipe_output_per_min": 40.0,
-          "buildings_exact": 138.75,
-          "buildings_ceil": 139,
-          "power_mw": 555.0
-        },
-        {
-          "recipe": "Iron Rod",
-          "item": "Iron Rod",
-          "building": "Constructor",
-          "rate_per_min": 2137.5,
-          "recipe_output_per_min": 15.0,
-          "buildings_exact": 142.5,
-          "buildings_ceil": 143,
-          "power_mw": 570.0
-        },
-        {
-          "recipe": "Iron Ingot",
-          "item": "Iron Ingot",
-          "building": "Smelter",
-          "rate_per_min": 3487.5,
-          "recipe_output_per_min": 30.0,
-          "buildings_exact": 116.25,
-          "buildings_ceil": 117,
-          "power_mw": 465.0
-        }
-      ],
-      "total_shards": 17,
-      "reason": "scaled_in_place; signature=iron; 1 site(s); 0 outpost(s)"
-    },
-    "ferrium_hmf": {
-      "factory_name": "ferrium (+HMF)",
-      "theme": "HMF +15.0",
-      "kind": "hmf",
-      "signature_resource": "iron",
-      "disposition": "satellite",
-      "targets": {
-        "Heavy Modular Frame": 15.0
-      },
-      "center": {
-        "x": 320627.9,
-        "y": -150724.3
-      },
-      "sites": [
-        {
-          "center": {
-            "x": 320627.9,
-            "y": -150724.3
-          },
-          "signature_capacity": 2100.0,
-          "nodes": [
-            {
-              "x": 338207.625,
-              "y": -177564.140625,
-              "t": "iron",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 339300.1875,
-              "y": -183354.421875,
-              "t": "iron",
-              "p": "n",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 283968.625,
-              "y": -121598.34375,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 311229.8125,
-              "y": -128705.0390625,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            },
-            {
-              "x": 330433.03125,
-              "y": -142399.734375,
-              "t": "iron",
-              "p": "i",
-              "k": "node",
-              "oc": 250,
-              "sh": 3
-            }
-          ],
-          "demand_met": 2100,
-          "shards": 15
-        },
-        {
-          "center": {
-            "x": 372373.7,
-            "y": -153420.9
-          },
-          "signature_capacity": 720.0,
-          "nodes": [
-            {
-              "x": 372373.6875,
-              "y": -153420.890625,
-              "t": "iron",
-              "p": "p",
-              "k": "node",
-              "oc": 150,
-              "sh": 1
-            }
-          ],
-          "demand_met": 585.4,
-          "shards": 1
+          "demand_met": 2685.4,
+          "shards": 5
         }
       ],
       "outposts": [],
       "resources": {
         "iron": {
           "demand": 2685.4,
-          "reserved_capacity": 2820.0
+          "reserved_capacity": 2760.0
         },
         "limestone": {
           "demand": 1080.0,
@@ -2163,214 +2508,8 @@
           "power_mw": 293.3
         }
       ],
-      "total_shards": 16,
-      "reason": "satellite; signature=iron; 2 site(s); 0 outpost(s)"
-    },
-    "cathera_hmf": {
-      "factory_name": "cathera (+HMF)",
-      "theme": "HMF +15.0",
-      "kind": "hmf",
-      "signature_resource": "copper",
-      "disposition": "scaled_in_place",
-      "targets": {
-        "Heavy Modular Frame": 15.0
-      },
-      "center": {
-        "x": 56109.2,
-        "y": -85970.2
-      },
-      "sites": [
-        {
-          "center": {
-            "x": 56109.2,
-            "y": -85970.2
-          },
-          "signature_capacity": 480.0,
-          "nodes": [
-            {
-              "x": 56109.1640625,
-              "y": -85970.15625,
-              "t": "copper",
-              "p": "p",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            }
-          ],
-          "demand_met": 368.6,
-          "shards": 0
-        }
-      ],
-      "outposts": [
-        {
-          "resource": "caterium",
-          "center": {
-            "x": 103845.6,
-            "y": -94854.0
-          },
-          "capacity": 240.0,
-          "nodes": [
-            {
-              "x": 103845.5703125,
-              "y": -94854.0390625,
-              "t": "caterium",
-              "p": "n",
-              "k": "node",
-              "oc": 100,
-              "sh": 0
-            }
-          ],
-          "demand_met": 17.8,
-          "shards": 0
-        }
-      ],
-      "resources": {
-        "caterium": {
-          "demand": 17.8,
-          "reserved_capacity": 240.0
-        },
-        "copper": {
-          "demand": 368.6,
-          "reserved_capacity": 480.0
-        },
-        "iron": {
-          "demand": 1379.6,
-          "reserved_capacity": 0.0
-        },
-        "limestone": {
-          "demand": 1080.0,
-          "reserved_capacity": 0.0
-        }
-      },
-      "sig_shortfall": 0.0,
-      "trained_shortfall": {},
-      "imports_resolved": [],
-      "building_totals": {
-        "by_building": {
-          "Smelter": 2,
-          "Foundry": 35,
-          "Constructor": 54,
-          "Assembler": 34,
-          "Manufacturer": 6
-        },
-        "total_buildings": 131,
-        "total_power_mw": 1550.0,
-        "footprint_m2": 14688
-      },
-      "building_chain": [
-        {
-          "recipe": "Caterium Ingot",
-          "item": "Caterium Ingot",
-          "building": "Smelter",
-          "rate_per_min": 5.93,
-          "recipe_output_per_min": 1.1111,
-          "buildings_exact": 0.4,
-          "buildings_ceil": 1,
-          "power_mw": 1.6
-        },
-        {
-          "recipe": "Copper Ingot",
-          "item": "Copper Ingot",
-          "building": "Smelter",
-          "rate_per_min": 23.7,
-          "recipe_output_per_min": 4.4444,
-          "buildings_exact": 0.79,
-          "buildings_ceil": 1,
-          "power_mw": 3.2
-        },
-        {
-          "recipe": "Alternate: Iron Alloy Ingot",
-          "item": "Iron Ingot",
-          "building": "Foundry",
-          "rate_per_min": 2586.67,
-          "recipe_output_per_min": 485.0,
-          "buildings_exact": 34.49,
-          "buildings_ceil": 35,
-          "power_mw": 551.8
-        },
-        {
-          "recipe": "Concrete",
-          "item": "Concrete",
-          "building": "Constructor",
-          "rate_per_min": 360.0,
-          "recipe_output_per_min": 67.5,
-          "buildings_exact": 24.0,
-          "buildings_ceil": 24,
-          "power_mw": 96.0
-        },
-        {
-          "recipe": "Alternate: Iron Pipe",
-          "item": "Steel Pipe",
-          "building": "Constructor",
-          "rate_per_min": 613.33,
-          "recipe_output_per_min": 115.0,
-          "buildings_exact": 24.53,
-          "buildings_ceil": 25,
-          "power_mw": 98.1
-        },
-        {
-          "recipe": "Iron Plate",
-          "item": "Iron Plate",
-          "building": "Constructor",
-          "rate_per_min": 88.89,
-          "recipe_output_per_min": 16.6667,
-          "buildings_exact": 4.44,
-          "buildings_ceil": 5,
-          "power_mw": 17.8
-        },
-        {
-          "recipe": "Alternate: Fused Wire",
-          "item": "Wire",
-          "building": "Assembler",
-          "rate_per_min": 177.78,
-          "recipe_output_per_min": 33.3333,
-          "buildings_exact": 1.98,
-          "buildings_ceil": 2,
-          "power_mw": 29.6
-        },
-        {
-          "recipe": "Alternate: Encased Industrial Pipe",
-          "item": "Encased Industrial Beam",
-          "building": "Assembler",
-          "rate_per_min": 50.0,
-          "recipe_output_per_min": 9.375,
-          "buildings_exact": 12.5,
-          "buildings_ceil": 13,
-          "power_mw": 187.5
-        },
-        {
-          "recipe": "Alternate: Stitched Iron Plate",
-          "item": "Reinforced Iron Plate",
-          "building": "Assembler",
-          "rate_per_min": 26.67,
-          "recipe_output_per_min": 5.0,
-          "buildings_exact": 4.74,
-          "buildings_ceil": 5,
-          "power_mw": 71.1
-        },
-        {
-          "recipe": "Alternate: Steeled Frame",
-          "item": "Modular Frame",
-          "building": "Assembler",
-          "rate_per_min": 40.0,
-          "recipe_output_per_min": 7.5,
-          "buildings_exact": 13.33,
-          "buildings_ceil": 14,
-          "power_mw": 200.0
-        },
-        {
-          "recipe": "Alternate: Heavy Encased Frame",
-          "item": "Heavy Modular Frame",
-          "building": "Manufacturer",
-          "rate_per_min": 15.0,
-          "recipe_output_per_min": 2.8125,
-          "buildings_exact": 5.33,
-          "buildings_ceil": 6,
-          "power_mw": 293.3
-        }
-      ],
-      "total_shards": 0,
-      "reason": "scaled_in_place; signature=copper; 1 site(s); 1 outpost(s)"
+      "total_shards": 5,
+      "reason": "scaled_in_place; signature=iron; 1 site(s); 0 outpost(s)"
     }
   },
   "gap_mining_towns": [
@@ -2399,8 +2538,8 @@
           "t": "coal",
           "p": "p",
           "k": "node",
-          "oc": 150,
-          "sh": 1
+          "oc": 200,
+          "sh": 2
         },
         {
           "x": -113215.828125,
@@ -2408,8 +2547,8 @@
           "t": "coal",
           "p": "p",
           "k": "node",
-          "oc": 150,
-          "sh": 1
+          "oc": 200,
+          "sh": 2
         },
         {
           "x": -107640.28125,
@@ -2417,8 +2556,8 @@
           "t": "coal",
           "p": "p",
           "k": "node",
-          "oc": 150,
-          "sh": 1
+          "oc": 200,
+          "sh": 2
         },
         {
           "x": -113615.8828125,
@@ -2426,8 +2565,8 @@
           "t": "coal",
           "p": "p",
           "k": "node",
-          "oc": 150,
-          "sh": 1
+          "oc": 200,
+          "sh": 2
         },
         {
           "x": -53781.875,
@@ -2435,37 +2574,29 @@
           "t": "coal",
           "p": "n",
           "k": "node",
-          "oc": 200,
-          "sh": 2
+          "oc": 250,
+          "sh": 3
         }
       ],
       "existing": false,
       "supplies": [
         {
           "factory": "moldmarsh",
-          "amount_per_min": 1632.1
-        },
-        {
-          "factory": "bauxhold",
-          "amount_per_min": 249.5
-        },
-        {
-          "factory": "classic_iron_motor",
-          "amount_per_min": 922.5
+          "amount_per_min": 3039.0
         },
         {
           "factory": "silvashade",
-          "amount_per_min": 805.3
+          "amount_per_min": 1102.2
         },
         {
-          "factory": "voltreach",
-          "amount_per_min": 329.2
+          "factory": "bauxhold",
+          "amount_per_min": 178.8
         }
       ],
       "capacity_max": 4320,
-      "demand_share": 3938.7,
-      "capacity": 3960.0,
-      "shards": 9
+      "demand_share": 4320.0,
+      "capacity": 4320.0,
+      "shards": 14
     },
     {
       "id": "town_coal_2",
@@ -2473,8 +2604,8 @@
       "resource": "coal",
       "name": "Coal Town 2",
       "center": {
-        "x": 330471.4,
-        "y": -264658.3
+        "x": 310824.3,
+        "y": -259829.9
       },
       "nodes": [
         {
@@ -2483,20 +2614,42 @@
           "t": "coal",
           "p": "p",
           "k": "node",
-          "oc": 200,
-          "sh": 2
+          "oc": 150,
+          "sh": 1
+        },
+        {
+          "x": 325548.8125,
+          "y": -264500.125,
+          "t": "coal",
+          "p": "p",
+          "k": "node",
+          "oc": 150,
+          "sh": 1
+        },
+        {
+          "x": 276452.75,
+          "y": -250331.375,
+          "t": "coal",
+          "p": "n",
+          "k": "node",
+          "oc": 100,
+          "sh": 0
         }
       ],
       "existing": false,
       "supplies": [
         {
           "factory": "bauxhold",
-          "amount_per_min": 780
+          "amount_per_min": 850.8
+        },
+        {
+          "factory": "voltreach",
+          "amount_per_min": 771.0
         }
       ],
-      "capacity_max": 780,
-      "demand_share": 780,
-      "capacity": 780.0,
+      "capacity_max": 2160,
+      "demand_share": 1621.8,
+      "capacity": 1680.0,
       "shards": 2
     },
     {
@@ -2505,8 +2658,8 @@
       "resource": "copper",
       "name": "Copper Town 1",
       "center": {
-        "x": -30454.9,
-        "y": 270517.6
+        "x": -47860.6,
+        "y": 259850.4
       },
       "nodes": [
         {
@@ -2524,8 +2677,8 @@
           "t": "copper",
           "p": "n",
           "k": "node",
-          "oc": 200,
-          "sh": 2
+          "oc": 250,
+          "sh": 3
         },
         {
           "x": -36771.38671875,
@@ -2533,25 +2686,146 @@
           "t": "copper",
           "p": "n",
           "k": "node",
-          "oc": 100,
-          "sh": 0
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -83962.1484375,
+          "y": 273576.625,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -83133.6328125,
+          "y": 275762.21875,
+          "t": "copper",
+          "p": "i",
+          "k": "node",
+          "oc": 150,
+          "sh": 1
+        },
+        {
+          "x": -28703.16796875,
+          "y": 198210.484375,
+          "t": "copper",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
         }
       ],
       "existing": false,
       "supplies": [
+        {
+          "factory": "ironclad_cathera",
+          "amount_per_min": 242.0
+        },
         {
           "factory": "aldercast",
           "amount_per_min": 1060.7
         },
         {
           "factory": "voltreach",
-          "amount_per_min": 205.0
+          "amount_per_min": 1040.0
+        },
+        {
+          "factory": "moldmarsh",
+          "amount_per_min": 532.0
         }
       ],
-      "capacity_max": 1800,
-      "demand_share": 1265.7,
-      "capacity": 1320.0,
-      "shards": 5
+      "capacity_max": 3000,
+      "demand_share": 2874.7,
+      "capacity": 2880.0,
+      "shards": 16
+    },
+    {
+      "id": "town_copper_2",
+      "idx": 2,
+      "resource": "copper",
+      "name": "Copper Town 2",
+      "center": {
+        "x": 153441.0,
+        "y": 8263.8
+      },
+      "nodes": [
+        {
+          "x": 152648.421875,
+          "y": 5227.0913085938,
+          "t": "copper",
+          "p": "p",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": 149936.703125,
+          "y": 4686.4711914062,
+          "t": "copper",
+          "p": "p",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": 157737.734375,
+          "y": 14877.821289062,
+          "t": "copper",
+          "p": "p",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "ironclad_ne",
+          "amount_per_min": 1591.0
+        },
+        {
+          "factory": "ironclad_cathera",
+          "amount_per_min": 749.0
+        }
+      ],
+      "capacity_max": 2340,
+      "demand_share": 2340.0,
+      "capacity": 2340.0,
+      "shards": 6
+    },
+    {
+      "id": "town_copper_3",
+      "idx": 3,
+      "resource": "copper",
+      "name": "Copper Town 3",
+      "center": {
+        "x": -281345.6,
+        "y": -71999.7
+      },
+      "nodes": [
+        {
+          "x": -281345.625,
+          "y": -71999.671875,
+          "t": "copper",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "ironclad_cathera",
+          "amount_per_min": 600
+        }
+      ],
+      "capacity_max": 600,
+      "demand_share": 600,
+      "capacity": 600.0,
+      "shards": 3
     },
     {
       "id": "siderith",
@@ -2569,12 +2843,12 @@
       "shards": 0,
       "supplies": [
         {
-          "factory": "forgeholm_hmf",
-          "amount_per_min": 1884.6
+          "factory": "cathera_hmf",
+          "amount_per_min": 2759.1
         },
         {
-          "factory": "naphtheon_hmf",
-          "amount_per_min": 1408.4
+          "factory": "forgeholm_hmf",
+          "amount_per_min": 533.9
         }
       ],
       "demand_share": 5340.0,
@@ -2586,15 +2860,60 @@
       "resource": "iron",
       "name": "Iron Town 1",
       "center": {
-        "x": -63255.6,
-        "y": 253662.1
+        "x": -51816.6,
+        "y": 185104.0
       },
       "nodes": [
         {
-          "x": -49077.015625,
-          "y": 231707.75,
+          "x": -57161.0625,
+          "y": 192772.703125,
           "t": "iron",
-          "p": "n",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -55693.16796875,
+          "y": 194370.484375,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -58919.39453125,
+          "y": 195892.9375,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -61757.26953125,
+          "y": 194633.71875,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -43940.1640625,
+          "y": 207992.46875,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -41928.3203125,
+          "y": 206907.640625,
+          "t": "iron",
+          "p": "i",
           "k": "node",
           "oc": 250,
           "sh": 3
@@ -2618,8 +2937,62 @@
           "sh": 3
         },
         {
+          "x": -96100.7109375,
+          "y": 163752.859375,
+          "t": "iron",
+          "p": "p",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": -49077.015625,
+          "y": 231707.75,
+          "t": "iron",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -60453.41796875,
+          "y": 141695.671875,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -65049.11328125,
+          "y": 137463.796875,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -42273.09765625,
+          "y": 132150.96875,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
           "x": -36499.55859375,
           "y": 243893.734375,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": -43326.96875,
+          "y": 130254.3828125,
           "t": "iron",
           "p": "i",
           "k": "node",
@@ -2636,8 +3009,8 @@
           "sh": 3
         },
         {
-          "x": -50101.90234375,
-          "y": 284478.03125,
+          "x": -38249.46484375,
+          "y": 127975.2109375,
           "t": "iron",
           "p": "i",
           "k": "node",
@@ -2645,74 +3018,97 @@
           "sh": 3
         },
         {
-          "x": -91267.7109375,
-          "y": 253077.453125,
+          "x": -41484.48828125,
+          "y": 125793.5859375,
           "t": "iron",
           "p": "i",
           "k": "node",
           "oc": 250,
           "sh": 3
-        },
-        {
-          "x": -93267.109375,
-          "y": 254146.171875,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -47534.35546875,
-          "y": 289606.59375,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -92372.078125,
-          "y": 266081.84375,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 250,
-          "sh": 3
-        },
-        {
-          "x": -94905.46875,
-          "y": 262677.5,
-          "t": "iron",
-          "p": "i",
-          "k": "node",
-          "oc": 200,
-          "sh": 2
         }
       ],
       "existing": false,
       "supplies": [
         {
           "factory": "moldmarsh",
-          "amount_per_min": 1632.1
-        },
-        {
-          "factory": "naphtheon_hmf",
-          "amount_per_min": 5.4
-        },
-        {
-          "factory": "cathera_hmf",
-          "amount_per_min": 1379.6
+          "amount_per_min": 3039.0
         },
         {
           "factory": "voltreach",
-          "amount_per_min": 1063.8
+          "amount_per_min": 2491.0
+        },
+        {
+          "factory": "forgeholm_hmf",
+          "amount_per_min": 1250.0
         }
       ],
-      "capacity_max": 4200,
-      "demand_share": 4080.9,
-      "capacity": 4140.0,
-      "shards": 32
+      "capacity_max": 6780,
+      "demand_share": 6780.0,
+      "capacity": 6780.0,
+      "shards": 53
+    },
+    {
+      "id": "town_iron_2",
+      "idx": 2,
+      "resource": "iron",
+      "name": "Iron Town 2",
+      "center": {
+        "x": 318534.3,
+        "y": -140761.2
+      },
+      "nodes": [
+        {
+          "x": 319464.0625,
+          "y": -158098.328125,
+          "t": "iron",
+          "p": "p",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": 313010.1875,
+          "y": -133841.609375,
+          "t": "iron",
+          "p": "n",
+          "k": "node",
+          "oc": 250,
+          "sh": 3
+        },
+        {
+          "x": 330433.03125,
+          "y": -142399.734375,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": 311229.8125,
+          "y": -128705.0390625,
+          "t": "iron",
+          "p": "i",
+          "k": "node",
+          "oc": 100,
+          "sh": 0
+        }
+      ],
+      "existing": false,
+      "supplies": [
+        {
+          "factory": "forgeholm_hmf",
+          "amount_per_min": 100.7
+        },
+        {
+          "factory": "naphtheon_hmf",
+          "amount_per_min": 1602.3
+        }
+      ],
+      "capacity_max": 1980,
+      "demand_share": 1703.0,
+      "capacity": 1740.0,
+      "shards": 7
     },
     {
       "id": "calcara",
@@ -2743,8 +3139,8 @@
       "resource": "limestone",
       "name": "Limestone Town 1",
       "center": {
-        "x": 50631.8,
-        "y": -142098.8
+        "x": 48278.8,
+        "y": -138491.6
       },
       "nodes": [
         {
@@ -2789,12 +3185,34 @@
           "t": "limestone",
           "p": "n",
           "k": "node",
+          "oc": 200,
+          "sh": 2
+        },
+        {
+          "x": 15240.25390625,
+          "y": -158578.609375,
+          "t": "limestone",
+          "p": "i",
+          "k": "node",
           "oc": 100,
           "sh": 0
+        },
+        {
+          "x": 69552.0859375,
+          "y": -100368.703125,
+          "t": "limestone",
+          "p": "p",
+          "k": "node",
+          "oc": 150,
+          "sh": 1
         }
       ],
       "existing": false,
       "supplies": [
+        {
+          "factory": "cathera_hmf",
+          "amount_per_min": 2160.0
+        },
         {
           "factory": "forgeholm_hmf",
           "amount_per_min": 246.0
@@ -2804,18 +3222,14 @@
           "amount_per_min": 1080.0
         },
         {
-          "factory": "cathera_hmf",
-          "amount_per_min": 1080.0
-        },
-        {
           "factory": "naphtheon_hmf",
-          "amount_per_min": 300.0
+          "amount_per_min": 340.0
         }
       ],
-      "capacity_max": 3180,
-      "demand_share": 2706.0,
-      "capacity": 2760.0,
-      "shards": 10
+      "capacity_max": 4260,
+      "demand_share": 3826.0,
+      "capacity": 3840.0,
+      "shards": 13
     }
   ]
 }

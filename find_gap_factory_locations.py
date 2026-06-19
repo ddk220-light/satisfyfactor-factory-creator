@@ -145,9 +145,16 @@ OCC_NAME_MAP = {'Iron Ore': 'iron', 'Copper Ore': 'copper',
 #   Stator               250 −  120 live =  130
 #   Smart Plating        150 −    0 live =  150   (Desc_SpaceElevatorPart_1_C)
 #   Heavy Modular Frame   95 −   35 live =   60   (Desc_ModularFrameHeavy_C)
+# Copper Powder is consumed by Nuclear Pasta (a Phase-5 SET production target in
+# the main assembly .sft tab): 200/pasta -> 1000/min for the 5 pasta/min target.
+# The .sft lists CopperDust ONLY as an input (assumed supplied) and live
+# production makes zero, so nothing actually produces it -> a VERIFIED real gap,
+# NOT a phantom. Whitelisted in PHANTOM_EXCEPTIONS so the phantom guard allows it
+# while still rejecting genuine input-only phantoms (High-Speed Connector, etc.).
+PHANTOM_EXCEPTIONS = {'Copper Powder'}
 GAP_TARGETS = {  # items/min, end-product gap demand
     'Aluminum Casing': 3650, 'Steel Beam': 598, 'Motor': 205, 'Stator': 130,
-    'Smart Plating': 150, 'Heavy Modular Frame': 60,
+    'Smart Plating': 150, 'Heavy Modular Frame': 60, 'Copper Powder': 1000,
 }
 # Flavor splits as relative WEIGHTS, rescaled to GAP_TARGETS[item] at load
 # (so a split can never silently drift from its target). Weights preserve the
@@ -159,7 +166,7 @@ GAP_TARGETS = {  # items/min, end-product gap demand
 FLAVOR_WEIGHTS = {
     'Aluminum Casing': {'aldercast': 1700, 'bauxhold': 1100, 'silvashade': 1100},
     'Steel Beam':       {'moldmarsh': 400, 'silvashade': 50},
-    'Motor':            {'voltreach': 1, 'classic_iron_motor': 1},
+    'Motor':            {'voltreach': 1},   # classic_iron_motor removed; voltreach is ('fixed',) now
     'Stator':           {'moldmarsh': 159, 'voltreach': 130},
 }
 # HMF split weights: Luxara's HMF chain is the only bauxite one, so weight 0
@@ -237,12 +244,13 @@ def assert_no_phantom_targets(db):
     tabs' input[] — that is fine; only input-ONLY items are phantoms."""
     prod, inputs = sft_production_and_inputs(db)
     phantoms = inputs - prod
-    bad = [k for k in GAP_TARGETS if k in phantoms]
+    bad = [k for k in GAP_TARGETS if k in phantoms and k not in PHANTOM_EXCEPTIONS]
     assert not bad, (f"PHANTOM gap targets (input-only in .sft, never a SET "
                      f"production target): {bad}")
     # Also assert each gap target is a real .sft production target (defense in
-    # depth — catches typos / future drift away from the .sft).
-    missing = [k for k in GAP_TARGETS if k not in prod]
+    # depth — catches typos / future drift away from the .sft). Whitelisted
+    # exceptions (Copper Powder) are verified-real gaps not in .sft production.
+    missing = [k for k in GAP_TARGETS if k not in prod and k not in PHANTOM_EXCEPTIONS]
     assert not missing, (f"GAP_TARGETS not found among .sft production "
                          f"targets: {missing}")
 
@@ -275,9 +283,16 @@ NEW_FACTORIES = {
                     'Aluminum Ingot': 'Alternate: Pure Aluminum Ingot',
                     'Aluminum Casing': 'Aluminum Casing'},
         'imports': set()},
+    # ---- SATURATED themed factories: maxed to ON-SITE signature @250% OC; for
+    # the outpost-bound ones (voltreach quartz) the EXISTING outpost runs to
+    # 250% but is NOT grown. Output via ('fixed', amt) = a deliberate surplus
+    # beyond the .sft target; the split factories (aldercast/bauxhold) still
+    # cover the requirement, so the fixed amount stacks extra on top. ----
     'silvashade': {
         'theme': 'Classic Silica Foundry', 'signature': 'bauxite',
-        'products': {'Aluminum Casing': ('split',), 'Steel Beam': ('split',)},
+        # local bauxite cluster = 4 nodes (belt-capped ~2280/min); sized to fit
+        # ONE site (1917 over-claimed and spilled 109k to a distant field).
+        'products': {'Aluminum Casing': ('fixed', 1409), 'Steel Beam': ('fixed', 91)},
         'recipes': {'Alumina Solution': 'Alumina Solution',
                     'Aluminum Scrap': 'Aluminum Scrap',
                     'Aluminum Ingot': 'Aluminum Ingot',
@@ -286,34 +301,73 @@ NEW_FACTORIES = {
         'imports': set()},
     'voltreach': {
         'theme': 'Electric Motion', 'signature': 'caterium',
-        'products': {'Motor': ('split',), 'Stator': ('split',)},
+        'products': {'Motor': ('fixed', 240), 'Stator': ('fixed', 137)},
         'recipes': {'Rotor': 'Alternate: Copper Rotor',
                     'Stator': 'Alternate: Quickwire Stator',
                     'Motor': 'Alternate: Rigor Motor'},
         'imports': set()},
     'moldmarsh': {
         'theme': 'Cast Steel', 'signature': 'limestone',
-        'products': {'Steel Beam': ('split',), 'Stator': ('split',)},
+        'products': {'Steel Beam': ('fixed', 990), 'Stator': ('fixed', 133)},
         'recipes': {'Steel Beam': 'Alternate: Molded Beam',
                     'Steel Pipe': 'Alternate: Molded Steel Pipe',
                     'Stator': 'Stator'},
         'imports': set()},   # Wire "(or in-house)" -> A6 default in-house
-    'classic_iron_motor': {
-        'theme': 'Classic Iron Motor', 'signature': 'iron',
-        'products': {'Motor': ('split',)},
-        'recipes': {'Rotor': 'Rotor', 'Stator': 'Stator', 'Motor': 'Motor'},
+    # ---- iron-copper Smart Plating + Motor, split across two pinned sites
+    # (extreme NE + near Cathera). Drops pure-iron: copper Wire (30/min) kills
+    # the iron-wire bottleneck; Iron-Alloy Ingot blends copper+iron ore. Each
+    # makes SP 75 + Motor 51 (sum SP 150 = target; Motor 102 stacks on the
+    # voltreach surplus). Anchored via NEW_FACTORY_ANCHORS. ----
+    'ironclad_ne': {
+        'name': 'Bronzereach', 'theme': 'Iron-Copper Plating & Motors',
+        'signature': 'iron',   # site on abundant NE iron; copper via shared towns
+                               # (avoids on-site copper contention with Dustforge)
+        'products': {'Smart Plating': ('fixed', 75), 'Motor': ('fixed', 51)},
+        'recipes': {'Iron Ingot': 'Alternate: Iron Alloy Ingot',
+                    'Copper Ingot': 'Copper Ingot', 'Wire': 'Wire',
+                    'Iron Plate': 'Iron Plate',
+                    'Steel Pipe': 'Alternate: Iron Pipe',
+                    'Reinforced Iron Plate': 'Alternate: Stitched Iron Plate',
+                    'Rotor': 'Alternate: Steel Rotor', 'Stator': 'Stator',
+                    'Motor': 'Motor', 'Smart Plating': 'Smart Plating'},
+        'imports': set()},
+    'ironclad_cathera': {
+        'name': 'Brasshold', 'theme': 'Iron-Copper Plating & Motors',
+        'signature': 'iron',
+        'products': {'Smart Plating': ('fixed', 75), 'Motor': ('fixed', 51)},
+        'recipes': {'Iron Ingot': 'Alternate: Iron Alloy Ingot',
+                    'Copper Ingot': 'Copper Ingot', 'Wire': 'Wire',
+                    'Iron Plate': 'Iron Plate',
+                    'Steel Pipe': 'Alternate: Iron Pipe',
+                    'Reinforced Iron Plate': 'Alternate: Stitched Iron Plate',
+                    'Rotor': 'Alternate: Steel Rotor', 'Stator': 'Stator',
+                    'Motor': 'Motor', 'Smart Plating': 'Smart Plating'},
+        'imports': set()},
+    # ---- standalone Copper Powder for Nuclear Pasta (1000/min). Pure Copper
+    # Ingot (ore+water) keeps the copper-ore draw tractable (~2400/min). ----
+    'coppermill': {
+        'name': 'Dustforge', 'theme': 'Copper Powder (Nuclear Pasta)',
+        'signature': 'copper',
+        'products': {'Copper Powder': ('target',)},
+        'recipes': {'Copper Ingot': 'Alternate: Pure Copper Ingot',
+                    'Copper Powder': 'Copper Powder'},
         'imports': set()},
 }
-EXTENSIONS = {
-    # naphtheon (Rubber export) DROPPED — Rubber is .sft input-only + live
-    # surplus +1808/min.  cathera (High-Speed Connector + Copper Powder)
-    # DROPPED ENTIRELY — both were .sft input-only phantoms; removing it also
-    # removes that factory's far caterium outposts.  Modular Frame removed from
-    # ferrium (live makes 148.5/min ≥ 75 target).
-    'ferrium':   {'signature': 'iron',
-                  'added': {'Smart Plating': ('target',)},
-                  'recipes': {'Rotor': 'Rotor'}, 'exports': False},
+# Pinned anchors for new factories (extreme-NE copper field, near-Cathera iron
+# pocket, and a SEPARATE NE copper field for the powder mill so the three do not
+# collide). Un-anchored NEW_FACTORIES auto-place via score_centers as before.
+NEW_FACTORY_ANCHORS = {
+    'ironclad_ne':      {'x': 296569, 'y': -199802},   # extreme-NE iron cluster
+    'ironclad_cathera': {'x': 84199,  'y': -86394},    # near-Cathera iron (E, clear of cathera_hmf)
+    'coppermill':       {'x': 355462, 'y': -149808},   # 4500-cap NE copper field (powder mill)
 }
+# Per-factory HMF saturate override = max on the LOCAL signature cluster (one
+# site, belt-capped 780/node, no far satellites): naphtheon oil 2 wells -> 17,
+# cathera 1 copper node (780/min) -> 30. Others use HMF_SPLIT.
+HMF_SATURATE = {'naphtheon': 17, 'cathera': 30}
+# The pure-iron NE Smart Plating (ferrium ext) and classic_iron_motor are REMOVED
+# — their Smart Plating 150 + Motor now come from the iron-copper factories.
+EXTENSIONS = {}
 HMF_CRITICAL = {'ferrium': 'iron', 'naphtheon': 'oil', 'forgeholm': 'coal',
                 'luxara': 'bauxite', 'cathera': 'copper'}
 
@@ -588,9 +642,8 @@ def centroid(nodes):
 
 # ---------------------------------------------------------------- demand
 def _resolved_products(products, fid):
-    """{item: per_min} from a factory.products dict (mode='split' or 'target')."""
-    return {p: (split_rate(p, fid) if m[0] == 'split' else GAP_TARGETS[p])
-            for p, m in products.items()}
+    """{item: per_min} from a factory.products dict (mode 'split'/'target'/'fixed')."""
+    return {p: _rate(p, m, fid) for p, m in products.items()}
 
 
 def split_rate(item, fid):
@@ -599,20 +652,34 @@ def split_rate(item, fid):
     return GAP_TARGETS[item]
 
 
+def _rate(item, mode, fid):
+    """Resolve a products[] mode tuple to an absolute per-min rate.
+      ('split',)      -> this factory's FLAVOR_SPLITS share of the target.
+      ('fixed', amt)  -> the literal `amt`. Used by SATURATED/maxed factories
+                         whose output is a deliberate surplus decoupled from the
+                         rescaled split (the split totals still cover the .sft
+                         requirement; the fixed amount stacks extra on top).
+      ('target',)     -> the whole GAP_TARGETS[item] (single-factory products)."""
+    if mode[0] == 'split':
+        return split_rate(item, fid)
+    if mode[0] == 'fixed':
+        return mode[1]
+    return GAP_TARGETS[item]
+
+
 def job_raw_demand(db, fid, products, pinned, imports):
     """{node_type: per_min} for mined solids + oil + nitrogenGas. Decomposes
     each FINAL product end-to-end (A7); Water dropped (sited-anywhere)."""
     agg = defaultdict(float)
     for item, mode in products.items():
-        rate = split_rate(item, fid) if mode[0] == 'split' else GAP_TARGETS[item]
+        rate = _rate(item, mode, fid)
         for raw, pm in decompose(db, item, rate, pinned, imports).items():
             if raw == 'Water':
                 continue
             nt = ITEM_TO_NODETYPE.get(raw)
             if nt:
                 agg[nt] += pm
-    return dict(agg), {p: (split_rate(p, fid) if m[0] == 'split'
-                           else GAP_TARGETS[p]) for p, m in products.items()}
+    return dict(agg), {p: _rate(p, m, fid) for p, m in products.items()}
 
 
 def aldercast_imports(db):
@@ -1160,9 +1227,10 @@ def build_jobs(db, extras=None):
         rd, tgt = job_raw_demand(db, fid, f['products'], f['recipes'], imports)
         chain = building_chain(db, _resolved_products(f['products'], fid),
                                 f['recipes'], imports)
-        jobs.append({'id': fid, 'name': fid, 'kind': 'new',
+        jobs.append({'id': fid, 'name': f.get('name', fid), 'kind': 'new',
                      'theme': f['theme'], 'signature': f['signature'],
-                     'raw_demand': rd, 'targets': tgt, 'anchor': None,
+                     'raw_demand': rd, 'targets': tgt,
+                     'anchor': NEW_FACTORY_ANCHORS.get(fid),
                      'imports_resolved': sorted(imports),
                      'building_chain': chain,
                      'building_totals': factory_building_totals(chain)})
@@ -1189,7 +1257,7 @@ def build_jobs(db, extras=None):
         m = sub[fid]
         per_hmf = {k: v['per_min'] / m['hmf_per_min']
                    for k, v in m['raw_inputs'].items()}
-        inc = HMF_SPLIT.get(fid, 0.0)
+        inc = HMF_SATURATE.get(fid, HMF_SPLIT.get(fid, 0.0))
         if inc <= 0:                             # skip jobs with 0 increment
             continue
         # Building totals for the increment: scale subunits steps by
@@ -1221,7 +1289,8 @@ def build_jobs(db, extras=None):
         # job's anchor, so every other factory also keeps clear of it.
         built = False
         jobs.append({'id': fid + '_hmf',
-                     'name': ('Anvilreach' if fid == 'forgeholm' else fid + ' (+HMF)'),
+                     'name': ({'forgeholm': 'Anvilreach', 'ferrium': 'Heavyhold'}
+                              .get(fid, fid + ' (+HMF)')),
                      'kind': 'hmf', 'theme': f'HMF +{inc:.1f}', 'signature': crit,
                      'raw_demand': rd, 'targets': {'Heavy Modular Frame': round(inc, 1)},
                      'anchor': {'x': ctr['x'], 'y': ctr['y']},
@@ -1264,8 +1333,9 @@ def allocate(pool, jobs):
     for j in pending:
         if j['id'] in done:
             continue
-        if j['kind'] == 'new':                     # A3 round-robin peers
+        if j['kind'] == 'new' and not j.get('anchor'):  # A3 round-robin peers
             peers = [p for p in pending if p['kind'] == 'new'
+                     and not p.get('anchor')            # anchored new -> alloc_anchored
                      and p['signature'] == j['signature']
                      and p['id'] not in done]
             for p in peers:
