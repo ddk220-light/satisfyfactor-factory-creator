@@ -842,6 +842,10 @@ function drawIcon(name, sx, sy, size, alpha) {
 // hoverKey is a stable string id for the hovered element; any draw*
 // routine compares its own element key against it to apply HOVER_MUL.
 let hoverKey = null;
+// Screen-space hit boxes for factory markers (name pill + product icons),
+// rebuilt every draw() so hovering anywhere on a factory's label/symbols
+// highlights it — not just the tiny center point between them.
+let hoverTargets = [];
 
 // --- Core zoom -> scale curve ---------------------------------------
 // Returns a multiplier that is MARKER_SCALE_MIN at/under ZOOM_FIT and
@@ -957,6 +961,7 @@ function baseEligible(fid) {
 
 // === DRAWING ===
 function draw() {
+  hoverTargets = [];   // rebuilt below as factory markers are drawn
   ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, W, H);
 
@@ -1224,7 +1229,8 @@ function drawFactoryCenter(fid, f) {
   const s = g2s(f.cx, f.cy);
   const color = FACTORY_COLORS[fid];
   const hov = (hoverKey === ('fc:' + fid)) ? HOVER_MUL : 1;
-  const r = Math.max(8, Math.round(11 * markerScale())) * hov;
+  const baseR = Math.max(8, Math.round(11 * markerScale()));
+  const r = baseR * hov;
 
   // (blue disc removed per user — keep just the name label + product icons)
   // Label (translucent pill behind text instead of bare stroke)
@@ -1234,6 +1240,8 @@ function drawFactoryCenter(fid, f) {
   drawLabelPill(f.name, s.x, s.y - r - 8 - fs * 0.5, '#fff');
   ctx.textAlign = 'left';
   drawProductIcons(s.x, s.y, BASE_FACTORY_PROD[fid], r);
+  recordFactoryHoverBox(s, f.name, BASE_FACTORY_PROD[fid], baseR, fs,
+                        { key: 'fc:' + fid, kind: 'fc', fid });
 }
 
 // === GAP FACTORY DRAWING ===
@@ -1413,7 +1421,8 @@ function drawGapCenter(gf) {
   (gf.sites || []).forEach((site, si) => {
     const s = g2s(site.x, site.y);
     const hov = (hoverKey === ('gc:' + gf.id + ':' + si)) ? HOVER_MUL : 1;
-    const r = Math.max(7, Math.round(10 * markerScale())) * hov;
+    const baseR = Math.max(7, Math.round(10 * markerScale()));
+    const r = baseR * hov;
     if (si !== 0) {
       // satellite site: small dashed ring marker only (no big disc)
       ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.setLineDash([3, 2]);
@@ -1428,6 +1437,8 @@ function drawGapCenter(gf) {
       drawLabelPill(tag, s.x, s.y - r - 8 - fs * 0.5, gf.infeasible ? '#ff6b6b' : '#fff');
       ctx.textAlign = 'left';
       drawProductIcons(s.x, s.y, gf.prod, r);
+      recordFactoryHoverBox(s, tag, gf.prod, baseR, fs,
+                            { key: 'gc:' + gf.id + ':0', kind: 'gc', gf });
     }
   });
   ctx.setLineDash([]);
@@ -1498,6 +1509,35 @@ function drawProductIcons(sx, sy, prodList, r) {
     }
     x += step;
   }
+}
+
+// Register a screen-space hover box covering a factory marker's NAME pill (drawn
+// above the center) and PRODUCT ICONS (drawn below it), so hovering anywhere on
+// the label or the symbols highlights the factory — not just the tiny center gap
+// between them. Sized to the HOVER_MUL-enlarged extent so the box is stable
+// across hover states and a touch generous to grab. `info` is spread onto the
+// record (key/kind + fid or gf) for the mousemove handler to resolve.
+function recordFactoryHoverBox(s, name, prodList, baseR, fs, info) {
+  const r = baseR * HOVER_MUL;
+  ctx.save();
+  ctx.font = `bold ${fs}px Courier New`;
+  const nameW = ctx.measureText(name || '').width + 12;
+  ctx.restore();
+  const nameH = fs + 6;
+  const nameCy = s.y - r - 8 - fs * 0.5;
+  let x0 = s.x - nameW / 2, x1 = s.x + nameW / 2;
+  let y0 = nameCy - nameH / 2, y1 = nameCy + nameH / 2;
+  if (prodList && prodList.length) {
+    const size = Math.max(13, Math.min(34, Math.round(15 * markerScale())));
+    const step = size + 3;
+    const totalW = prodList.length * step - 3;
+    x0 = Math.min(x0, s.x - totalW / 2);
+    x1 = Math.max(x1, s.x + totalW / 2);
+    y1 = Math.max(y1, s.y + r + 10 + size);
+  }
+  y0 = Math.min(y0, s.y - r);   // span the center gap so the whole marker is live
+  const pad = 4;
+  hoverTargets.push({ x0: x0 - pad, y0: y0 - pad, x1: x1 + pad, y1: y1 + pad, ...info });
 }
 
 // Primary-site center for a factory id (target of a town supply arrow).
@@ -1935,74 +1975,63 @@ window.addEventListener('mousemove', (e) => {
     viewY = dragViewY - dy / zoom;
     draw();
   }
-  // Tooltip for factory centers
+  // Hover: which factory / town is under the cursor?
   if (!dragging) {
-    const mg = s2g(e.clientX - canvas.getBoundingClientRect().left,
-                    e.clientY - canvas.getBoundingClientRect().top);
-    let hit = null;
-    for (const [fid, f] of Object.entries(FACTORIES)) {
-      if (!visible[fid]) continue;
-      const dx = mg.x - f.cx, dy = mg.y - f.cy;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const hitR = 15 / zoom;
-      if (dist < hitR) { hit = {fid, f}; break; }
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+    const mg = s2g(sx, sy);
+    let newHoverKey = null, tipHtml = null;
+    // 1) Factory markers — hover the whole NAME + ICONS box (recorded in draw()).
+    //    Walk last-drawn-first so the topmost marker wins on overlap.
+    for (let i = hoverTargets.length - 1; i >= 0; i--) {
+      const t = hoverTargets[i];
+      if (sx < t.x0 || sx > t.x1 || sy < t.y0 || sy > t.y1) continue;
+      if (t.kind === 'fc' && visible[t.fid]) {
+        newHoverKey = t.key; tipHtml = baseTooltipHtml(t.fid, FACTORIES[t.fid]); break;
+      }
+      if (t.kind === 'gc' && gapVisible[t.gf.id]) {
+        newHoverKey = t.key; tipHtml = gapTooltipHtml(t.gf, 0); break;
+      }
     }
-    // Also check mining towns
-    let hitTown = null;
-    if (!hit) {
+    // 2) Mining towns (center-distance).
+    if (!newHoverKey) {
       for (const mt of MINING_TOWNS) {
         if (!townVisible[mt.id]) continue;
-        const dx = mg.x - mt.cx, dy = mg.y - mt.cy;
-        const d = Math.sqrt(dx * dx + dy * dy);
-        const hitR = 15 / zoom;
-        if (d < hitR) { hitTown = mt; break; }
+        if (Math.hypot(mg.x - mt.cx, mg.y - mt.cy) < 15 / zoom) {
+          newHoverKey = 'tc:' + mt.id;
+          tipHtml = `<b>${mt.name}</b> (${mt.theme})<br>` +
+                    `${mt.nodeCount} ${mt.resource} nodes | ${mt.capacity}/min<br>` +
+                    `${mt.purity.pure}P / ${mt.purity.normal}N / ${mt.purity.impure}I<br>` +
+                    `Supplies: ${mt.supplies.join(', ')}`;
+          break;
+        }
       }
     }
-    // Gap factory hit (any site)
-    let hitGap = null;
-    if (!hit && !hitTown) {
+    // 3) Gap factory SATELLITE sites (i>0; primary i=0 is covered by its box).
+    if (!newHoverKey) {
       for (const gf of GAP_FACTORIES) {
         if (!gapVisible[gf.id] || !gf.sites) continue;
-        for (let i = 0; i < gf.sites.length; i++) {
+        for (let i = 1; i < gf.sites.length; i++) {
           const s = gf.sites[i];
-          const dx = mg.x - s.x, dy = mg.y - s.y;
-          if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) {
-            hitGap = {gf, siteIdx: i}; break;
+          if (Math.hypot(mg.x - s.x, mg.y - s.y) < 15 / zoom) {
+            newHoverKey = 'gc:' + gf.id + ':' + i; tipHtml = gapTooltipHtml(gf, i); break;
           }
         }
-        if (hitGap) break;
+        if (newHoverKey) break;
       }
     }
-    // Gap mining town hit
-    let hitGapTown = null;
-    if (!hit && !hitTown && !hitGap && typeof GAP_TOWNS !== 'undefined') {
+    // 4) Gap mining towns.
+    if (!newHoverKey && typeof GAP_TOWNS !== 'undefined') {
       for (const gt of GAP_TOWNS) {
         if (!gapTownVisible[gt.id]) continue;
-        const dx = mg.x - gt.cx, dy = mg.y - gt.cy;
-        if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) { hitGapTown = gt; break; }
+        if (Math.hypot(mg.x - gt.cx, mg.y - gt.cy) < 15 / zoom) {
+          newHoverKey = 'gt:' + gt.id; tipHtml = gapTownTooltipHtml(gt); break;
+        }
       }
     }
-    let newHoverKey = null;
-    if (hit) newHoverKey = 'fc:' + hit.fid;
-    else if (hitTown) newHoverKey = 'tc:' + hitTown.id;
-    else if (hitGap) newHoverKey = 'gc:' + hitGap.gf.id + ':' + hitGap.siteIdx;
-    else if (hitGapTown) newHoverKey = 'gt:' + hitGapTown.id;
     if (newHoverKey !== hoverKey) { hoverKey = newHoverKey; draw(); }
-    if (hit) {
-      showTooltip(baseTooltipHtml(hit.fid, hit.f), e.clientX, e.clientY);
-    } else if (hitTown) {
-      let tt = `<b>${hitTown.name}</b> (${hitTown.theme})<br>`;
-      tt += `${hitTown.nodeCount} ${hitTown.resource} nodes | ${hitTown.capacity}/min<br>`;
-      tt += `${hitTown.purity.pure}P / ${hitTown.purity.normal}N / ${hitTown.purity.impure}I<br>`;
-      tt += `Supplies: ${hitTown.supplies.join(', ')}`;
-      showTooltip(tt, e.clientX, e.clientY);
-    } else if (hitGap) {
-      showTooltip(gapTooltipHtml(hitGap.gf, hitGap.siteIdx), e.clientX, e.clientY);
-    } else if (hitGapTown) {
-      showTooltip(gapTownTooltipHtml(hitGapTown), e.clientX, e.clientY);
-    } else if (!tooltipPinned) {
-      tooltip.style.display = 'none';
-    }
+    if (tipHtml) showTooltip(tipHtml, e.clientX, e.clientY);
+    else if (!tooltipPinned) tooltip.style.display = 'none';
   }
 });
 
@@ -2087,13 +2116,12 @@ canvas.addEventListener('click', (e) => {
   }
 
   let html = null;
-  for (const [fid, f] of Object.entries(FACTORIES)) {
-    if (!visible[fid]) continue;
-    const dx = mg.x - f.cx, dy = mg.y - f.cy;
-    if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) {
-      html = `<b>${f.name}</b> (${f.theme})<br>${f.totalNodes} resource nodes`;
-      break;
-    }
+  // Factory markers: same name+icons boxes the hover uses.
+  for (let i = hoverTargets.length - 1; i >= 0; i--) {
+    const t = hoverTargets[i];
+    if (sx < t.x0 || sx > t.x1 || sy < t.y0 || sy > t.y1) continue;
+    if (t.kind === 'fc' && visible[t.fid]) { html = baseTooltipHtml(t.fid, FACTORIES[t.fid]); break; }
+    if (t.kind === 'gc' && gapVisible[t.gf.id]) { html = gapTooltipHtml(t.gf, 0); break; }
   }
   if (!html) for (const mt of MINING_TOWNS) {
     if (!townVisible[mt.id]) continue;
@@ -2105,7 +2133,7 @@ canvas.addEventListener('click', (e) => {
   }
   if (!html) for (const gf of GAP_FACTORIES) {
     if (!gapVisible[gf.id] || !gf.sites) continue;
-    for (let i=0; i<gf.sites.length; i++) {
+    for (let i=1; i<gf.sites.length; i++) {   // primary (i=0) handled by its box
       const s = gf.sites[i];
       const dx = mg.x - s.x, dy = mg.y - s.y;
       if (Math.sqrt(dx*dx + dy*dy) < 15 / zoom) { html = gapTooltipHtml(gf, i); break; }
