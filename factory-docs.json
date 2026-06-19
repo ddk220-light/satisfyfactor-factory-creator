@@ -1,0 +1,432 @@
+{
+  "meta": {
+    "source": "factory-detail-tabs workflow wf_4c976c74-212"
+  },
+  "docs": {
+    "silvashade": {
+      "headline": "Bauxite-to-Aluminum Casing foundry that smelts its own Silica from Raw Quartz to feed Aluminum Ingots",
+      "summary": "Silvashade is a classic-recipe aluminum foundry that turns Bauxite, Coal, and Raw Quartz into 1,409 Aluminum Casing/min plus 91 Steel Beam/min. Its signature trick is self-sourcing: rather than import Silica, it runs 74 Constructors converting Raw Quartz into 2,756 Silica/min, which (with refined Aluminum Scrap) feeds the vanilla Aluminum Ingot recipe in 37 Foundries. The Alumina Solution refineries also throw off free Silica as a by-product, and the Steel Beam output uses the Alternate: Aluminum Beam recipe so beams are cast from aluminum instead of steel. Scale is roughly 169 buildings (103 Constructors, 37 Foundries, 29 Refineries) drawing about 1,819 MW.",
+      "input_notes": "Raw ores cross the boundary inward: Bauxite ~2,204/min (signature node site), Coal ~1,102/min, and Raw Quartz ~1,653/min (served from two quartz outposts). The only external input is Water ~2,204/min from free extractors; there are no declared imports.",
+      "output_notes": "Delivers 1,409 Aluminum Casing/min and 91 Steel Beam/min. By-product Silica runs a large surplus of ~918/min (the Alumina Solution refinery output not consumed by ingot smelting) plus a trivial ~1.8 Aluminum Scrap/min; these surpluses are not consumed downstream, so they sink/waste unless tapped.",
+      "recipe_notes": [
+        {
+          "recipe": "Silica",
+          "note": "In-house Silica: 74 Constructors turn Raw Quartz into 2,756/min so ingot smelting needs no imported Silica."
+        },
+        {
+          "recipe": "Alternate: Aluminum Beam",
+          "note": "Casts Steel Beam from Aluminum Ingot instead of steel, keeping the factory all-aluminum (no separate iron/coal steel line)."
+        },
+        {
+          "recipe": "Aluminum Ingot",
+          "note": "Vanilla wet-route ingot: consumes Aluminum Scrap + Silica; the chain's throughput backbone at 2,204/min across 37 Foundries."
+        },
+        {
+          "recipe": "Alumina Solution",
+          "note": "Refinery step that also yields surplus Silica (~918/min) as a by-product on top of the Alumina feedstock."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Silica",
+          "Aluminum Ingot",
+          "Alumina Solution",
+          "Aluminum Scrap",
+          "Aluminum Casing"
+        ],
+        "discrepancies": []
+      }
+    },
+    "aldercast": {
+      "headline": "Aldercast: 1,591 Aluminum Casing/min from bauxite, copper-fused via the Alclad Casing alternate",
+      "summary": "Aldercast is an Alclad / copper-fused aluminum plant that turns local bauxite (and a copper-ore stream) into 1,591 Aluminum Casing/min. Its signature trick is the Alternate: Alclad Casing recipe, which fuses Aluminum Ingot with Copper Ingot instead of using pure aluminum, so the factory also runs a parallel copper-smelting line. The aluminum chain stacks three alternates: Sloppy Alumina (high-yield Alumina Solution from bauxite + water), Electrode Aluminum Scrap (scrap from alumina + imported Petroleum Coke, returning water), and Pure Aluminum Ingot (2:1 scrap-to-ingot). It is a large build: 148 buildings (107 Smelters, 26 Refineries, 15 Assemblers) drawing about 1,378.8 MW, with 9 power shards on the bauxite extraction.",
+      "input_notes": "Inward across the boundary: raw Bauxite (2,121.3/min, the signature node) and Copper Ore (1,060.7/min) mined locally, plus imported Petroleum Coke (848.4/min) feeding the Electrode Scrap refineries. Water (637.3/min net) comes free from extractors; the Electrode Scrap step recycles most process water internally.",
+      "output_notes": "Delivers Aluminum Casing at 1,591/min as its sole product. Only a negligible byproduct surplus of Alumina Solution (1.2/min) remains \u2014 effectively balanced, not a meaningful sink or waste stream.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Alclad Casing",
+          "note": "Signature alternate: fuses Aluminum + Copper Ingot into casings, cutting aluminum demand by adding a copper line."
+        },
+        {
+          "recipe": "Alternate: Sloppy Alumina",
+          "note": "High-yield alumina: 10 bauxite + 10 water per cycle into 12 Alumina Solution; only 11 refineries needed."
+        },
+        {
+          "recipe": "Alternate: Electrode Aluminum Scrap",
+          "note": "Scrap from Alumina Solution + imported Petroleum Coke; returns 1,484.7 water/min back into the chain."
+        },
+        {
+          "recipe": "Alternate: Pure Aluminum Ingot",
+          "note": "Water-free 2:1 scrap-to-ingot route; the smelter bulk of the factory (71 Smelters)."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Alternate: Electrode Aluminum Scrap",
+          "Alternate: Sloppy Alumina",
+          "Alternate: Pure Aluminum Ingot"
+        ],
+        "discrepancies": []
+      }
+    },
+    "bauxhold": {
+      "headline": "Sulfuric-acid Aluminum Casing plant: Instant Scrap blends bauxite+coal+acid straight to scrap",
+      "summary": "Bauxhold is a compact, chemistry-driven aluminum plant whose sole deliverable is 1,029.5 Aluminum Casing/min, all built on its signature bauxite. Its defining trick is the Alternate: Instant Scrap recipe, which blends Bauxite, Coal, Sulfuric Acid and Water directly into 3,090 Aluminum Scrap/min in one Blender step, bypassing the usual separate Alumina Solution refining stage. An on-site Sulfuric Acid refinery (Sulfur + Water) feeds that blend, and Alternate: Pure Aluminum Ingot smelts 2 scrap into 1 ingot without needing any silica. It is lean: just 92 buildings (52 Smelters, 18 Constructors, 11 Blenders, 11 Refineries) drawing ~1,355 MW, dominated by the power-hungry Blenders (~772 MW).",
+      "input_notes": "Crosses the boundary inward: raw Bauxite 1,544.3/min (signature, mined on 2 local nodes), Coal 1,029.5/min, and Sulfur 514.8/min hauled from a remote outpost. Water 618/min comes free from extractors. No declared imports \u2014 the factory is self-contained.",
+      "output_notes": "Delivers Aluminum Casing 1,029.5/min as its only product. The only byproduct is a trivial 1.2/min Aluminum Scrap rounding surplus (effectively negligible/sunk). The Instant Scrap blend also recycles 515 m\u00b3/min of water back out internally, which is consumed in-loop, so there is no meaningful waste stream.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Instant Scrap",
+          "note": "Blender fuses Bauxite + Coal + Sulfuric Acid + Water straight into 3,090 scrap/min, collapsing the Alumina Solution + scrap chain into one step (its 11 Blenders draw ~772 MW, the factory's biggest power sink)."
+        },
+        {
+          "recipe": "Alternate: Pure Aluminum Ingot",
+          "note": "Smelts 2 Aluminum Scrap to 1 ingot with no silica required, keeping the ingot stage simple \u2014 just 52 Smelters at low power."
+        },
+        {
+          "recipe": "Sulfuric Acid",
+          "note": "On-site refinery turns Sulfur + Water into the 515/min acid the Instant Scrap blend needs, so no acid import is required."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Alternate: Instant Scrap",
+          "Alternate: Pure Aluminum Ingot",
+          "Aluminum Casing"
+        ],
+        "discrepancies": []
+      }
+    },
+    "voltreach": {
+      "headline": "Caterium-fed Electric Motion plant: Rigor Motor + Quickwire Stator yield 240 Motors & 137 Stators/min",
+      "summary": "Voltreach is the \"Electric Motion\" factory: it turns caterium plus iron, copper, coal and raw quartz into 240 Motors/min and 137 Stators/min (net), with caterium as its signature resource refined into Quickwire. The chain leans on the Quickwire Stator alternate \u2014 flooding cheap caterium Quickwire (1927/min) and Steel Pipe into Stators at 257/min, of which 120 feed Motors internally and 137 export. Motors come from the Rigor Motor alternate (Crystal Oscillator + Rotor + Stator), and Rotors from the Copper Rotor alternate (Copper Sheet + Screws), keeping the whole tree on in-house ingots. It is a large build at 612 buildings and ~6993 MW, dominated by 72 Manufacturers (Motors + Crystal Oscillators) and a heavy Constructor bank (339) for Screws, Wire, Quartz Crystal and Quickwire.",
+      "input_notes": "Five raw ores cross the boundary inward: Caterium Ore 1156.5, Iron Ore 2491, Copper Ore 1040, Coal 771 and Raw Quartz 1200 per min. No declared imports and no water needed \u2014 the factory is fully self-contained from ore.",
+      "output_notes": "Delivers Motor 240/min and Stator 137/min (net, after 120 Stators are consumed internally by the Rigor Motor recipe). No byproducts or surpluses \u2014 the chain is balanced to ~0 net on every intermediate (Quickwire, Screws, Rotor, Crystal Oscillator, all ingots), so nothing is sunk or wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Quickwire Stator",
+          "note": "Uses caterium Quickwire instead of copper Wire for Stators \u2014 exploits the cheap caterium signature; runs at 257/min across 33 Assemblers."
+        },
+        {
+          "recipe": "Alternate: Rigor Motor",
+          "note": "High-yield Motor recipe (6 Motors/cycle) folding in a Crystal Oscillator alongside Rotor+Stator; the 72-Manufacturer/2200 MW Crystal Oscillator line is the power sink behind it."
+        },
+        {
+          "recipe": "Alternate: Copper Rotor",
+          "note": "Builds Rotors from Copper Sheet + Screws instead of steel, keeping Rotor supply on copper rather than competing for steel."
+        },
+        {
+          "recipe": "Crystal Oscillator",
+          "note": "Vanilla recipe but the single biggest power draw (40 Manufacturers, 2200 MW); consumes 720 Quartz Crystal/min, the entire reason Raw Quartz is imported."
+        },
+        {
+          "recipe": "Screws",
+          "note": "Highest item throughput in the plant at 3280/min over 82 Constructors, feeding the Copper Rotor line."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "discrepancies": [],
+        "recipes_checked": [
+          "Alternate: Rigor Motor",
+          "Alternate: Quickwire Stator",
+          "Screws"
+        ]
+      }
+    },
+    "coppermill": {
+      "headline": "Dustforge: 1000 Copper Powder/min for Nuclear Pasta, fed by Pure Copper Ingot water refining",
+      "summary": "Dustforge is a single-output copper factory delivering 1000 Copper Powder/min to feed the Nuclear Pasta chain. It pulls 2400 Copper Ore/min from four nearby copper nodes (3 pure + 1 normal, scaled in place) and runs the alternate Pure Copper Ingot recipe, which refines ore with water to roughly double ingot yield per ore versus plain smelting \u2014 2400 ore plus 1600 m\u00b3 free water become 6000 Copper Ingot/min. 20 Constructors then convert all 6000 ingots into 1000 Copper Powder. It is a large, refinery-heavy build: 180 buildings total (160 Refineries + 20 Constructors) drawing about 4880 MW, with no imports and no byproducts.",
+      "input_notes": "Inward: only 2400 Copper Ore/min from the four on-site copper nodes (signature resource, mined in place). External input is 1600 m\u00b3/min Water from extractors, which is free. No declared part imports.",
+      "output_notes": "Delivers 1000 Copper Powder/min as its sole output (for Nuclear Pasta). The 6000 Copper Ingot/min produced is fully consumed internally \u2014 no surplus. No byproducts and nothing sunk or wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Pure Copper Ingot",
+          "note": "Water-refining alternate: 160 Refineries turn 2400 ore + 1600 m3 free water into 6000 ingots/min, far better ore-to-ingot yield than smelting."
+        },
+        {
+          "recipe": "Copper Powder",
+          "note": "Powder is ingot-hungry: 30 ingots per 5 powder (6:1), so 20 Constructors eat all 6000 ingots to make 1000 powder."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Copper Powder",
+          "Alternate: Pure Copper Ingot"
+        ],
+        "discrepancies": []
+      }
+    },
+    "moldmarsh": {
+      "headline": "Cast Steel hub: 990 Steel Beam + 133 Stator/min, melting limestone-fed concrete into molded steel parts",
+      "summary": "Moldmarsh is a \"Cast Steel\" factory delivering 990 Steel Beam/min and 133 Stator/min from raw iron, coal, copper, and a massive limestone supply (its signature resource, ~5,998/min across 8 nodes). The chain smelts coal+iron into Steel Ingot, then leans on two Foundry alternates \u2014 Molded Beam and Molded Steel Pipe \u2014 that cast Concrete together with Steel Ingot, stretching expensive steel with cheap limestone-derived concrete instead of using more ore. Stators are assembled from molded Steel Pipe plus Wire smelted from a small Copper Ore feed. It is a heavy build: 313 buildings (98 Foundries, 170 Constructors, 27 Assemblers, 18 Smelters) drawing about 2,705 MW.",
+      "input_notes": "All inputs are raw ore mined on-site: ~5,998 Limestone/min (the signature feed, routed almost entirely into Concrete), 3,039 Iron Ore and 3,039 Coal/min for Steel Ingot, and 532 Copper Ore/min for Wire. No external/imported items cross the boundary \u2014 external_inputs and imports are empty.",
+      "output_notes": "Delivers two products outward: 990 Steel Beam/min and 133 Stator/min. There are no byproducts or surpluses \u2014 internal intermediates (Concrete, Steel Ingot, Steel Pipe, Wire, Copper Ingot) net to ~zero, so nothing is sunk or wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Molded Beam",
+          "note": "Foundry alternate casts 16 Concrete + 24 Steel Ingot into 9 Steel Beam \u2014 stretches steel with cheap limestone-concrete instead of more ore."
+        },
+        {
+          "recipe": "Alternate: Molded Steel Pipe",
+          "note": "Same trick for pipes: Concrete + Steel Ingot in a Foundry feeds the Stator line without extra ore-heavy steel."
+        },
+        {
+          "recipe": "Concrete",
+          "note": "Largest building count (134 Constructors); converts ~5,998 Limestone/min into ~1,999 Concrete feeding both molded-casting recipes."
+        },
+        {
+          "recipe": "Wire",
+          "note": "Copper Wire path: 532 Copper Ingot yields 1,064 Wire/min (2:1), out-throughputting iron Wire for the Stator's 1,064 Wire demand."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Concrete",
+          "Steel Ingot",
+          "Alternate: Molded Beam"
+        ],
+        "discrepancies": []
+      }
+    },
+    "ironclad_ne": {
+      "headline": "Bronzereach: 75 Smart Plating + 51 Motor/min from in-place iron, stretched with copper via Iron Alloy Ingot",
+      "summary": "Bronzereach (\"Iron-Copper Plating & Motors\") delivers 75 Smart Plating/min and 51 Motor/min, sitting on three local iron nodes (1608 iron ore/min consumed in place) plus a heavy copper ore import (1591/min). Its signature trick is Alternate: Iron Alloy Ingot, which blends a little copper ore into the iron smelt to yield 3015 Iron Ingot/min from 41 Foundries, stretching the local iron supply. Copper goes overwhelmingly into Wire (a massive 2378/min across 80 Constructors) to feed the rotor and stator chains, with Alternate: Steel Rotor and Alternate: Iron Pipe building rotors and steel pipe entirely from iron rather than steel. At 321 buildings and ~3027 MW it is wire-and-rotor heavy, with everything balanced to zero surplus on intermediates.",
+      "input_notes": "Inward across the boundary: Iron Ore 1608/min (drawn from the three local iron nodes it sits on) and Copper Ore 1591/min. No declared external imports \u2014 all copper ore is counted as raw_inputs, and there is no Water or other utility import.",
+      "output_notes": "Delivers Smart Plating 75/min and Motor 51/min. No byproducts: the chain is balanced to ~0 net on every intermediate (Wire +0.2, Iron Plate +0.1 rounding), so nothing meaningful is sunk or wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "note": "Blends 402 copper ore into the iron smelt to make 3015 Iron Ingot/min, stretching the 1608/min local iron supply across 41 Foundries."
+        },
+        {
+          "recipe": "Alternate: Steel Rotor",
+          "note": "Builds 177 Rotor/min from Steel Pipe + Wire instead of Iron Rod, leaning on the copper-Wire abundance."
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "note": "Makes 660 Steel Pipe/min from pure Iron Ingot (no coal/steel), keeping the factory steel-free."
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "note": "Reinforced Iron Plate from Iron Plate + Wire, faster than the screw-based vanilla recipe."
+        },
+        {
+          "recipe": "Wire",
+          "note": "Dominant load: 2378/min across 80 Constructors from copper ingot, feeding all rotor/stator demand."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "discrepancies": [],
+        "recipes_checked": [
+          "Wire",
+          "Alternate: Iron Alloy Ingot",
+          "Copper Ingot"
+        ]
+      }
+    },
+    "ironclad_cathera": {
+      "headline": "Brasshold: 75 Smart Plating + 51 Motor/min from iron, stretched with copper via Iron Alloy Ingot",
+      "summary": "Brasshold is the \"Ironclad Cathera\" iron-copper plating and motors factory, delivering 75 Smart Plating/min and 51 Motor/min. Its signature trick is the Iron Alloy Ingot foundry recipe, which stretches 1608 Iron Ore/min with just 402 Copper Ore/min into 3015 Iron Ingot/min, cutting raw iron demand on the chain feeding plates, pipes and rotors. Copper is also smelted in bulk (1189 Copper Ingot/min) and burned almost entirely into Wire (2378/min) \u2014 by far the highest-throughput line at 80 Constructors \u2014 to feed the wire-hungry Steel Rotor, Stator and Stitched Iron Plate alternates. At roughly 321 buildings and 3027 MW, the plan leans on alternates (Steel Rotor, Iron Pipe, Stitched Iron Plate) to keep the building count and ore draw down.",
+      "input_notes": "All inputs are raw ore mined on-site: ~1608 Iron Ore/min and ~1591 Copper Ore/min (1189 smelted to copper for wire, 402 fed into the Iron Alloy Ingot foundry). No external imports \u2014 imports and external_inputs are both empty.",
+      "output_notes": "Delivers 75 Smart Plating/min and 51 Motor/min. No byproduct surpluses to sink \u2014 the chain is internally balanced (net Wire +0.2, Iron Plate +0.1, essentially rounding), so nothing meaningful is wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "note": "Signature recipe: blends 8 Iron + 2 Copper Ore into 15 ingots, stretching iron with a little copper across 41 Foundries."
+        },
+        {
+          "recipe": "Wire",
+          "note": "Highest-throughput line \u2014 80 Constructors making 2378 Wire/min to feed the wire-heavy Steel Rotor, Stator and Stitched Iron Plate alternates."
+        },
+        {
+          "recipe": "Alternate: Steel Rotor",
+          "note": "Rotor from Steel Pipe + Wire instead of iron, supplying both Smart Plating and Motor (177 Rotor/min)."
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "note": "Makes Steel Pipe straight from Iron Ingot (no coal/steel), feeding both Rotor and Stator lines."
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "note": "Reinforced Iron Plate from Iron Plate + Wire, trading screws for wire throughput."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "discrepancies": [],
+        "recipes_checked": [
+          "Wire",
+          "Alternate: Iron Alloy Ingot",
+          "Alternate: Steel Rotor"
+        ]
+      }
+    },
+    "forgeholm_hmf": {
+      "headline": "Anvilreach: 15 Heavy Modular Frames/min from a coal-fed all-steel chain (Steeled Frame trick)",
+      "summary": "Anvilreach (forgeholm_hmf) is a Heavy Modular Frame plant delivering 15 HMF/min. Its signature resource is coal, drawn from on-site nodes and fed almost entirely into a large Steel Ingot foundry bank (40 Foundries, ~1785/min) that anchors a steel-centric chain: steel becomes Steel Pipe, Encased Industrial Beam, and \u2014 via the Alternate: Steeled Frame recipe \u2014 Modular Frames, all of which feed 8 HMF Manufacturers. Alternate recipes do the heavy lifting: Steel Cast Plate forges Iron Plate from iron+steel ingots, Steel Screws turns Steel Beam into screws, and Encased Industrial Pipe casts beams from concrete+pipe, keeping the plant on steel rather than raw iron parts. It runs 203 buildings at about 2,322 MW across Smelters, Foundries, Constructors, Assemblers, and Manufacturers.",
+      "input_notes": "Inward across the boundary: only raw ores \u2014 Coal ~1784.6/min (signature, mined on-site), Iron Ore ~1884.6/min, and Limestone 1125/min. No external_inputs and no declared imports; the chain is self-contained.",
+      "output_notes": "Single declared output: Heavy Modular Frame at 15/min. No byproducts and no surplus intermediates \u2014 net_per_item shows every intermediate (Steel Pipe, Concrete, Modular Frame, Screws, Iron Plate, etc.) balancing to ~0, so nothing is sunk or wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "note": "Builds Modular Frame from Reinforced Iron Plate + Steel Pipe, keeping the chain on steel instead of iron rods/screws."
+        },
+        {
+          "recipe": "Alternate: Steel Cast Plate",
+          "note": "Foundry recipe makes Iron Plate from iron+steel ingots (300/min from 7 Foundries), bypassing pure Iron Plate constructors."
+        },
+        {
+          "recipe": "Alternate: Steel Screws",
+          "note": "Turns Steel Beam straight into Screws at 2400/min from 10 Constructors \u2014 far denser than iron-rod screws."
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "note": "Casts Encased Industrial Beam from Concrete + Steel Pipe, the reason Limestone is imported for the 25-Constructor concrete bank."
+        },
+        {
+          "recipe": "Steel Pipe",
+          "note": "Largest single building bank (51 Constructors, 1000/min) feeding pipe to Steeled Frame, Encased Beam, and the HMF Manufacturers."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Steel Ingot",
+          "Steel Pipe",
+          "Heavy Modular Frame"
+        ],
+        "discrepancies": []
+      }
+    },
+    "naphtheon_hmf": {
+      "headline": "Naphtheon: oil-fed HMF line \u2014 Coke Steel + rubber/plastic chains build 17 Heavy Modular Frames/min",
+      "summary": "Naphtheon delivers 17 Heavy Modular Frames/min from three raw streams: Iron Ore, Limestone, and its signature Crude Oil (860/min across two oil nodes). The oil is the trick \u2014 refineries crack it into Rubber and Plastic, and the Heavy Oil Residue by-product is recycled into Petroleum Coke that drives the Alternate: Coke Steel Ingot recipe, smelting Steel from coke + iron ore without coal. The chain leans on plastic/rubber alternates (Coated Iron Plate, Adhered Iron Plate, Rubber Concrete) and finishes on the screw-and-rubber-heavy Alternate: Heavy Flexible Frame. It is a large build: 300 buildings (mostly 120 Constructors and 96 Assemblers) drawing roughly 3,349 MW.",
+      "input_notes": "Raw ore/oil only, no imports: Iron Ore 1602.3/min, Limestone 340/min, and Crude Oil 860.6/min from two on-site oil nodes (1 pure, 1 normal, both with 3 shards; 6 shards total). No external_inputs \u2014 Petroleum Coke is made in-house from recycled Heavy Oil Residue rather than imported.",
+      "output_notes": "Delivers 17 Heavy Modular Frame/min. Notable by-product is a large surplus of Heavy Oil Residue (401.3/min) left over after feeding the Petroleum Coke loop \u2014 it is not consumed further here and must be sunk or piped out. A trivial 1.3 Screws/min surplus also remains.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Coke Steel Ingot",
+          "note": "Smelts Steel from Petroleum Coke + Iron Ore, no coal needed \u2014 coke is sourced from the factory's own Heavy Oil Residue."
+        },
+        {
+          "recipe": "Petroleum Coke",
+          "note": "Recycles surplus Heavy Oil Residue (153/min) into 459 coke/min, feeding the Coke Steel chain and closing the oil loop."
+        },
+        {
+          "recipe": "Alternate: Heavy Flexible Frame",
+          "note": "Final HMF recipe \u2014 screw-and-rubber heavy (1767 Screws, 340 Rubber/min) instead of vanilla, which is why the screw line is so large."
+        },
+        {
+          "recipe": "Alternate: Coated Iron Plate",
+          "note": "Stretches iron by adding Plastic, cutting Iron Ingot per plate vs vanilla."
+        },
+        {
+          "recipe": "Alternate: Adhered Iron Plate",
+          "note": "Bonds Iron Plate with Rubber for Reinforced Iron Plate \u2014 uses the oil-derived rubber instead of screws."
+        },
+        {
+          "recipe": "Alternate: Rubber Concrete",
+          "note": "Makes Concrete from Limestone + a little Rubber, leveraging the abundant on-site rubber."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Iron Ingot",
+          "Rubber",
+          "Screws"
+        ],
+        "discrepancies": []
+      }
+    },
+    "cathera_hmf": {
+      "headline": "Copper-node HMF plant: Iron Alloy Ingot + Iron Pipe steel-free chain to 30 Heavy Modular Frame/min",
+      "summary": "Cathera is a self-contained Heavy Modular Frame plant scaled in place on a pure Copper node, delivering 30 HMF/min. Its signature trick is going steel-free: the Alternate Iron Alloy Ingot recipe stretches 2759 Iron Ore/min with a splash of copper into 5173 Iron Ingot/min, and Alternate Iron Pipe converts those ingots straight into 1227 Steel Pipe/min without coal or a steelworks. From there Alternate recipes (Fused Wire, Stitched Iron Plate, Steeled Frame, Encased Industrial Pipe, Heavy Encased Frame) carry intermediates up to the 11 Manufacturers. It runs at 257 buildings and about 3.1 GW, with only 2 power shards needed (both on the copper node).",
+      "input_notes": "Inward across the boundary: Iron Ore 2759.1/min and Copper Ore 737.2/min (the copper node, 200 oc, holds 737), Limestone 2160/min for the concrete legs, and Caterium Ore 35.5/min railed in from a separate caterium outpost ~48km away. No external imports (no Petroleum Coke or fuels); imports list is empty.",
+      "output_notes": "Sole output is Heavy Modular Frame at 30/min. No declared byproducts and no surplus streams to sink \u2014 the chain is balanced (net is ~0 for every intermediate), so nothing is wasted.",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Iron Alloy Ingot",
+          "note": "Iron-stretcher: 8 iron + 2 copper ore yields 15 ingots, so 2759 iron ore alloyed with 690 copper ore makes 5173 ingots/min across 69 Foundries."
+        },
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "note": "Steel-free path: turns Iron Ingot directly into Steel Pipe (20 in -> 5 out), avoiding coal and a separate steel stage."
+        },
+        {
+          "recipe": "Alternate: Fused Wire",
+          "note": "Throughput winner: copper + caterium ingot gives 90 wire/cycle, so just 4 Assemblers cover 355 Wire/min."
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "note": "Plate+wire Reinforced Iron Plate variant feeding the Steeled Frame line."
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "note": "Reinforced Iron Plate + Steel Pipe to Modular Frame, the heaviest Assembler stage at 27 buildings."
+        },
+        {
+          "recipe": "Alternate: Heavy Encased Frame",
+          "note": "Final Manufacturer step: Modular Frame + Steel Pipe + Encased Industrial Beam + Concrete to 30 HMF/min."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "discrepancies": [],
+        "recipes_checked": [
+          "Alternate: Iron Alloy Ingot",
+          "Alternate: Iron Pipe",
+          "Concrete"
+        ]
+      }
+    },
+    "ferrium_hmf": {
+      "headline": "Heavyhold: 15 Heavy Modular Frame/min from pure iron + limestone, no coal or steel",
+      "summary": "Heavyhold (\"Ferrium\" theme) delivers 15 Heavy Modular Frame/min built entirely from its signature iron, scaled in place over five iron nodes feeding 2685 Iron Ore/min, plus 1080 Limestone/min for concrete. The chain deliberately skips steel and coal: Alternate: Iron Pipe turns Iron Ingot straight into Steel Pipe (613/min), Alternate: Iron Wire makes Wire from ingots, and the plate/frame path runs through Stitched Iron Plate and Steeled Frame into an Alternate: Heavy Encased Frame manufacturer. The result is a single-ore (plus limestone) supply chain. It runs 190 buildings (90 Smelters, 62 Constructors, 32 Assemblers, 6 Manufacturers) drawing roughly 1354 MW.",
+      "input_notes": "Inward boundary crossings are just two raw ores: Iron Ore ~2685.4/min (mined from the site's five iron nodes) and Limestone 1080/min. No external/declared imports \u2014 the chain is fully self-contained on iron plus limestone.",
+      "output_notes": "Delivers 15 Heavy Modular Frame/min as its sole product. No byproducts and no surpluses to sink \u2014 net flows show every intermediate (Steel Pipe, Wire, Iron Plate, Reinforced Iron Plate, Modular Frame, Encased Industrial Beam) balanced to ~0, with only trace rounding (e.g. +0.4 Iron Ingot).",
+      "recipe_notes": [
+        {
+          "recipe": "Alternate: Iron Pipe",
+          "note": "Makes Steel Pipe (613/min) directly from Iron Ingot \u2014 no steel or coal needed, the backbone alt of this iron-only chain."
+        },
+        {
+          "recipe": "Alternate: Iron Wire",
+          "note": "Wire straight from Iron Ingot, keeping the chain on a single ore instead of pulling in copper."
+        },
+        {
+          "recipe": "Alternate: Heavy Encased Frame",
+          "note": "The HMF manufacturer step; combines Modular Frame, Steel Pipe, Encased Industrial Beam and Concrete into 15 HMF/min."
+        },
+        {
+          "recipe": "Alternate: Steeled Frame",
+          "note": "Modular Frame (40/min) from Reinforced Iron Plate + Steel Pipe, feeding the manufacturer."
+        },
+        {
+          "recipe": "Alternate: Stitched Iron Plate",
+          "note": "Reinforced Iron Plate from Iron Plate + Wire, the plate path's throughput alt."
+        },
+        {
+          "recipe": "Alternate: Encased Industrial Pipe",
+          "note": "Encased Industrial Beam (50/min) from Concrete + Steel Pipe, consuming the limestone-fed concrete."
+        }
+      ],
+      "qa": {
+        "matches": true,
+        "recipes_checked": [
+          "Iron Ingot",
+          "Alternate: Iron Pipe",
+          "Concrete"
+        ],
+        "discrepancies": []
+      }
+    }
+  }
+}

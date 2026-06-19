@@ -14,6 +14,11 @@ Source files (all in `planner-export/`):
 Additional artifacts (added 2026-05-19, gap supply-chain amounts phase):
 - `../gap-factory-locations.json` — auto-placed gap factory plan with sites,
   outposts, building counts, per-node overclock %, shards used, erosion check
+- `../gap-factory-details.json` — per-factory recipe/building/input/output detail
+  (built by `compute_factory_details.py`: building_chain × satisfactory.db). Feeds
+  the per-factory tabs in `factory-map.html`. Numbers independently re-verified vs DB.
+- `../factory-docs.json` — per-factory write-up + QA verdict (factory-detail-tabs
+  workflow). Narrative half of the per-factory tabs.
 - `../docs/superpowers/specs/2026-05-19-gap-supply-chain-factories-design.md` — design
 - `../docs/plans/2026-05-19-gap-factory-locations-plan.md` — implementation plan
 

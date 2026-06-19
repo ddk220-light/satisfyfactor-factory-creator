@@ -44,11 +44,61 @@ body{font-family:'Courier New',monospace;display:flex;flex-direction:column;heig
 canvas{flex:1;min-width:0;display:block;cursor:grab}
 canvas.grabbing{cursor:grabbing}
 #tooltip{position:fixed;background:rgba(20,20,40,0.95);color:#ddd;padding:6px 10px;border-radius:4px;font-size:11px;font-family:'Courier New',monospace;pointer-events:none;display:none;border:1px solid #444;max-width:250px;z-index:100}
-#tab-bar{display:flex;background:#16213e;border-bottom:2px solid #333;flex-shrink:0}
+#tab-bar{display:flex;flex-wrap:wrap;background:#16213e;border-bottom:2px solid #333;flex-shrink:0}
 .tab-btn{padding:10px 24px;font-family:'Courier New',monospace;font-size:13px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#7f8fa6;background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
 .tab-btn:hover{color:#ccc}
 .tab-btn.active{color:#e0e0e0;border-bottom-color:#e0e0e0}
+.tab-btn.fac{padding:10px 13px;font-size:11px;letter-spacing:.5px}
+.tab-btn.fac .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.tab-sep{width:1px;background:#2a3550;margin:6px 2px}
 #tab-content{display:flex;flex:1;overflow:hidden}
+/* ---- per-factory detail view ---- */
+#factory-view{flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:22px 30px;font-family:'Courier New',monospace}
+.fd-wrap{max-width:1180px;margin:0 auto}
+.fd-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;border-bottom:1px solid #233;padding-bottom:14px;margin-bottom:16px}
+.fd-title{font-size:26px;font-weight:bold;color:#eef;margin:0}
+.fd-badge{display:inline-block;padding:2px 10px;border-radius:11px;font-size:10px;font-weight:bold;color:#0d1117;text-transform:uppercase;letter-spacing:.5px}
+.fd-sig{font-size:12px;color:#7f8fa6}
+.fd-head-icons{display:flex;gap:6px;margin-left:auto}
+.fd-head-icons svg{width:30px;height:30px}
+.fd-headline{font-size:14px;color:#9fb4c8;margin:-6px 0 14px;font-style:italic}
+.fd-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.fd-stat{background:#121821;border:1px solid #233;border-radius:6px;padding:8px 14px;min-width:84px}
+.fd-stat .v{font-size:19px;font-weight:bold;color:#e0e0e0;line-height:1.1}
+.fd-stat .l{font-size:9px;color:#7f8fa6;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.fd-summary{color:#cdd8e2;font-size:13.5px;line-height:1.6;margin-bottom:18px;max-width:920px}
+.fd-cols{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.fd-card{background:#121821;border:1px solid #233;border-radius:8px;padding:13px 16px;flex:1;min-width:240px}
+.fd-card h3{margin:0 0 9px;font-size:12px;color:#bfe3d4;text-transform:uppercase;letter-spacing:1px}
+.fd-io{display:flex;align-items:center;gap:9px;padding:3px 0;font-size:13px}
+.fd-io .ic{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fd-io .ic svg{width:22px;height:22px}
+.fd-io .nm{flex:1;color:#dde}
+.fd-io .rt{color:#7fe0b0;font-weight:bold;white-space:nowrap}
+.fd-io .src{color:#7f8fa6;font-size:10px;margin-left:4px}
+.fd-chip{display:inline-flex;width:22px;height:22px;border-radius:4px;align-items:center;justify-content:center;font-size:8px;font-weight:bold;color:#0d1117;line-height:1}
+.fd-note{color:#7f8fa6;font-size:11px;margin-top:7px;line-height:1.45}
+h2.fd-sec{font-size:13px;color:#cfe;text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px;border-bottom:1px solid #1c2733;padding-bottom:5px}
+table.fd-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.fd-tbl th{text-align:left;color:#7f8fa6;text-transform:uppercase;font-size:9.5px;letter-spacing:1px;border-bottom:1px solid #233;padding:6px 8px;white-space:nowrap}
+.fd-tbl td{border-bottom:1px solid #1a2330;padding:7px 8px;vertical-align:top}
+.fd-tbl tr:hover td{background:#161d27}
+.fd-tbl .rc{color:#dfe;font-weight:bold}
+.fd-tbl .bd{color:#9fb4c8}
+.fd-tbl .ct{color:#e0e0e0;font-weight:bold;text-align:right}
+.fd-iolist{display:flex;flex-direction:column;gap:3px}
+.fd-ioline{display:flex;align-items:center;gap:6px}
+.fd-ioline .ic{width:17px;height:17px;flex-shrink:0;display:flex}
+.fd-ioline .ic svg{width:17px;height:17px}
+.fd-ioline .rt{color:#7fe0b0}
+.fd-rnote{color:#c8b37a;font-size:10.5px;margin-top:3px;font-style:italic}
+.fd-bchips{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 4px}
+.fd-bchip{background:#0e1620;border:1px solid #233;border-radius:14px;padding:3px 11px;font-size:11px;color:#cde}
+.fd-bchip b{color:#fff}
+.fd-loc{font-size:12px;color:#9aa;line-height:1.6}
+.fd-qa{display:inline-block;font-size:10.5px;padding:3px 9px;border-radius:10px;font-weight:bold;letter-spacing:.4px}
+.fd-qa.ok{background:#143d2a;color:#5fe0a0;border:1px solid #1d6f4a}
+.fd-qa.warn{background:#3d2a14;color:#e0b05f;border:1px solid #6f4a1d}
 #map-view{display:flex;flex:1;overflow:hidden;position:relative}
 .summary-banner{background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:20px 24px;margin-bottom:24px}
 .summary-banner h2{font-size:16px;color:#e0e0e0;margin-bottom:4px;letter-spacing:1px}
@@ -169,8 +219,10 @@ canvas.grabbing{cursor:grabbing}
 </head>
 <body>
 <div id="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('map')">Map</button>
-  <button class="tab-btn" onclick="switchTab('crazy')">Factories</button>
+  <button class="tab-btn active" data-tab="map" onclick="switchTab('map')">Map</button>
+  <button class="tab-btn" data-tab="crazy" onclick="switchTab('crazy')">Factories</button>
+  <span class="tab-sep"></span>
+  <!-- per-factory tab buttons injected by buildFactoryTabs() -->
 </div>
 <div id="tab-content">
   <div id="map-view">
@@ -199,6 +251,7 @@ canvas.grabbing{cursor:grabbing}
   <div id="crazy-view" style="display:none;flex:1;overflow-y:auto;background:#0d1117;color:#ccc;padding:24px 32px;font-family:'Courier New',monospace">
     <div id="crazy-content" style="max-width:1400px;margin:0 auto;width:100%"></div>
   </div>
+  <div id="factory-view" style="display:none"></div>
 </div>
 <div id="tooltip"></div>
 
@@ -207,17 +260,17 @@ canvas.grabbing{cursor:grabbing}
 let currentTab = 'map';
 function switchTab(tab) {
   currentTab = tab;
-  const mapVisible = (tab === 'map');
-  document.getElementById('map-view').style.display = mapVisible ? 'flex' : 'none';
-  document.getElementById('crazy-view').style.display = tab === 'crazy' ? 'flex' : 'none';
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    var btnTab = btn.textContent.trim().toLowerCase();
-    btn.classList.toggle('active',
-      (btnTab === 'map' && tab === 'map') ||
-      (btnTab === 'factories' && tab === 'crazy'));
-  });
-  if (mapVisible) { resize(); draw(); }
-  if (tab === 'crazy' && !crazyLoaded) { loadCrazy(); }
+  const isMap = (tab === 'map');
+  const isCrazy = (tab === 'crazy');
+  const isFactory = !isMap && !isCrazy;
+  document.getElementById('map-view').style.display = isMap ? 'flex' : 'none';
+  document.getElementById('crazy-view').style.display = isCrazy ? 'flex' : 'none';
+  document.getElementById('factory-view').style.display = isFactory ? 'block' : 'none';
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.tab === tab));
+  if (isMap) { resize(); draw(); }
+  if (isCrazy && !crazyLoaded) { loadCrazy(); }
+  if (isFactory) { openFactoryTab(tab); }
 }
 let crazyLoaded = false;
 async function loadCrazy() {
@@ -406,6 +459,147 @@ function renderCrazyTab(data) {
   }
 
   el.innerHTML = html;
+}
+
+// === PER-FACTORY DETAIL TABS ===
+// 12 top-level factory tabs. Numbers come from gap-factory-details.json
+// (optimizer building_chain x game DB, verified). Narrative/QA from
+// factory-docs.json (factory-detail-tabs workflow). Both fetched lazily.
+const FACTORY_TAB_ORDER = ['ferrium_hmf','forgeholm_hmf','naphtheon_hmf','cathera_hmf',
+  'ironclad_ne','ironclad_cathera','voltreach','moldmarsh',
+  'silvashade','aldercast','bauxhold','coppermill'];
+const ORE_ICON = {'Iron Ore':'iron','Copper Ore':'copper','Bauxite':'bauxite','Coal':'coal',
+  'Raw Quartz':'quartz','Limestone':'limestone','Caterium Ore':'caterium','Crude Oil':'oil',
+  'Sulfur':'sulfur','Water':'water','Nitrogen Gas':'nitrogen','SAM':'sam','Uranium':'uranium'};
+let factoryDataLoaded = false, factoryDetailsData = null, factoryDocs = null;
+
+function fdEsc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtRate(n){ const r = Math.round(n*10)/10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
+function itemIconHtml(name){
+  if (ICON_SVG[name]) return ICON_SVG[name];
+  const ore = ORE_ICON[name];
+  if (ore && ICON_SVG[ore]) return ICON_SVG[ore];
+  const meta = COMPONENT_META[name];
+  const col = meta ? meta.color : '#54708a';
+  const code = meta ? meta.code : (name.replace(/[^A-Za-z]/g,'').slice(0,3).toUpperCase() || '?');
+  return '<span class="fd-chip" style="background:'+col+'">'+code+'</span>';
+}
+function fdIoRow(item, rate, tag){
+  const t = (tag && tag !== 'ore') ? '<span class="src">'+fdEsc(tag)+'</span>' : '';
+  return '<div class="fd-io"><span class="ic">'+itemIconHtml(item)+'</span>'
+    + '<span class="nm">'+fdEsc(item)+t+'</span><span class="rt">'+fmtRate(rate)+'</span></div>';
+}
+function fdIoMini(item, rate){
+  return '<div class="fd-ioline"><span class="ic">'+itemIconHtml(item)+'</span>'
+    + '<span class="nm">'+fdEsc(item)+'</span> <span class="rt">'+fmtRate(rate)+'</span></div>';
+}
+
+function buildFactoryTabs(){
+  const bar = document.getElementById('tab-bar');
+  const byId = {}; GAP_FACTORIES.forEach(g => byId[g.id] = g);
+  FACTORY_TAB_ORDER.forEach(fid => {
+    const g = byId[fid]; if (!g) return;
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn fac';
+    btn.dataset.tab = fid;
+    btn.onclick = () => switchTab(fid);
+    const col = GAP_COLORS[g.disp] || '#7f8fa6';
+    btn.innerHTML = '<span class="dot" style="background:'+col+'"></span>'+fdEsc(g.name);
+    bar.appendChild(btn);
+  });
+}
+
+async function loadFactoryData(){
+  if (factoryDataLoaded) return true;
+  try {
+    const [a, b] = await Promise.all([
+      fetch('gap-factory-details.json').then(r => r.json()),
+      fetch('factory-docs.json').then(r => r.json()).catch(() => ({docs:{}}))
+    ]);
+    factoryDetailsData = a;
+    factoryDocs = (b && b.docs) || {};
+    factoryDataLoaded = true;
+    return true;
+  } catch (e) {
+    document.getElementById('factory-view').innerHTML =
+      '<div class="fd-wrap"><p style="color:#e74c3c">Failed to load factory details: '+e.message+'</p></div>';
+    return false;
+  }
+}
+async function openFactoryTab(fid){
+  const el = document.getElementById('factory-view');
+  if (!factoryDataLoaded) {
+    el.innerHTML = '<div class="fd-wrap"><p style="color:#7f8fa6">Loading…</p></div>';
+    if (!(await loadFactoryData())) return;
+    if (currentTab !== fid) return; // user switched away while loading
+  }
+  renderFactoryDetail(fid);
+}
+
+function renderFactoryDetail(fid){
+  const el = document.getElementById('factory-view');
+  const d = factoryDetailsData && factoryDetailsData.factories[fid];
+  const doc = (factoryDocs && factoryDocs[fid]) || {};
+  if (!d) { el.innerHTML = '<div class="fd-wrap"><p style="color:#e74c3c">No detail for '+fdEsc(fid)+'</p></div>'; return; }
+  const t = d.totals || {};
+  const dispColor = GAP_COLORS[d.disposition] || '#7f8fa6';
+  const headIcons = d.outputs.map(o => itemIconHtml(o.item)).join('');
+  const stats = [
+    ['Buildings', t.total_buildings || 0],
+    ['Power', Math.round(t.total_power_mw || 0).toLocaleString()+' MW'],
+    ['Shards', d.total_shards || 0],
+    ['Footprint', (t.footprint_m2 || 0).toLocaleString()+' m²'],
+  ].map(s => '<div class="fd-stat"><div class="v">'+s[1]+'</div><div class="l">'+s[0]+'</div></div>').join('');
+
+  const outRows = d.outputs.map(o => fdIoRow(o.item, o.per_min)).join('')
+    + (d.byproducts || []).map(b => fdIoRow(b.item, b.per_min, 'surplus')).join('');
+  const inRows = d.raw_inputs.map(r => fdIoRow(r.item, r.per_min, 'ore')).join('')
+    + (d.external_inputs || []).map(e => fdIoRow(e.item, e.per_min, e.source)).join('');
+
+  const noteMap = {}; (doc.recipe_notes || []).forEach(n => noteMap[n.recipe] = n.note);
+  const rows = d.recipes.map(r => {
+    const prod = r.produces.map(p => fdIoMini(p.item, p.per_min)).join('');
+    const cons = r.consumes.length ? r.consumes.map(c => fdIoMini(c.item, c.per_min)).join('')
+      : '<span class="src">(raw extraction)</span>';
+    const note = noteMap[r.recipe] ? '<div class="fd-rnote">'+fdEsc(noteMap[r.recipe])+'</div>' : '';
+    return '<tr><td class="rc">'+fdEsc(r.recipe)+note+'</td><td class="bd">'+fdEsc(r.building)+'</td>'
+      + '<td class="ct">'+r.buildings+'</td><td><div class="fd-iolist">'+prod+'</div></td>'
+      + '<td><div class="fd-iolist">'+cons+'</div></td><td class="ct">'+Math.round(r.power_mw)+'</td></tr>';
+  }).join('');
+
+  const bchips = Object.entries(t.by_building || {}).sort((a,b) => b[1]-a[1])
+    .map(([b,n]) => '<span class="fd-bchip"><b>'+n+'</b> '+fdEsc(b)+'</span>').join('');
+
+  const c = d.center || {x:0,y:0};
+  const nNodes = (d.sites || []).reduce((a,s) => a + (s.nodes ? s.nodes.length : 0), 0);
+  const nOut = (d.outposts || []).length;
+  const qa = doc.qa || {};
+  const qaBadge = qa.matches === true
+    ? '<span class="fd-qa ok">✓ numbers verified vs game DB</span>'
+    : (qa.matches === false ? '<span class="fd-qa warn">⚠ '+((qa.discrepancies||[]).length)+' discrepancy</span>' : '');
+
+  el.innerHTML = '<div class="fd-wrap">'
+    + '<div class="fd-head"><h1 class="fd-title">'+fdEsc(d.factory_name)+'</h1>'
+      + '<span class="fd-badge" style="background:'+dispColor+'">'+fdEsc((d.disposition||'').replace(/_/g,' '))+'</span>'
+      + '<span class="fd-sig">signature: '+fdEsc(d.signature_resource)+'</span>'
+      + '<div class="fd-head-icons">'+headIcons+'</div></div>'
+    + (doc.headline ? '<div class="fd-headline">'+fdEsc(doc.headline)+'</div>' : '')
+    + '<div class="fd-stats">'+stats+'</div>'
+    + (qaBadge ? '<div style="margin-bottom:14px">'+qaBadge+'</div>' : '')
+    + (doc.summary ? '<div class="fd-summary">'+fdEsc(doc.summary)+'</div>' : '')
+    + '<div class="fd-cols">'
+      + '<div class="fd-card"><h3>Outputs</h3>'+outRows
+        + (doc.output_notes ? '<div class="fd-note">'+fdEsc(doc.output_notes)+'</div>' : '') + '</div>'
+      + '<div class="fd-card"><h3>Inputs</h3>'+inRows
+        + (doc.input_notes ? '<div class="fd-note">'+fdEsc(doc.input_notes)+'</div>' : '') + '</div>'
+    + '</div>'
+    + '<h2 class="fd-sec">Recipe chain &amp; buildings</h2>'
+    + '<div style="overflow-x:auto"><table class="fd-tbl"><thead><tr><th>Recipe</th><th>Building</th>'
+      + '<th>#</th><th>Produces /min</th><th>Consumes /min</th><th>MW</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+    + '<h2 class="fd-sec">Buildings by type</h2><div class="fd-bchips">'+bchips+'</div>'
+    + '<h2 class="fd-sec">Location</h2><div class="fd-loc">Center ≈ ('+Math.round(c.x)+', '+Math.round(c.y)+') · '
+      + (d.sites||[]).length+' site(s), '+nNodes+' signature node(s)'+(nOut ? ' · '+nOut+' outpost(s)' : '')+'</div>'
+    + '</div>';
 }
 
 
@@ -2202,6 +2396,7 @@ function init() {
   populateComponentFilter();
   buildLegend();
   buildSidebar();
+  buildFactoryTabs();
   loadOccupied();
   draw();
   updateZoomReadout();
